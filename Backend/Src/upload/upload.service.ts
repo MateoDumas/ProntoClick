@@ -2,6 +2,7 @@ import { Injectable, BadRequestException, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { v2 as cloudinary } from 'cloudinary';
 import { Readable } from 'stream';
+import axios from 'axios';
 
 @Injectable()
 export class UploadService {
@@ -139,6 +140,83 @@ export class UploadService {
     } catch (error) {
       this.logger.error('Error al optimizar URL:', error);
       return url;
+    }
+  }
+
+  /**
+   * Sube una imagen desde una URL a Cloudinary
+   */
+  async uploadImageFromUrl(
+    imageUrl: string,
+    folder: string = 'prontoclick',
+  ): Promise<{ url: string; publicId: string }> {
+    if (!this.isConfigured) {
+      throw new BadRequestException('Cloudinary no está configurado. Configura las variables de entorno.');
+    }
+
+    if (!imageUrl || !imageUrl.startsWith('http')) {
+      throw new BadRequestException('URL de imagen inválida. Debe ser una URL HTTP/HTTPS.');
+    }
+
+    try {
+      // Descargar la imagen desde la URL
+      this.logger.log(`Descargando imagen desde: ${imageUrl}`);
+      const response = await axios.get(imageUrl, {
+        responseType: 'arraybuffer',
+        timeout: 30000, // 30 segundos máximo
+        maxContentLength: 10 * 1024 * 1024, // 10MB máximo
+      });
+
+      // Validar que sea una imagen
+      const contentType = response.headers['content-type'];
+      if (!contentType || !contentType.startsWith('image/')) {
+        throw new BadRequestException('La URL no apunta a una imagen válida.');
+      }
+
+      // Validar tamaño (máximo 10MB)
+      const maxSize = 10 * 1024 * 1024; // 10MB
+      if (response.data.length > maxSize) {
+        throw new BadRequestException('La imagen es demasiado grande. Máximo 10MB.');
+      }
+
+      // Convertir a buffer y luego a stream
+      const buffer = Buffer.from(response.data);
+      const stream = Readable.from(buffer);
+
+      // Subir a Cloudinary
+      return new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            folder,
+            resource_type: 'image',
+            transformation: [
+              { width: 1200, height: 1200, crop: 'limit' },
+              { quality: 'auto' },
+              { format: 'auto' },
+            ],
+          },
+          (error, result) => {
+            if (error) {
+              this.logger.error('Error al subir imagen a Cloudinary:', error);
+              reject(new BadRequestException('Error al subir la imagen: ' + error.message));
+            } else {
+              this.logger.log(`Imagen subida exitosamente desde URL: ${result.public_id}`);
+              resolve({
+                url: result.secure_url,
+                publicId: result.public_id,
+              });
+            }
+          },
+        );
+
+        stream.pipe(uploadStream);
+      });
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+      this.logger.error('Error al descargar/procesar imagen desde URL:', error);
+      throw new BadRequestException('Error al procesar la imagen desde la URL: ' + (error.message || 'URL inválida o inaccesible'));
     }
   }
 

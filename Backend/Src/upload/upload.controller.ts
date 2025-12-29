@@ -216,5 +216,95 @@ export class UploadController {
       },
     };
   }
+
+  /**
+   * Sube imagen de restaurante desde URL Y actualiza automáticamente
+   * POST /upload/restaurant/:id/image-url
+   */
+  @Post('restaurant/:id/image-url')
+  @UseGuards(JwtAuthGuard)
+  async uploadRestaurantImageFromUrl(
+    @Param('id') restaurantId: string,
+    @Body() body: { url: string },
+  ) {
+    if (!body.url) {
+      throw new BadRequestException('No se proporcionó ninguna URL');
+    }
+
+    // Verificar que el restaurante existe
+    const restaurant = await this.prisma.restaurant.findUnique({
+      where: { id: restaurantId },
+    });
+
+    if (!restaurant) {
+      throw new BadRequestException('Restaurante no encontrado');
+    }
+
+    // Subir imagen desde URL a Cloudinary
+    const result = await this.uploadService.uploadImageFromUrl(body.url, 'prontoclick/restaurants');
+
+    // Actualizar restaurante en la base de datos
+    const updatedRestaurant = await this.prisma.restaurant.update({
+      where: { id: restaurantId },
+      data: { image: result.url },
+    });
+
+    return {
+      success: true,
+      message: 'Imagen subida desde URL y actualizada correctamente',
+      url: result.url,
+      publicId: result.publicId,
+      restaurant: {
+        id: updatedRestaurant.id,
+        name: updatedRestaurant.name,
+        image: updatedRestaurant.image,
+      },
+    };
+  }
+
+  /**
+   * Sube imagen de producto desde URL Y actualiza automáticamente
+   * POST /upload/product/:id/image-url
+   */
+  @Post('product/:id/image-url')
+  @UseGuards(JwtAuthGuard)
+  async uploadProductImageFromUrl(
+    @Param('id') productId: string,
+    @Body() body: { url: string },
+  ) {
+    if (!body.url) {
+      throw new BadRequestException('No se proporcionó ninguna URL');
+    }
+
+    // Verificar que el producto existe
+    const product = await this.prisma.product.findUnique({
+      where: { id: productId },
+    });
+
+    if (!product) {
+      throw new BadRequestException('Producto no encontrado');
+    }
+
+    // Subir imagen desde URL a Cloudinary
+    const result = await this.uploadService.uploadImageFromUrl(body.url, 'prontoclick/products');
+
+    // Actualizar producto en la base de datos
+    const updatedProduct = await this.prisma.product.update({
+      where: { id: productId },
+      data: { image: result.url },
+    });
+
+    return {
+      success: true,
+      message: 'Imagen subida desde URL y actualizada correctamente',
+      url: result.url,
+      publicId: result.publicId,
+      product: {
+        id: updatedProduct.id,
+        name: updatedProduct.name,
+        image: updatedProduct.image,
+      },
+    };
+  }
 }
 
