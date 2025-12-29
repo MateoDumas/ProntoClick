@@ -10,19 +10,23 @@ type FilterType = 'all' | 'fast' | 'rating' | 'price';
 function RestaurantsPageContent() {
   const [searchQuery, setSearchQuery] = useState('');
   const [filter, setFilter] = useState<FilterType>('all');
-  const [restaurants, setRestaurants] = useState<Restaurant[]>(mockRestaurants);
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Intentar cargar desde el backend, si falla usar mock data
+    // Cargar restaurantes desde el backend
     getRestaurants()
       .then((data) => {
         if (data && data.length > 0) {
           setRestaurants(data);
+        } else {
+          // Si no hay datos en el backend, usar mock data como fallback
+          setRestaurants(mockRestaurants);
         }
       })
       .catch(() => {
-        // Usar mock data si el backend no está disponible
+        // Usar mock data solo si el backend no está disponible
+        console.warn('Backend no disponible, usando datos mock');
         setRestaurants(mockRestaurants);
       })
       .finally(() => setLoading(false));
