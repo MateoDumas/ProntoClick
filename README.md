@@ -134,7 +134,7 @@ Este proyecto es privado.
 
 ## 👥 Autores
 
-- Tu nombre aquí
+- Mateo Dumas
 
 ---
 
