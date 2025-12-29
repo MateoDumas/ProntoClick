@@ -18,10 +18,10 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["Src/*"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["Src/**/*"],
   "exclude": ["node_modules", "dist"]
 }
 
