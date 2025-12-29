@@ -1,6 +1,7 @@
 import {
   Controller,
   Post,
+  Get,
   UseGuards,
   UseInterceptors,
   UploadedFile,
@@ -12,11 +13,24 @@ import { JwtAuthGuard } from '../common/jwt.guard';
 import { memoryStorage } from 'multer';
 
 @Controller('upload')
-@UseGuards(JwtAuthGuard)
 export class UploadController {
   constructor(private uploadService: UploadService) {}
 
+  @Get('status')
+  getStatus() {
+    const isConfigured = this.uploadService.isCloudinaryConfigured();
+    return {
+      cloudinary: {
+        configured: isConfigured,
+        message: isConfigured 
+          ? 'Cloudinary está configurado correctamente' 
+          : 'Cloudinary no está configurado. Verifica las variables de entorno.',
+      },
+    };
+  }
+
   @Post('image')
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(
     FileInterceptor('file', {
       storage: memoryStorage(),
@@ -41,6 +55,7 @@ export class UploadController {
   }
 
   @Post('product-image')
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(
     FileInterceptor('file', {
       storage: memoryStorage(),
@@ -65,6 +80,7 @@ export class UploadController {
   }
 
   @Post('restaurant-image')
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(
     FileInterceptor('file', {
       storage: memoryStorage(),
