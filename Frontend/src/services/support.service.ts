@@ -194,6 +194,7 @@ export interface SupportSurvey {
       id: string;
       name: string;
       email: string;
+      avatar?: string;
     };
   };
   supportUser: {
