@@ -1,0 +1,172 @@
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { PrismaService } from '../Prisma/prisma.service';
+import { OrdersWebSocketGateway } from '../websocket/websocket.gateway';
+
+@Injectable()
+export class OrderStatusSchedulerService implements OnModuleInit {
+  constructor(
+    private prisma: PrismaService,
+    private webSocketGateway: OrdersWebSocketGateway,
+  ) {}
+
+  onModuleInit() {
+    // Iniciar el scheduler cuando el módulo se inicializa
+    this.startStatusScheduler();
+  }
+
+  private async startStatusScheduler() {
+    // En desarrollo, revisar cada 5 segundos para pruebas rápidas
+    const interval = process.env.NODE_ENV === 'production' ? 30000 : 5000;
+    setInterval(async () => {
+      await this.processPendingOrders();
+    }, interval);
+  }
+
+  private async processPendingOrders() {
+    try {
+      // Obtener pedidos pendientes que necesitan actualización
+      const pendingOrders = await this.prisma.order.findMany({
+        where: {
+          status: {
+            in: ['pending', 'confirmed', 'preparing', 'ready', 'on_the_way'],
+          },
+        },
+        include: {
+          items: {
+            include: {
+              product: true,
+            },
+          },
+          restaurant: true,
+        },
+        orderBy: {
+          createdAt: 'asc',
+        },
+        take: 10, // Procesar máximo 10 pedidos a la vez
+      });
+
+      for (const order of pendingOrders) {
+        // Calcular tiempo desde la última actualización (updatedAt) para estados que ya cambiaron
+        // O desde la creación para el estado inicial
+        const referenceTime = order.status === 'pending' 
+          ? new Date(order.createdAt).getTime()
+          : new Date(order.updatedAt).getTime();
+        
+        const timeSinceReference = Date.now() - referenceTime;
+        const secondsSinceReference = Math.floor(timeSinceReference / 1000);
+        
+        // En producción usar minutos, en desarrollo usar segundos para pruebas rápidas
+        const isProduction = process.env.NODE_ENV === 'production';
+        const timeUnit = isProduction ? Math.floor(secondsSinceReference / 60) : secondsSinceReference;
+
+        let newStatus: string | null = null;
+
+        // Lógica de transición de estados basada en tiempo desde la última actualización
+        if (isProduction) {
+          // Tiempos de producción (en minutos desde último cambio)
+          switch (order.status) {
+            case 'pending':
+              if (timeUnit >= 1) newStatus = 'confirmed';
+              break;
+            case 'confirmed':
+              if (timeUnit >= 2) newStatus = 'preparing'; // 2 minutos desde confirmado
+              break;
+            case 'preparing':
+              if (timeUnit >= 5) newStatus = 'ready'; // 5 minutos desde preparación
+              break;
+            case 'ready':
+              if (timeUnit >= 2) newStatus = 'on_the_way'; // 2 minutos desde listo
+              break;
+            case 'on_the_way':
+              if (timeUnit >= 10) newStatus = 'delivered'; // 10 minutos desde en camino
+              break;
+          }
+        } else {
+          // Tiempos de desarrollo (en segundos desde último cambio) - MUCHO MÁS RÁPIDO para pruebas
+          switch (order.status) {
+            case 'pending':
+              if (timeUnit >= 10) newStatus = 'confirmed'; // 10 segundos
+              break;
+            case 'confirmed':
+              if (timeUnit >= 15) newStatus = 'preparing'; // 15 segundos desde confirmado
+              break;
+            case 'preparing':
+              if (timeUnit >= 20) newStatus = 'ready'; // 20 segundos desde preparación
+              break;
+            case 'ready':
+              if (timeUnit >= 15) newStatus = 'on_the_way'; // 15 segundos desde listo
+              break;
+            case 'on_the_way':
+              if (timeUnit >= 20) newStatus = 'delivered'; // 20 segundos desde en camino
+              break;
+          }
+        }
+
+        if (newStatus) {
+          await this.updateOrderStatus(order.id, newStatus);
+        }
+      }
+    } catch (error) {
+      console.error('Error en el scheduler de estados:', error);
+    }
+  }
+
+  private async updateOrderStatus(orderId: string, newStatus: string) {
+    try {
+      const updatedOrder = await this.prisma.order.update({
+        where: { id: orderId },
+        data: { status: newStatus },
+        include: {
+          items: {
+            include: {
+              product: true,
+            },
+          },
+          restaurant: true,
+        },
+      });
+
+      // Emitir actualización vía WebSocket
+      this.webSocketGateway.emitOrderUpdate(orderId, this.transformOrder(updatedOrder));
+      
+      const statusMessages: Record<string, string> = {
+        confirmed: 'Tu pedido ha sido confirmado',
+        preparing: 'Tu pedido está siendo preparado',
+        ready: 'Tu pedido está listo para recoger',
+        on_the_way: 'Tu pedido está en camino',
+        delivered: '¡Tu pedido ha sido entregado!',
+      };
+
+      this.webSocketGateway.emitStatusChange(
+        orderId,
+        newStatus,
+        statusMessages[newStatus] || `Estado actualizado a: ${newStatus}`,
+      );
+
+      console.log(`✅ Estado del pedido ${orderId} actualizado a: ${newStatus}`);
+    } catch (error) {
+      console.error(`Error al actualizar estado del pedido ${orderId}:`, error);
+    }
+  }
+
+  private transformOrder(order: any) {
+    return {
+      id: order.id,
+      userId: order.userId,
+      restaurantId: order.restaurantId,
+      items: order.items.map((item: any) => ({
+        product: item.product,
+        quantity: item.quantity,
+      })),
+      total: order.total,
+      status: order.status,
+      deliveryAddress: order.deliveryAddress,
+      paymentMethod: order.paymentMethod,
+      couponCode: order.couponCode || null,
+      discountAmount: order.discountAmount || null,
+      createdAt: order.createdAt.toISOString(),
+      updatedAt: order.updatedAt.toISOString(),
+    };
+  }
+}
+

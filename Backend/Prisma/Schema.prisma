@@ -1,0 +1,372 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String             @id @default(uuid())
+  email          String             @unique
+  password       String
+  name           String
+  role           String             @default("user")
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  avatar         String?
+  points         Int                @default(0)
+  referredBy     String?
+  referralsCount Int                @default(0)
+  referralCode   String?            @unique
+  pendingPenalty Float              @default(0)
+  favorites      Favorite[]
+  orders         Order[]
+  pointHistory   PointTransaction[]
+  referrals      Referral[]         @relation("Referrer")
+  reports        Report[]
+  savedLists     SavedList[]
+  referredUser   User?              @relation("Referred", fields: [referredBy], references: [id])
+  referredUsers  User[]             @relation("Referred")
+  rewards        UserReward[]
+  chatSessions   ChatSession[]
+  supportSurveys SupportSurvey[]     @relation("SupportSurveys")
+  reviews        Review[]
+  userCoupons    UserCoupon[]
+
+  @@index([referredBy])
+  @@index([referralCode])
+}
+
+model Referral {
+  id             String    @id @default(uuid())
+  referrerId     String
+  referredUserId String    @unique
+  status         String    @default("pending")
+  rewardPoints   Int       @default(0)
+  completedAt    DateTime?
+  rewardedAt     DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  referrer       User      @relation("Referrer", fields: [referrerId], references: [id], onDelete: Cascade)
+
+  @@index([referrerId])
+  @@index([status])
+}
+
+model Restaurant {
+  id           String      @id @default(uuid())
+  name         String
+  description  String
+  image        String?
+  rating       Float?
+  deliveryTime String?
+  minOrder     Float?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  favorites    Favorite[]
+  orders       Order[]
+  products     Product[]
+  promotions   Promotion[]
+}
+
+model Product {
+  id           String      @id @default(uuid())
+  name         String
+  description  String
+  price        Float
+  image        String?
+  category     String?
+  restaurantId String
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  favorites    Favorite[]
+  orderItems   OrderItem[]
+  restaurant   Restaurant  @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+}
+
+model Order {
+  id                 String      @id @default(uuid())
+  userId             String
+  restaurantId       String
+  status             String      @default("pending")
+  total              Float
+  deliveryAddress    Json
+  paymentMethod      String
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+  couponCode         String?
+  discountAmount     Float?
+  tipAmount          Float?
+  isScheduled        Boolean     @default(false)
+  scheduledFor       DateTime?
+  scheduledOrderData Json?
+  cancellationFee    Float?
+  cancellationReason String?
+  cancelledAt        DateTime?
+  appliedPenalty     Float?
+  restaurant         Restaurant  @relation(fields: [restaurantId], references: [id])
+  user               User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items              OrderItem[]
+  reports            Report[]
+
+  @@index([isScheduled])
+  @@index([scheduledFor])
+  @@index([status, isScheduled])
+}
+
+model OrderItem {
+  id        String   @id @default(uuid())
+  orderId   String
+  productId String
+  quantity  Int
+  price     Float
+  createdAt DateTime @default(now())
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id])
+}
+
+model Favorite {
+  id           String      @id @default(uuid())
+  userId       String
+  restaurantId String?
+  productId    String?
+  type         String
+  createdAt    DateTime    @default(now())
+  product      Product?    @relation(fields: [productId], references: [id], onDelete: Cascade)
+  restaurant   Restaurant? @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([restaurantId])
+  @@index([productId])
+}
+
+model Promotion {
+  id             String      @id @default(uuid())
+  title          String
+  description    String
+  discount       Float?
+  discountAmount Float?
+  minOrder       Float?
+  code           String?
+  type           String
+  image          String?
+  restaurantId   String?
+  category       String?
+  dayOfWeek      Int?
+  startDate      DateTime?
+  endDate        DateTime?
+  isActive       Boolean     @default(true)
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  restaurant     Restaurant? @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  @@index([isActive])
+  @@index([dayOfWeek])
+  @@index([restaurantId])
+}
+
+model Review {
+  id           String   @id @default(uuid())
+  userId       String
+  restaurantId String?
+  productId    String?
+  orderId      String?
+  rating       Int
+  comment      String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, restaurantId, orderId])
+  @@unique([userId, productId, orderId])
+  @@index([restaurantId])
+  @@index([productId])
+  @@index([userId])
+}
+
+model Address {
+  id        String   @id @default(uuid())
+  userId    String
+  label     String
+  street    String
+  city      String
+  zipCode   String
+  notes     String?
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Coupon {
+  id             String       @id @default(uuid())
+  code           String       @unique
+  description    String
+  discount       Float?
+  discountAmount Float?
+  minOrder       Float?
+  maxDiscount    Float?
+  type           String
+  restaurantId   String?
+  startDate      DateTime?
+  endDate        DateTime?
+  usageLimit     Int?
+  userUsageLimit Int?
+  isActive       Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  usages         UserCoupon[]
+
+  @@index([code])
+  @@index([isActive])
+}
+
+model UserCoupon {
+  id        String   @id @default(uuid())
+  userId    String
+  couponId  String
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+  coupon    Coupon   @relation(fields: [couponId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, couponId])
+  @@index([userId])
+  @@index([couponId])
+}
+
+model Reward {
+  id             String       @id @default(uuid())
+  title          String
+  description    String
+  pointsCost     Int
+  type           String
+  discount       Float?
+  discountAmount Float?
+  couponCode     String?      @unique
+  image          String?
+  isActive       Boolean      @default(true)
+  stock          Int?
+  redeemedCount  Int          @default(0)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  redemptions    UserReward[]
+
+  @@index([isActive])
+  @@index([pointsCost])
+}
+
+model UserReward {
+  id         String    @id @default(uuid())
+  userId     String
+  rewardId   String
+  couponCode String?
+  usedAt     DateTime?
+  redeemedAt DateTime  @default(now())
+  reward     Reward    @relation(fields: [rewardId], references: [id], onDelete: Cascade)
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([rewardId])
+  @@index([couponCode])
+}
+
+model PointTransaction {
+  id          String   @id @default(uuid())
+  userId      String
+  points      Int
+  type        String
+  description String
+  orderId     String?
+  rewardId    String?
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([orderId])
+  @@index([createdAt])
+}
+
+model SavedList {
+  id          String   @id @default(uuid())
+  userId      String
+  name        String
+  description String?
+  items       Json
+  isFavorite  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isFavorite])
+}
+
+model Report {
+  id        String   @id @default(uuid())
+  userId    String
+  orderId   String
+  type      String   @default("cancellation")
+  reason    String
+  fee       Float?
+  status    String   @default("pending")
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([orderId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model ChatSession {
+  id        String         @id @default(uuid())
+  userId    String
+  status    String         @default("active")
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  ChatMessage[]
+  survey    SupportSurvey?
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model ChatMessage {
+  id        String       @id @default(uuid())
+  sessionId String
+  role      String
+  content   String
+  metadata  Json?
+  createdAt DateTime     @default(now())
+  session   ChatSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@index([createdAt])
+}
+
+model SupportSurvey {
+  id            String       @id @default(uuid())
+  sessionId     String       @unique
+  supportUserId String
+  rating        Int?
+  comment       String?
+  createdAt     DateTime     @default(now())
+  resolvedAt    DateTime?
+  session       ChatSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  supportUser   User         @relation("SupportSurveys", fields: [supportUserId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@index([supportUserId])
+  @@index([createdAt])
+  @@index([rating])
+}
