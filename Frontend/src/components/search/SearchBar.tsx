@@ -269,9 +269,6 @@ export default function SearchBar() {
                           </p>
                           <p className="text-xs text-gray-500 truncate">
                             {product.restaurant?.name || 'Mercado'}
-                            {product.restaurant?.rating && (
-                              <span className="ml-2 text-yellow-500">⭐ {product.restaurant.rating.toFixed(1)}</span>
-                            )}
                           </p>
                         </div>
                         <p className="text-sm font-bold text-red-600">
