@@ -1,6 +1,6 @@
 # 🌍 Guía: Insertar Restaurantes Multiculturales
 
-Esta guía te ayudará a insertar 30 restaurantes de diferentes culturas en tu base de datos Supabase.
+Esta guía te ayudará a insertar 12 restaurantes de diferentes culturas (uno por cada cultura) en tu base de datos Supabase.
 
 ## 📋 Pasos para Insertar
 
@@ -26,7 +26,7 @@ Esta guía te ayudará a insertar 30 restaurantes de diferentes culturas en tu b
 
 1. Ve a **"Table Editor"** en Supabase
 2. Selecciona la tabla **"Restaurant"**
-3. Deberías ver los 30 nuevos restaurantes
+3. Deberías ver los 12 nuevos restaurantes (uno por cada cultura)
 
 ## 🎨 Agregar Imágenes a los Restaurantes
 
@@ -63,76 +63,53 @@ POST https://prontoclick-backend.onrender.com/upload/restaurant/[ID_DEL_RESTAURA
 3. Edita el campo **"image"** con la URL de tu imagen
 4. Guarda los cambios
 
-## 📊 Restaurantes Incluidos
+## 📊 Restaurantes Incluidos (12 restaurantes, uno por cultura)
 
-### 🇧🇷 Brasil (3)
-- Feijoada do Brasil
-- Churrasco Gaúcho
-- Acarajé da Bahia
+### 🇧🇷 Brasil
+- **Feijoada do Brasil** - Auténtica feijoada brasileña
 
-### 🇦🇷 Argentina (3)
-- Parrilla Argentina
-- Empanadas del Sur
-- Milanesa Napolitana
+### 🇦🇷 Argentina
+- **Parrilla Argentina** - Asado argentino tradicional
 
-### 🇵🇪 Perú (3)
-- Cevichería El Pescador
-- Lomo Saltado
-- Anticuchos El Inca
+### 🇵🇪 Perú
+- **Cevichería El Pescador** - Ceviche fresco del día
 
-### 🇪🇸 España (3)
-- Paella Valenciana
-- Tapas Barcelona
-- Gazpacho Andaluz
+### 🇪🇸 España
+- **Paella Valenciana** - Paella auténtica valenciana
 
-### 🇹🇷 Turquía (3)
-- Kebab Istanbul
-- Baklava House
-- Lahmacun Express
+### 🇹🇷 Turquía
+- **Kebab Istanbul** - Kebab auténtico turco
 
-### 🇨🇴 Colombia (3)
-- Bandeja Paisa
-- Arepas Colombianas
-- Ajiaco Santafereño
+### 🇨🇴 Colombia
+- **Bandeja Paisa** - Bandeja paisa completa
 
-### 🇨🇱 Chile (3)
-- Empanadas de Pino
-- Pastel de Choclo
-- Completo Italiano
+### 🇨🇱 Chile
+- **Empanadas de Pino** - Empanadas chilenas tradicionales
 
-### 🇬🇷 Grecia (3)
-- Souvlaki Athens
-- Moussaka House
-- Greek Mezze
+### 🇬🇷 Grecia
+- **Souvlaki Athens** - Souvlaki griego auténtico
 
-### 🇰🇷 Corea (3)
-- Bulgogi House
-- Bibimbap Seoul
-- Korean BBQ
+### 🇰🇷 Corea
+- **Bulgogi House** - Bulgogi coreano auténtico
 
-### 🇹🇭 Tailandia (3)
-- Pad Thai Original
-- Tom Yum Goong
-- Curry Tailandés
+### 🇹🇭 Tailandia
+- **Pad Thai Original** - Pad Thai auténtico tailandés
 
-### 🇮🇳 India (3)
-- Curry House India
-- Biryani Express
-- Tandoori Grill
+### 🇮🇳 India
+- **Curry House India** - Curries indios auténticos
 
-### 🇫🇷 Francia (3)
-- Boulangerie Parisienne
-- Coq au Vin
-- Crêperie Bretonne
+### 🇫🇷 Francia
+- **Boulangerie Parisienne** - Baguettes y pastelería francesa
 
 ## ✅ Verificación
 
 Después de insertar, verifica que:
 
-1. ✅ Los restaurantes aparecen en la tabla `Restaurant`
+1. ✅ Los 12 restaurantes aparecen en la tabla `Restaurant`
 2. ✅ Cada restaurante tiene nombre, descripción y rating
 3. ✅ Las imágenes se cargan correctamente (o actualízalas después)
 4. ✅ Los restaurantes aparecen en tu aplicación frontend
+5. ✅ Hay un restaurante representativo de cada cultura
 
 ## 🔄 Si Necesitas Modificar
 
