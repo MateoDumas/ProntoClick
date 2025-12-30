@@ -23,6 +23,7 @@
     "prisma:studio": "prisma studio",
     "prisma:seed": "ts-node Prisma/seed.ts",
     "create:support": "ts-node Prisma/create-support-user.ts",
+    "reset:support": "ts-node Prisma/reset-support-password.ts",
     "pre-deploy": "node scripts/pre-deploy-check.js",
     "keep-alive": "node scripts/keep-alive.js"
   },
