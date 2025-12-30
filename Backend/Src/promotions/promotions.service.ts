@@ -5,7 +5,7 @@ import { PrismaService } from '../Prisma/prisma.service';
 export class PromotionsService {
   constructor(private prisma: PrismaService) {}
 
-  async getActivePromotions(restaurantId?: string) {
+  async getActivePromotions(restaurantId?: string, userId?: string) {
     const today = new Date();
     const dayOfWeek = today.getDay(); // 0 = domingo, 6 = sábado
 
@@ -40,7 +40,7 @@ export class PromotionsService {
       where.restaurantId = null; // Solo promociones generales si no se especifica restaurante
     }
 
-    return this.prisma.promotion.findMany({
+    let promotions = await this.prisma.promotion.findMany({
       where,
       include: {
         restaurant: {
@@ -56,10 +56,33 @@ export class PromotionsService {
         { createdAt: 'desc' },
       ],
     });
+
+    // Si hay userId, filtrar el descuento de bienvenida si el usuario ya hizo pedidos
+    if (userId) {
+      const userOrdersCount = await this.prisma.order.count({
+        where: {
+          userId,
+          status: { not: 'cancelled' },
+        },
+      });
+
+      // Si el usuario ya hizo al menos un pedido, filtrar promociones de bienvenida
+      if (userOrdersCount > 0) {
+        promotions = promotions.filter(
+          (promo) => 
+            !promo.code?.toUpperCase().includes('BIENVENIDO') && 
+            !promo.code?.toUpperCase().includes('BIENVENIDA') &&
+            !promo.title.toLowerCase().includes('bienvenida') &&
+            !promo.title.toLowerCase().includes('primera compra')
+        );
+      }
+    }
+
+    return promotions;
   }
 
-  async getFeaturedPromotions(limit: number = 3) {
-    const promotions = await this.getActivePromotions();
+  async getFeaturedPromotions(limit: number = 3, userId?: string) {
+    const promotions = await this.getActivePromotions(undefined, userId);
     
     // Rotar promociones basándose en el día de la semana
     const dayOfWeek = new Date().getDay();

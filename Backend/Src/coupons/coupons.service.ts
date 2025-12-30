@@ -132,21 +132,37 @@ export class CouponsService {
 
     // Si hay userId, verificar cuáles puede usar
     if (userId) {
+      // Verificar si el usuario ya hizo pedidos
+      const userOrdersCount = await this.prisma.order.count({
+        where: {
+          userId,
+          status: { not: 'cancelled' },
+        },
+      });
+
       const userCoupons = await this.prisma.userCoupon.findMany({
         where: { userId },
       });
 
-      return coupons.map(coupon => {
-        const userCoupon = userCoupons.find(uc => uc.couponId === coupon.id);
-        const canUse = !userCoupon?.usedAt || 
-                      (coupon.userUsageLimit && 
-                       userCoupons.filter(uc => uc.couponId === coupon.id && uc.usedAt).length < coupon.userUsageLimit);
+      return coupons
+        .filter(coupon => {
+          // Filtrar cupón de bienvenida si el usuario ya hizo pedidos
+          if (coupon.code?.toUpperCase() === 'BIENVENIDA10' && userOrdersCount > 0) {
+            return false;
+          }
+          return true;
+        })
+        .map(coupon => {
+          const userCoupon = userCoupons.find(uc => uc.couponId === coupon.id);
+          const canUse = !userCoupon?.usedAt || 
+                        (coupon.userUsageLimit && 
+                         userCoupons.filter(uc => uc.couponId === coupon.id && uc.usedAt).length < coupon.userUsageLimit);
 
-        return {
-          ...coupon,
-          canUse,
-        };
-      });
+          return {
+            ...coupon,
+            canUse,
+          };
+        });
     }
 
     return coupons;

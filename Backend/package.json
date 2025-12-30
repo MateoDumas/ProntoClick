@@ -24,6 +24,10 @@
     "prisma:seed": "ts-node Prisma/seed.ts",
     "create:support": "ts-node Prisma/create-support-user.ts",
     "reset:support": "ts-node Prisma/reset-support-password.ts",
+    "seed:promotions": "ts-node Prisma/seed-promotions.ts",
+    "seed:rewards": "ts-node Prisma/seed-rewards.ts",
+    "seed:coupons": "ts-node Prisma/seed-coupons.ts",
+    "seed:all": "npm run seed:promotions && npm run seed:rewards && npm run seed:coupons",
     "pre-deploy": "node scripts/pre-deploy-check.js",
     "keep-alive": "node scripts/keep-alive.js"
   },
