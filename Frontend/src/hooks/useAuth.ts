@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { login, register, logout, getCurrentUser, verifyEmail, resendVerificationCode } from '../services/auth.service';
-import { updateProfile, changePassword, type UpdateProfileDto, type ChangePasswordDto } from '../services/user.service';
+import { updateProfile, changePassword, deleteAccount, type UpdateProfileDto, type ChangePasswordDto } from '../services/user.service';
 import { User } from '../types';
 import type { LoginDto, RegisterDto } from '../services/auth.service';
 
@@ -85,6 +85,22 @@ export const useUpdateProfile = () => {
 export const useChangePassword = () => {
   return useMutation({
     mutationFn: changePassword,
+  });
+};
+
+export const useDeleteAccount = () => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: (password: string) => deleteAccount(password),
+    onSuccess: () => {
+      // Limpiar cache y token
+      queryClient.setQueryData(['me'], null);
+      localStorage.removeItem('token');
+      // Redirigir al login
+      router.push('/login');
+    },
   });
 };
 

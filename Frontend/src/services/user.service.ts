@@ -21,4 +21,8 @@ export const changePassword = async (data: ChangePasswordDto): Promise<void> => 
   await api.patch('/users/me/password', data);
 };
 
+export const deleteAccount = async (password: string): Promise<void> => {
+  await api.delete('/users/me', { data: { password } });
+};
+
 

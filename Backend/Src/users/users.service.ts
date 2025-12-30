@@ -79,5 +79,23 @@ export class UsersService {
       data,
     });
   }
+
+  async deleteAccount(userId: string, password: string): Promise<void> {
+    const user = await this.findById(userId);
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+
+    // Verificar contraseña antes de eliminar
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('La contraseña es incorrecta');
+    }
+
+    // Eliminar usuario (Prisma eliminará automáticamente los datos relacionados por onDelete: Cascade)
+    await this.prisma.user.delete({
+      where: { id: userId },
+    });
+  }
 }
 

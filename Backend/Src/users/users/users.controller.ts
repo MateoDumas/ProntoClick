@@ -1,4 +1,4 @@
-import { Controller, Get, Patch, Body, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Patch, Delete, Body, UseGuards, Request } from '@nestjs/common';
 import { UsersService } from '../users.service';
 import { JwtAuthGuard } from '../../common/jwt.guard';
 import { UpdateProfileDto } from '../dto/update-profile.dto';
@@ -30,6 +30,12 @@ export class UsersController {
   async changePassword(@Request() req, @Body() changePasswordDto: ChangePasswordDto) {
     await this.usersService.changePassword(req.user.id, changePasswordDto);
     return { message: 'Contraseña actualizada exitosamente' };
+  }
+
+  @Delete('me')
+  async deleteAccount(@Request() req, @Body() body: { password: string }) {
+    await this.usersService.deleteAccount(req.user.id, body.password);
+    return { message: 'Cuenta eliminada exitosamente' };
   }
 }
 
