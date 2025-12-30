@@ -118,39 +118,328 @@ export class NotificationsService {
 
     try {
       const fromEmail = this.configService.get<string>('FROM_EMAIL') || 'noreply@prontoclick.com';
+      const frontendUrl = this.configService.get<string>('FRONTEND_URL') || 'https://pronto-click.vercel.app';
       
       const msg = {
         to: userEmail,
         from: fromEmail,
-        subject: '¡Bienvenido a ProntoClick!',
+        subject: '¡Bienvenido a ProntoClick! Tu cuenta ha sido confirmada 🎉',
         html: `
           <!DOCTYPE html>
           <html>
           <head>
             <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <style>
-              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-              .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-              .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
-              .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
+              * { margin: 0; padding: 0; box-sizing: border-box; }
+              body { 
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; 
+                line-height: 1.6; 
+                color: #333; 
+                background-color: #f4f4f4;
+              }
+              .email-container { 
+                max-width: 600px; 
+                margin: 0 auto; 
+                background-color: #ffffff;
+              }
+              .header { 
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                color: white; 
+                padding: 40px 30px; 
+                text-align: center; 
+              }
+              .header h1 { 
+                font-size: 32px; 
+                margin-bottom: 10px;
+                font-weight: 700;
+              }
+              .header p { 
+                font-size: 18px; 
+                opacity: 0.95;
+              }
+              .content { 
+                padding: 40px 30px; 
+              }
+              .welcome-message {
+                font-size: 18px;
+                color: #667eea;
+                font-weight: 600;
+                margin-bottom: 20px;
+              }
+              .confirmation-box {
+                background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 100%);
+                border-left: 4px solid #667eea;
+                padding: 20px;
+                margin: 25px 0;
+                border-radius: 8px;
+              }
+              .confirmation-box h2 {
+                color: #667eea;
+                font-size: 20px;
+                margin-bottom: 10px;
+              }
+              .benefits {
+                background: #f9f9f9;
+                padding: 25px;
+                border-radius: 8px;
+                margin: 25px 0;
+              }
+              .benefits h3 {
+                color: #333;
+                font-size: 20px;
+                margin-bottom: 15px;
+                text-align: center;
+              }
+              .benefits-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+                margin-top: 15px;
+              }
+              .benefit-item {
+                background: white;
+                padding: 15px;
+                border-radius: 8px;
+                text-align: center;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+              }
+              .benefit-icon {
+                font-size: 32px;
+                margin-bottom: 8px;
+              }
+              .benefit-title {
+                font-weight: 600;
+                color: #667eea;
+                margin-bottom: 5px;
+              }
+              .benefit-desc {
+                font-size: 13px;
+                color: #666;
+              }
+              .promo-box {
+                background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+                color: white;
+                padding: 25px;
+                border-radius: 8px;
+                margin: 25px 0;
+                text-align: center;
+              }
+              .promo-box h3 {
+                font-size: 24px;
+                margin-bottom: 10px;
+              }
+              .promo-code {
+                background: white;
+                color: #ff6b6b;
+                padding: 12px 20px;
+                border-radius: 6px;
+                font-size: 20px;
+                font-weight: 700;
+                display: inline-block;
+                margin: 15px 0;
+                letter-spacing: 2px;
+              }
+              .cta-button {
+                display: inline-block;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 15px 40px;
+                text-decoration: none;
+                border-radius: 8px;
+                font-weight: 600;
+                font-size: 16px;
+                margin: 20px 0;
+                text-align: center;
+                box-shadow: 0 4px 6px rgba(102, 126, 234, 0.3);
+              }
+              .steps {
+                margin: 25px 0;
+              }
+              .step {
+                display: flex;
+                align-items: flex-start;
+                margin-bottom: 20px;
+              }
+              .step-number {
+                background: #667eea;
+                color: white;
+                width: 35px;
+                height: 35px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 700;
+                margin-right: 15px;
+                flex-shrink: 0;
+              }
+              .step-content h4 {
+                color: #333;
+                margin-bottom: 5px;
+              }
+              .step-content p {
+                color: #666;
+                font-size: 14px;
+              }
+              .footer { 
+                background: #2c3e50;
+                color: #ecf0f1;
+                padding: 30px;
+                text-align: center;
+                font-size: 14px;
+              }
+              .footer a {
+                color: #667eea;
+                text-decoration: none;
+              }
+              .social-links {
+                margin: 20px 0;
+              }
+              .social-links a {
+                display: inline-block;
+                margin: 0 10px;
+                color: #ecf0f1;
+                text-decoration: none;
+              }
+              @media only screen and (max-width: 600px) {
+                .benefits-grid {
+                  grid-template-columns: 1fr;
+                }
+                .header h1 {
+                  font-size: 24px;
+                }
+                .content {
+                  padding: 25px 20px;
+                }
+              }
             </style>
           </head>
           <body>
-            <div class="container">
+            <div class="email-container">
               <div class="header">
-                <h1>¡Bienvenido a ProntoClick!</h1>
+                <h1>🎉 ¡Bienvenido a ProntoClick!</h1>
+                <p>Tu cuenta ha sido confirmada exitosamente</p>
               </div>
+              
               <div class="content">
-                <p>Hola ${userName},</p>
-                <p>¡Gracias por unirte a ProntoClick! Estamos emocionados de tenerte con nosotros.</p>
-                <p>Ahora puedes:</p>
-                <ul>
-                  <li>Explorar restaurantes y productos</li>
-                  <li>Realizar pedidos rápidos y seguros</li>
-                  <li>Ganar puntos con cada compra</li>
-                  <li>Canjear recompensas exclusivas</li>
-                </ul>
-                <p>¡Que disfrutes tu experiencia con ProntoClick!</p>
+                <p class="welcome-message">Hola ${userName},</p>
+                
+                <p style="font-size: 16px; margin-bottom: 20px;">
+                  ¡Estamos emocionados de tenerte con nosotros! Tu cuenta ha sido creada y confirmada correctamente. 
+                  Ahora puedes disfrutar de todos los beneficios que ProntoClick tiene para ofrecerte.
+                </p>
+
+                <div class="confirmation-box">
+                  <h2>✅ Cuenta Confirmada</h2>
+                  <p style="margin: 0; color: #555;">
+                    Tu email <strong>${userEmail}</strong> ha sido verificado y tu cuenta está lista para usar. 
+                    Ya puedes iniciar sesión y comenzar a pedir.
+                  </p>
+                </div>
+
+                <div class="promo-box">
+                  <h3>🎁 ¡Descuento Especial de Bienvenida!</h3>
+                  <p style="margin-bottom: 15px;">Usa este código en tu primer pedido:</p>
+                  <div class="promo-code">BIENVENIDA10</div>
+                  <p style="font-size: 14px; opacity: 0.9;">10% de descuento en tu primer pedido</p>
+                </div>
+
+                <div class="benefits">
+                  <h3>🌟 ¿Qué puedes hacer en ProntoClick?</h3>
+                  <div class="benefits-grid">
+                    <div class="benefit-item">
+                      <div class="benefit-icon">🍕</div>
+                      <div class="benefit-title">Explorar</div>
+                      <div class="benefit-desc">Restaurantes y productos</div>
+                    </div>
+                    <div class="benefit-item">
+                      <div class="benefit-icon">⚡</div>
+                      <div class="benefit-title">Pedidos Rápidos</div>
+                      <div class="benefit-desc">Entrega en minutos</div>
+                    </div>
+                    <div class="benefit-item">
+                      <div class="benefit-icon">⭐</div>
+                      <div class="benefit-title">ProntoPuntos</div>
+                      <div class="benefit-desc">Gana con cada compra</div>
+                    </div>
+                    <div class="benefit-item">
+                      <div class="benefit-icon">🎁</div>
+                      <div class="benefit-title">Recompensas</div>
+                      <div class="benefit-desc">Canjea puntos</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="steps">
+                  <h3 style="color: #333; margin-bottom: 20px; text-align: center;">🚀 Cómo Empezar</h3>
+                  
+                  <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                      <h4>Explora Restaurantes</h4>
+                      <p>Descubre una amplia variedad de restaurantes y productos de diferentes culturas.</p>
+                    </div>
+                  </div>
+                  
+                  <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                      <h4>Agrega al Carrito</h4>
+                      <p>Selecciona tus productos favoritos y agrégalos a tu carrito de compras.</p>
+                    </div>
+                  </div>
+                  
+                  <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                      <h4>Realiza tu Pedido</h4>
+                      <p>Usa el código BIENVENIDA10 para obtener 10% de descuento en tu primer pedido.</p>
+                    </div>
+                  </div>
+                  
+                  <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                      <h4>Gana ProntoPuntos</h4>
+                      <p>Con cada compra gana puntos que puedes canjear por recompensas exclusivas.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="text-align: center; margin: 30px 0;">
+                  <a href="${frontendUrl}" class="cta-button">Comenzar a Pedir Ahora</a>
+                </div>
+
+                <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin-top: 30px;">
+                  <h4 style="color: #333; margin-bottom: 10px;">💡 Consejos para aprovechar al máximo:</h4>
+                  <ul style="color: #666; padding-left: 20px; margin: 0;">
+                    <li style="margin-bottom: 8px;">Guarda tus direcciones favoritas para pedidos más rápidos</li>
+                    <li style="margin-bottom: 8px;">Revisa las promociones diarias para obtener mejores descuentos</li>
+                    <li style="margin-bottom: 8px;">Invita amigos y gana puntos adicionales con el programa de referidos</li>
+                    <li>Canjea tus ProntoPuntos por cupones y recompensas exclusivas</li>
+                  </ul>
+                </div>
+
+                <p style="margin-top: 30px; color: #666; font-size: 14px; text-align: center;">
+                  Si tienes alguna pregunta, nuestro equipo de soporte está disponible 24/7 para ayudarte.
+                </p>
+              </div>
+
+              <div class="footer">
+                <p style="margin-bottom: 15px;">
+                  <strong>ProntoClick</strong><br>
+                  Tu comida favorita, a un click de distancia
+                </p>
+                <div class="social-links">
+                  <a href="${frontendUrl}">Visita nuestro sitio</a> |
+                  <a href="${frontendUrl}/support">Soporte</a> |
+                  <a href="${frontendUrl}/rewards">Recompensas</a>
+                </div>
+                <p style="margin-top: 20px; font-size: 12px; color: #95a5a6;">
+                  Este es un email automático, por favor no respondas a este mensaje.<br>
+                  © ${new Date().getFullYear()} ProntoClick. Todos los derechos reservados.
+                </p>
               </div>
             </div>
           </body>
