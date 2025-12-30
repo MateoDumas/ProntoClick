@@ -111,6 +111,17 @@ Después de insertar, verifica que:
 4. ✅ Los restaurantes aparecen en tu aplicación frontend
 5. ✅ Hay un restaurante representativo de cada cultura
 
+---
+
+## 📦 Siguiente Paso: Insertar Productos
+
+Una vez que hayas insertado los restaurantes, puedes agregar productos típicos para cada uno usando:
+
+- **Script**: `INSERTAR_PRODUCTOS_RESTAURANTES.sql`
+- **Guía**: `GUIA_INSERTAR_PRODUCTOS.md`
+
+Cada restaurante tendrá 4 productos: 2 platos principales, 1 bebida y 1 postre típicos de su cultura.
+
 ## 🔄 Si Necesitas Modificar
 
 Si quieres modificar algún restaurante después de insertarlo:
