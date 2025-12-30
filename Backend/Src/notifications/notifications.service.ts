@@ -526,6 +526,157 @@ export class NotificationsService {
   }
 
   /**
+   * Envía email con código de verificación
+   */
+  async sendVerificationCodeEmail(userEmail: string, userName: string, verificationCode: string): Promise<boolean> {
+    if (!this.isConfigured) {
+      this.logger.warn('SendGrid no configurado. Email no enviado.');
+      return false;
+    }
+
+    try {
+      const fromEmail = this.configService.get<string>('FROM_EMAIL') || 'noreply@prontoclick.com';
+      const frontendUrl = this.configService.get<string>('FRONTEND_URL') || 'https://pronto-click.vercel.app';
+      
+      const msg = {
+        to: userEmail,
+        from: fromEmail,
+        subject: '🔐 Código de Verificación - ProntoClick',
+        html: `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <style>
+              * { margin: 0; padding: 0; box-sizing: border-box; }
+              body { 
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; 
+                line-height: 1.6; 
+                color: #333; 
+                background-color: #f4f4f4;
+              }
+              .email-container { 
+                max-width: 600px; 
+                margin: 0 auto; 
+                background-color: #ffffff;
+              }
+              .header { 
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                color: white; 
+                padding: 40px 30px; 
+                text-align: center; 
+              }
+              .header h1 { 
+                font-size: 32px; 
+                margin-bottom: 10px;
+                font-weight: 700;
+              }
+              .content { 
+                padding: 40px 30px; 
+              }
+              .code-box {
+                background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 100%);
+                border: 2px dashed #667eea;
+                padding: 30px;
+                margin: 30px 0;
+                border-radius: 12px;
+                text-align: center;
+              }
+              .verification-code {
+                font-size: 48px;
+                font-weight: 700;
+                color: #667eea;
+                letter-spacing: 8px;
+                font-family: 'Courier New', monospace;
+                margin: 20px 0;
+              }
+              .code-label {
+                font-size: 14px;
+                color: #666;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                margin-bottom: 10px;
+              }
+              .warning-box {
+                background: #fff3cd;
+                border-left: 4px solid #ffc107;
+                padding: 15px;
+                margin: 20px 0;
+                border-radius: 4px;
+              }
+              .footer { 
+                background: #2c3e50;
+                color: #ecf0f1;
+                padding: 30px;
+                text-align: center;
+                font-size: 14px;
+              }
+            </style>
+          </head>
+          <body>
+            <div class="email-container">
+              <div class="header">
+                <h1>🔐 Verifica tu Email</h1>
+                <p>Completa tu registro en ProntoClick</p>
+              </div>
+              
+              <div class="content">
+                <p style="font-size: 16px; margin-bottom: 20px;">
+                  Hola <strong>${userName}</strong>,
+                </p>
+                
+                <p style="font-size: 16px; margin-bottom: 20px;">
+                  Gracias por registrarte en ProntoClick. Para completar tu registro y comenzar a usar tu cuenta, 
+                  necesitas verificar tu dirección de email usando el código que aparece a continuación.
+                </p>
+
+                <div class="code-box">
+                  <div class="code-label">Tu código de verificación</div>
+                  <div class="verification-code">${verificationCode}</div>
+                  <p style="font-size: 14px; color: #666; margin-top: 15px;">
+                    Este código expira en 15 minutos
+                  </p>
+                </div>
+
+                <div class="warning-box">
+                  <p style="margin: 0; color: #856404;">
+                    <strong>⚠️ Importante:</strong> No compartas este código con nadie. Si no solicitaste este código, 
+                    puedes ignorar este email de forma segura.
+                  </p>
+                </div>
+
+                <p style="font-size: 14px; color: #666; margin-top: 30px; text-align: center;">
+                  Si tienes problemas, puedes solicitar un nuevo código desde la página de verificación.
+                </p>
+              </div>
+
+              <div class="footer">
+                <p style="margin-bottom: 15px;">
+                  <strong>ProntoClick</strong><br>
+                  Tu comida favorita, a un click de distancia
+                </p>
+                <p style="margin-top: 20px; font-size: 12px; color: #95a5a6;">
+                  Este es un email automático, por favor no respondas a este mensaje.<br>
+                  © ${new Date().getFullYear()} ProntoClick. Todos los derechos reservados.
+                </p>
+              </div>
+            </div>
+          </body>
+          </html>
+        `,
+      };
+
+      await sgMail.send(msg);
+      this.logger.log(`Email de verificación enviado a ${userEmail}`);
+      return true;
+    } catch (error) {
+      this.logger.error(`Error al enviar email de verificación a ${userEmail}:`, error);
+      return false;
+    }
+  }
+
+  /**
    * Verifica si el servicio está configurado
    */
   isEmailConfigured(): boolean {

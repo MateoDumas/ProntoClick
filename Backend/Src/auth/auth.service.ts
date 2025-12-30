@@ -47,10 +47,18 @@ export class AuthService {
     // Hash de la contraseña
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
+    // Generar código de verificación (6 dígitos)
+    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const verificationCodeExpires = new Date();
+    verificationCodeExpires.setMinutes(verificationCodeExpires.getMinutes() + 15); // Expira en 15 minutos
+
     // Crear usuario
     const user = await this.usersService.create({
       ...data,
       password: hashedPassword,
+      emailVerified: false,
+      verificationCode,
+      verificationCodeExpires,
     });
 
     // Procesar código de referido si existe
@@ -81,10 +89,82 @@ export class AuthService {
       // No fallar el registro si hay error con el email
     }
 
+    // Enviar código de verificación (no bloquea el registro si falla)
+    try {
+      await this.notificationsService.sendVerificationCodeEmail(user.email, user.name, verificationCode);
+    } catch (error) {
+      console.error('Error al enviar código de verificación:', error);
+      // No fallar el registro si hay error con el email
+    }
+
     return {
       user: userWithoutPassword,
       token: this.jwtService.sign(payload),
+      requiresVerification: true,
     };
+  }
+
+  async verifyEmail(userId: string, code: string): Promise<boolean> {
+    const user = await this.usersService.findById(userId);
+    if (!user) {
+      throw new UnauthorizedException('Usuario no encontrado');
+    }
+
+    if (user.emailVerified) {
+      return true; // Ya está verificado
+    }
+
+    if (!user.verificationCode || !user.verificationCodeExpires) {
+      throw new UnauthorizedException('Código de verificación no encontrado');
+    }
+
+    if (new Date() > user.verificationCodeExpires) {
+      throw new UnauthorizedException('El código de verificación ha expirado');
+    }
+
+    if (user.verificationCode !== code) {
+      throw new UnauthorizedException('Código de verificación incorrecto');
+    }
+
+    // Verificar el email
+    await this.usersService.update(userId, {
+      emailVerified: true,
+      verificationCode: null,
+      verificationCodeExpires: null,
+    });
+
+    return true;
+  }
+
+  async resendVerificationCode(userId: string): Promise<boolean> {
+    const user = await this.usersService.findById(userId);
+    if (!user) {
+      throw new UnauthorizedException('Usuario no encontrado');
+    }
+
+    if (user.emailVerified) {
+      throw new UnauthorizedException('El email ya está verificado');
+    }
+
+    // Generar nuevo código de verificación
+    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const verificationCodeExpires = new Date();
+    verificationCodeExpires.setMinutes(verificationCodeExpires.getMinutes() + 15);
+
+    // Actualizar usuario con nuevo código
+    await this.usersService.update(userId, {
+      verificationCode,
+      verificationCodeExpires,
+    });
+
+    // Enviar email con nuevo código
+    try {
+      await this.notificationsService.sendVerificationCodeEmail(user.email, user.name, verificationCode);
+      return true;
+    } catch (error) {
+      console.error('Error al reenviar código de verificación:', error);
+      throw new UnauthorizedException('Error al enviar código de verificación');
+    }
   }
 }
 

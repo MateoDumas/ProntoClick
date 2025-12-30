@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
-import { login, register, logout, getCurrentUser } from '../services/auth.service';
+import { login, register, logout, getCurrentUser, verifyEmail, resendVerificationCode } from '../services/auth.service';
 import { updateProfile, changePassword, type UpdateProfileDto, type ChangePasswordDto } from '../services/user.service';
 import { User } from '../types';
 import type { LoginDto, RegisterDto } from '../services/auth.service';
@@ -44,6 +44,11 @@ export const useRegister = () => {
       // Actualizar el cache con el usuario
       queryClient.setQueryData(['me'], data.user);
       queryClient.invalidateQueries({ queryKey: ['me'] });
+      
+      // Si requiere verificación, redirigir a la página de verificación
+      if (data.requiresVerification) {
+        router.push('/verify-email');
+      }
     },
     onError: (error: any) => {
       // El error se manejará en el componente
@@ -80,5 +85,22 @@ export const useUpdateProfile = () => {
 export const useChangePassword = () => {
   return useMutation({
     mutationFn: changePassword,
+  });
+};
+
+export const useVerifyEmail = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: verifyEmail,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['me'] });
+    },
+  });
+};
+
+export const useResendVerificationCode = () => {
+  return useMutation({
+    mutationFn: resendVerificationCode,
   });
 };

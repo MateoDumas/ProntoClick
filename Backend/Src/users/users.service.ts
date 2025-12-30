@@ -72,5 +72,12 @@ export class UsersService {
       data: { password: hashedPassword },
     });
   }
+
+  async update(userId: string, data: Partial<User>): Promise<User> {
+    return this.prisma.user.update({
+      where: { id: userId },
+      data,
+    });
+  }
 }
 

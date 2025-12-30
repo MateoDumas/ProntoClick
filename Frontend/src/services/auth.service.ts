@@ -16,6 +16,7 @@ export interface RegisterDto {
 export interface AuthResponse {
   user: User;
   token: string;
+  requiresVerification?: boolean;
 }
 
 export const login = async (credentials: LoginDto): Promise<AuthResponse> => {
@@ -55,6 +56,16 @@ export const logout = async (): Promise<void> => {
 
 export const getCurrentUser = async (): Promise<User> => {
   const { data } = await api.get<User>('/auth/me');
+  return data;
+};
+
+export const verifyEmail = async (code: string): Promise<{ success: boolean; message: string }> => {
+  const { data } = await api.post<{ success: boolean; message: string }>('/auth/verify-email', { code });
+  return data;
+};
+
+export const resendVerificationCode = async (): Promise<{ success: boolean; message: string }> => {
+  const { data } = await api.post<{ success: boolean; message: string }>('/auth/resend-verification');
   return data;
 };
 

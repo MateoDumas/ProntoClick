@@ -70,18 +70,21 @@ export default function Register() {
     if (!validateForm()) return;
 
     try {
-      await registerMutation.mutateAsync({
+      const result = await registerMutation.mutateAsync({
         name: formData.name.trim(),
         email: formData.email.trim(),
         password: formData.password,
         referralCode: formData.referralCode.trim() || undefined,
       });
       
-      success('¡Cuenta creada exitosamente! Bienvenido a ProntoClick.');
+      success('¡Cuenta creada exitosamente! Revisa tu email para verificar tu cuenta.');
       
-      // Redirigir a la página que intentaba acceder o al home
-      const redirect = (router.query.redirect as string) || '/';
-      router.push(redirect);
+      // Si requiere verificación, el hook ya redirigirá a /verify-email
+      // Si no, redirigir normalmente
+      if (!result.requiresVerification) {
+        const redirect = (router.query.redirect as string) || '/';
+        router.push(redirect);
+      }
     } catch (error: any) {
       let errorMessage = 'Error al registrarse. Intenta de nuevo.';
       

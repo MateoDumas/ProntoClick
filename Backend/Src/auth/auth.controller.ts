@@ -23,5 +23,19 @@ export class AuthController {
   async getProfile(@Request() req) {
     return req.user;
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('verify-email')
+  async verifyEmail(@Request() req, @Body() body: { code: string }) {
+    const success = await this.authService.verifyEmail(req.user.id, body.code);
+    return { success, message: 'Email verificado correctamente' };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('resend-verification')
+  async resendVerification(@Request() req) {
+    const success = await this.authService.resendVerificationCode(req.user.id);
+    return { success, message: 'Código de verificación reenviado' };
+  }
 }
 
