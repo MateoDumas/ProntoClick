@@ -85,10 +85,10 @@ POST https://prontoclick-backend.onrender.com/upload/restaurant/[ID_DEL_RESTAURA
 - Tapas Barcelona
 - Gazpacho Andaluz
 
-### 🇲🇽 México (3)
-- Tacos El Charro
-- Mole Poblano
-- Pozole Rojo
+### 🇹🇷 Turquía (3)
+- Kebab Istanbul
+- Baklava House
+- Lahmacun Express
 
 ### 🇨🇴 Colombia (3)
 - Bandeja Paisa
@@ -100,15 +100,15 @@ POST https://prontoclick-backend.onrender.com/upload/restaurant/[ID_DEL_RESTAURA
 - Pastel de Choclo
 - Completo Italiano
 
-### 🇮🇹 Italia (3)
-- Pasta Artigianale
-- Pizzeria Napoletana
-- Risotto Milano
+### 🇬🇷 Grecia (3)
+- Souvlaki Athens
+- Moussaka House
+- Greek Mezze
 
-### 🇯🇵 Japón (3)
-- Sushi Omakase
-- Ramen House
-- Tempura Tokyo
+### 🇰🇷 Corea (3)
+- Bulgogi House
+- Bibimbap Seoul
+- Korean BBQ
 
 ### 🇹🇭 Tailandia (3)
 - Pad Thai Original

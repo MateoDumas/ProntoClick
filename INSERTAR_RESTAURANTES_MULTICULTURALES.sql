@@ -1,5 +1,5 @@
 -- Insertar restaurantes de diferentes culturas
--- Brasil, Argentina, Perú, España, México, Colombia, Chile, Italia, Japón, Tailandia, India, Francia
+-- Brasil, Argentina, Perú, España, Turquía, Colombia, Chile, Grecia, Corea, Tailandia, India, Francia
 
 INSERT INTO "Restaurant" (id, name, description, image, rating, "deliveryTime", "minOrder", "createdAt", "updatedAt")
 VALUES 
@@ -143,37 +143,37 @@ VALUES
     NOW()
   ),
 
-  -- MÉXICO 🇲🇽
+  -- TURQUÍA 🇹🇷
   (
     gen_random_uuid(),
-    'Tacos El Charro',
-    'Tacos auténticos mexicanos: pastor, carnitas, barbacoa. Salsas caseras picantes',
-    'https://images.unsplash.com/photo-1565299585323-38174c3d6c6e?w=800',
+    'Kebab Istanbul',
+    'Kebab auténtico turco: döner, shish, adana. Pan pita fresco y salsas tradicionales',
+    'https://images.unsplash.com/photo-1527477396000-e27163b481c2?w=800',
     4.9,
-    '18-28 min',
+    '20-30 min',
+    14.00,
+    NOW(),
+    NOW()
+  ),
+  (
+    gen_random_uuid(),
+    'Baklava House',
+    'Baklava casero con pistachos y miel. Postres turcos tradicionales y café turco',
+    'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=800',
+    4.8,
+    '15-25 min',
     10.00,
     NOW(),
     NOW()
   ),
   (
     gen_random_uuid(),
-    'Mole Poblano',
-    'Mole poblano tradicional con pollo. Sabor único de Puebla, México',
-    'https://images.unsplash.com/photo-1558030006-450675393462?w=800',
-    4.8,
-    '30-40 min',
-    19.00,
-    NOW(),
-    NOW()
-  ),
-  (
-    gen_random_uuid(),
-    'Pozole Rojo',
-    'Pozole rojo tradicional con todos los acompañamientos. Caldo caliente y delicioso',
-    'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800',
+    'Lahmacun Express',
+    'Lahmacun y pide turcos recién horneados. Sabor auténtico de la cocina turca',
+    'https://images.unsplash.com/photo-1565299585323-38174c3d6c6e?w=800',
     4.7,
-    '25-35 min',
-    16.00,
+    '18-28 min',
+    12.00,
     NOW(),
     NOW()
   ),
@@ -248,72 +248,72 @@ VALUES
     NOW()
   ),
 
-  -- ITALIA 🇮🇹
+  -- GRECIA 🇬🇷
   (
     gen_random_uuid(),
-    'Pasta Artigianale',
-    'Pastas artesanales italianas: carbonara, amatriciana, cacio e pepe. Recetas auténticas',
-    'https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=800',
+    'Souvlaki Athens',
+    'Souvlaki griego auténtico con tzatziki casero. Gyros y platos tradicionales griegos',
+    'https://images.unsplash.com/photo-1527477396000-e27163b481c2?w=800',
     4.9,
-    '25-35 min',
-    19.00,
-    NOW(),
-    NOW()
-  ),
-  (
-    gen_random_uuid(),
-    'Pizzeria Napoletana',
-    'Pizza napolitana auténtica con masa fermentada 48 horas. Ingredientes importados de Italia',
-    'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800',
-    4.8,
     '20-30 min',
-    16.00,
+    15.00,
     NOW(),
     NOW()
   ),
   (
     gen_random_uuid(),
-    'Risotto Milano',
-    'Risotto cremoso al estilo milanés. Arroz arborio con ingredientes premium',
+    'Moussaka House',
+    'Moussaka casera griega con berenjena y carne. Sabor auténtico de las islas griegas',
     'https://images.unsplash.com/photo-1558030006-450675393462?w=800',
-    4.7,
-    '30-40 min',
-    21.00,
-    NOW(),
-    NOW()
-  ),
-
-  -- JAPÓN 🇯🇵
-  (
-    gen_random_uuid(),
-    'Sushi Omakase',
-    'Sushi premium preparado por chefs japoneses. Pescado fresco importado diariamente',
-    'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=800',
-    4.9,
-    '30-40 min',
-    35.00,
-    NOW(),
-    NOW()
-  ),
-  (
-    gen_random_uuid(),
-    'Ramen House',
-    'Ramen tradicional con caldo hecho durante 12 horas. Tonkotsu, miso y shoyu',
-    'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=800',
     4.8,
+    '30-40 min',
+    20.00,
+    NOW(),
+    NOW()
+  ),
+  (
+    gen_random_uuid(),
+    'Greek Mezze',
+    'Mezze griego: hummus, tzatziki, dolmades, spanakopita. Sabores mediterráneos auténticos',
+    'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800',
+    4.7,
     '25-35 min',
     18.00,
     NOW(),
     NOW()
   ),
+
+  -- COREA 🇰🇷
   (
     gen_random_uuid(),
-    'Tempura Tokyo',
-    'Tempura crujiente y ligero. Verduras y mariscos fritos al estilo japonés',
-    'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=800',
-    4.7,
-    '20-30 min',
+    'Bulgogi House',
+    'Bulgogi coreano auténtico: carne marinada a la parrilla. Kimchi casero incluido',
+    'https://images.unsplash.com/photo-1544025162-d76694265947?w=800',
+    4.9,
+    '25-35 min',
     22.00,
+    NOW(),
+    NOW()
+  ),
+  (
+    gen_random_uuid(),
+    'Bibimbap Seoul',
+    'Bibimbap tradicional coreano con arroz, verduras y huevo. Sabor único de Corea',
+    'https://images.unsplash.com/photo-1558030006-450675393462?w=800',
+    4.8,
+    '20-30 min',
+    17.00,
+    NOW(),
+    NOW()
+  ),
+  (
+    gen_random_uuid(),
+    'Korean BBQ',
+    'Barbacoa coreana: galbi, samgyeopsal, bulgogi. Cocina en tu mesa con banchan',
+    'https://images.unsplash.com/photo-1544025162-d76694265947?w=800',
+    4.7,
+    '30-40 min',
+    25.00,
     NOW(),
     NOW()
   ),
