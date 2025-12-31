@@ -16,8 +16,8 @@ export default function CategoryTabs({
           onClick={() => onCategoryChange(null)}
           className={`px-6 py-3 rounded-full whitespace-nowrap transition-all duration-300 font-medium relative overflow-hidden group ${
             activeCategory === null
-              ? 'bg-gradient-to-r from-red-600 to-red-500 text-white shadow-glow scale-105'
-              : 'bg-white/80 backdrop-blur-sm text-gray-700 hover:bg-gradient-to-r hover:from-red-50 hover:to-red-50 hover:text-red-600 hover:scale-105 border border-gray-200'
+              ? 'bg-gradient-to-r from-red-600 to-red-500 dark:from-red-500 dark:to-red-600 text-white shadow-glow scale-105'
+              : 'bg-white/80 dark:bg-gray-700/80 backdrop-blur-sm text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-red-50 dark:hover:from-red-900/30 hover:to-red-50 dark:hover:to-red-900/30 hover:text-red-600 dark:hover:text-red-300 hover:scale-105 border border-gray-200 dark:border-gray-600'
           }`}
         >
           <span className="relative z-10">Todos</span>
@@ -32,8 +32,8 @@ export default function CategoryTabs({
           onClick={() => onCategoryChange(category)}
           className={`px-6 py-3 rounded-full whitespace-nowrap transition-all duration-300 font-medium relative overflow-hidden group ${
             activeCategory === category
-              ? 'bg-gradient-to-r from-red-600 to-red-500 text-white shadow-glow scale-105'
-              : 'bg-white/80 backdrop-blur-sm text-gray-700 hover:bg-gradient-to-r hover:from-red-50 hover:to-red-50 hover:text-red-600 hover:scale-105 border border-gray-200'
+              ? 'bg-gradient-to-r from-red-600 to-red-500 dark:from-red-500 dark:to-red-600 text-white shadow-glow scale-105'
+              : 'bg-white/80 dark:bg-gray-700/80 backdrop-blur-sm text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-red-50 dark:hover:from-red-900/30 hover:to-red-50 dark:hover:to-red-900/30 hover:text-red-600 dark:hover:text-red-300 hover:scale-105 border border-gray-200 dark:border-gray-600'
           }`}
         >
           <span className="relative z-10">{category}</span>

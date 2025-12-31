@@ -87,7 +87,7 @@ const RestaurantPageContent: NextPage = () => {
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Cargando restaurante...</p>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Cargando restaurante...</p>
         </div>
       </div>
     );
@@ -96,10 +96,10 @@ const RestaurantPageContent: NextPage = () => {
   if (error || !restaurant) {
     return (
       <div className="text-center py-12">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
           {error || 'Restaurante no encontrado'}
         </h2>
-        <p className="text-gray-600 mb-4">
+        <p className="text-gray-600 dark:text-gray-400 mb-4">
           {error || 'El restaurante que buscas no existe o fue eliminado.'}
         </p>
         <button
@@ -128,11 +128,11 @@ const RestaurantPageContent: NextPage = () => {
         )}
         <div className="flex items-start justify-between">
           <div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">{restaurant.name}</h1>
-            <p className="text-gray-600 text-lg">{restaurant.description}</p>
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-2">{restaurant.name}</h1>
+            <p className="text-gray-600 dark:text-gray-300 text-lg">{restaurant.description}</p>
           </div>
         </div>
-        <div className="flex gap-6 mt-4 text-sm text-gray-600">
+        <div className="flex gap-6 mt-4 text-sm text-gray-600 dark:text-gray-300">
           {restaurant.rating && (
             <div className="flex items-center gap-1">
               <span className="text-yellow-500">⭐</span>
@@ -154,7 +154,7 @@ const RestaurantPageContent: NextPage = () => {
 
       {/* Menú */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Menú</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Menú</h2>
         
         {categories.length > 0 && (
           <CategoryTabs
@@ -166,7 +166,7 @@ const RestaurantPageContent: NextPage = () => {
 
         {filteredProducts.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-400">
               {activeCategory
                 ? `No hay productos en la categoría "${activeCategory}"`
                 : 'Este restaurante aún no tiene productos disponibles.'}
