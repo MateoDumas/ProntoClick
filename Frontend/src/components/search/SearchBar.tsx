@@ -209,29 +209,29 @@ export default function SearchBar() {
       {/* Dropdown de resultados - Enhanced */}
       {isOpen && results && (
         <div className="absolute top-full mt-3 w-full 
-          bg-white/95 backdrop-blur-xl
+          bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl
           rounded-2xl 
-          shadow-2xl shadow-gray-900/10
-          border border-gray-200/80
+          shadow-2xl shadow-gray-900/10 dark:shadow-gray-900/50
+          border border-gray-200/80 dark:border-gray-700/80
           z-50 max-h-96 overflow-y-auto custom-scrollbar
           animate-fade-in-down
           overflow-hidden">
           {results.total === 0 ? (
             <div className="p-8 text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">
-                <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full mb-4">
+                <svg className="w-8 h-8 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
-              <p className="text-gray-600 font-medium">No se encontraron resultados</p>
-              <p className="text-sm text-gray-400 mt-1">Intenta con otros términos de búsqueda</p>
+              <p className="text-gray-600 dark:text-gray-300 font-medium">No se encontraron resultados</p>
+              <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">Intenta con otros términos de búsqueda</p>
             </div>
           ) : (
             <>
               {/* Productos - PRIORIDAD (mostrar primero) */}
               {results.products.length > 0 && (
-                <div className="p-4 border-b border-gray-100">
-                  <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3 flex items-center gap-2">
+                <div className="p-4 border-b border-gray-100 dark:border-gray-700">
+                  <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase mb-3 flex items-center gap-2">
                     <span>🍕</span>
                     Productos ({results.products.length})
                   </h3>
@@ -246,7 +246,7 @@ export default function SearchBar() {
                         }
                         onClick={() => setIsOpen(false)}
                         className="flex items-center gap-3 p-3 rounded-xl 
-                          hover:bg-gradient-to-r hover:from-red-50 hover:to-red-50/50 
+                          hover:bg-gradient-to-r hover:from-red-50 dark:hover:from-red-900/20 hover:to-red-50/50 dark:hover:to-red-900/20 
                           transition-all duration-200 group
                           hover:shadow-sm hover:scale-[1.01]"
                       >
@@ -264,14 +264,14 @@ export default function SearchBar() {
                           </div>
                         )}
                         <div className="flex-1 min-w-0">
-                          <p className="font-semibold text-gray-900 group-hover:text-red-600 transition-colors truncate">
+                          <p className="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors truncate">
                             {product.name}
                           </p>
-                          <p className="text-xs text-gray-500 truncate">
+                          <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                             {product.restaurant?.name || 'Mercado'}
                           </p>
                         </div>
-                        <p className="text-sm font-bold text-red-600">
+                        <p className="text-sm font-bold text-red-600 dark:text-red-400">
                           ${product.price.toFixed(2)}
                         </p>
                       </Link>
@@ -282,8 +282,8 @@ export default function SearchBar() {
 
               {/* Restaurantes - Secundario */}
               {results.restaurants.length > 0 && (
-                <div className="p-4 border-b border-gray-100">
-                  <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3 flex items-center gap-2">
+                <div className="p-4 border-b border-gray-100 dark:border-gray-700">
+                  <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase mb-3 flex items-center gap-2">
                     <span>🏪</span>
                     Restaurantes ({results.restaurants.length})
                   </h3>
@@ -294,7 +294,7 @@ export default function SearchBar() {
                         href={`/restaurants/${restaurant.id}`}
                         onClick={() => setIsOpen(false)}
                         className="flex items-center gap-3 p-3 rounded-xl 
-                          hover:bg-gradient-to-r hover:from-red-50 hover:to-red-50/50 
+                          hover:bg-gradient-to-r hover:from-red-50 dark:hover:from-red-900/20 hover:to-red-50/50 dark:hover:to-red-900/20 
                           transition-all duration-200 group
                           hover:shadow-sm hover:scale-[1.01]"
                       >
@@ -312,10 +312,10 @@ export default function SearchBar() {
                           </div>
                         )}
                         <div className="flex-1 min-w-0">
-                          <p className="font-semibold text-gray-900 group-hover:text-red-600 transition-colors truncate">
+                          <p className="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors truncate">
                             {restaurant.name}
                           </p>
-                          <p className="text-xs text-gray-500 truncate">
+                          <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                             {restaurant.description}
                           </p>
                         </div>
@@ -333,18 +333,18 @@ export default function SearchBar() {
 
 
               {/* Ver todos los resultados */}
-              <div className="p-4 border-t border-gray-100">
+              <div className="p-4 border-t border-gray-100 dark:border-gray-700">
                 <Link
                   href={`/search?q=${encodeURIComponent(query)}`}
                   onClick={() => setIsOpen(false)}
                   className="block w-full text-center py-3 px-4 
-                    bg-gradient-to-r from-red-600 to-red-500 
+                    bg-gradient-to-r from-red-600 to-red-500 dark:from-red-500 dark:to-red-600
                     text-white rounded-xl 
-                    hover:from-red-700 hover:to-red-600 
+                    hover:from-red-700 hover:to-red-600 dark:hover:from-red-600 dark:hover:to-red-700
                     transition-all duration-300 
                     font-semibold
-                    shadow-lg shadow-red-500/30
-                    hover:shadow-xl hover:shadow-red-500/40
+                    shadow-lg shadow-red-500/30 dark:shadow-red-500/50
+                    hover:shadow-xl hover:shadow-red-500/40 dark:hover:shadow-red-500/60
                     hover:scale-[1.02] active:scale-[0.98]"
                 >
                   Ver todos los resultados ({results.total})

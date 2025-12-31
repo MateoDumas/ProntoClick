@@ -373,7 +373,7 @@ export default function SupportDashboard() {
                           <button className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">
                             Revisar
                           </button>
-                          <button className="px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded hover:bg-gray-300">
+                          <button className="px-3 py-1 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-white text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors">
                             Ver Detalles
                           </button>
                           {(report.status === 'pending' || report.status === 'reviewed') && (

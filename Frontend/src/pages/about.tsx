@@ -119,7 +119,7 @@ export default function AboutPage() {
             <div className="flex gap-4 justify-center">
               <a
                 href="/register"
-                className="px-8 py-3 bg-white text-red-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors shadow-lg"
+                className="px-8 py-3 bg-white dark:bg-gray-700 text-red-600 dark:text-red-400 font-semibold rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors shadow-lg"
               >
                 Crear Cuenta
               </a>

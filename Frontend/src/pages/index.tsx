@@ -77,20 +77,20 @@ const Home: NextPage = () => {
 
       {/* Hero Section */}
       <section className="mb-12 md:mb-16">
-        <div className="bg-gradient-to-r from-red-600 to-red-700 rounded-2xl p-6 md:p-10 lg:p-12 text-white shadow-xl">
+        <div className="bg-gradient-to-r from-red-600 to-red-700 dark:from-red-700 dark:to-red-800 rounded-2xl p-6 md:p-10 lg:p-12 text-white shadow-xl">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
             Comida deliciosa,{' '}
             <span className="text-white">entregada rápido</span>
           </h1>
-          <p className="text-lg md:text-xl text-red-100 mb-6 max-w-2xl">
+          <p className="text-lg md:text-xl text-red-100 dark:text-red-200 mb-6 max-w-2xl">
             Descubre los mejores restaurantes cerca de ti y disfruta de tus platillos favoritos
             sin salir de casa.
           </p>
           <div className="flex flex-wrap gap-3">
-            <a href="/restaurants" className="px-6 py-3 bg-white text-red-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors shadow-lg text-sm">
+            <a href="/restaurants" className="px-6 py-3 bg-white dark:bg-gray-800 text-red-600 dark:text-red-400 font-semibold rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-lg text-sm">
               Explorar Restaurantes
             </a>
-            <a href="/promotions" className="px-6 py-3 bg-red-800 text-white font-semibold rounded-lg hover:bg-red-900 transition-colors border border-red-500 text-sm">
+            <a href="/promotions" className="px-6 py-3 bg-red-800 dark:bg-red-900 text-white font-semibold rounded-lg hover:bg-red-900 dark:hover:bg-red-950 transition-colors border border-red-500 dark:border-red-700 text-sm">
               Ver Promociones
             </a>
           </div>

@@ -167,7 +167,7 @@ export default function LiveOrderTracking({ orderId, onDismiss }: LiveOrderTrack
           )}
           <Link
             href={`/orders/${order.id}`}
-            className="flex-1 px-6 py-3 bg-white text-red-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors text-center shadow-lg"
+            className="flex-1 px-6 py-3 bg-white dark:bg-gray-700 text-red-600 dark:text-red-400 font-semibold rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors text-center shadow-lg"
           >
             Ver detalles completos
           </Link>

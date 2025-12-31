@@ -131,7 +131,7 @@ export default function CartFloating() {
               {items.length === 0 ? (
                 <div className="text-center py-12">
                   <svg
-                    className="w-16 h-16 text-gray-300 mx-auto mb-4"
+                    className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -175,7 +175,7 @@ export default function CartFloating() {
                       </div>
                       <button
                         onClick={() => remove(item.product.id)}
-                        className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-colors flex-shrink-0"
+                        className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors flex-shrink-0"
                         aria-label={`Eliminar ${item.product.name}`}
                       >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -241,12 +241,12 @@ export default function CartFloating() {
 
       {/* Save List Dialog */}
       {showSaveDialog && (
-        <div className="fixed inset-0 bg-black/50 z-[101] flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">Guardar Lista</h3>
+        <div className="fixed inset-0 bg-black/50 dark:bg-black/70 z-[101] flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 transition-colors duration-200">
+            <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">Guardar Lista</h3>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                <label className="block text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">
                   Nombre de la lista
                 </label>
                 <input
@@ -254,7 +254,7 @@ export default function CartFloating() {
                   value={listName}
                   onChange={(e) => setListName(e.target.value)}
                   placeholder="Ej: Lista de compras semanal"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400 focus:border-red-500 dark:focus:border-red-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500"
                   onKeyPress={(e) => e.key === 'Enter' && handleSaveList()}
                 />
               </div>
@@ -264,7 +264,7 @@ export default function CartFloating() {
                     setShowSaveDialog(false);
                     setListName('');
                   }}
-                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg font-semibold hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
                   Cancelar
                 </button>

@@ -102,18 +102,18 @@ export default function PromotionCard({ promotion }: PromotionCardProps) {
 
         {/* Code Badge */}
         {promotion.code && (
-          <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-red-600 shadow-lg">
+          <div className="absolute top-4 left-4 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-red-600 dark:text-red-400 shadow-lg">
             {promotion.code}
           </div>
         )}
       </div>
 
       {/* Content */}
-      <div className="p-6 bg-gradient-to-b from-white/90 via-white/80 to-gray-50/90 backdrop-blur-sm flex-1 flex flex-col">
-        <h3 className="font-bold text-xl text-gray-900 mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-red-600 group-hover:to-red-500 transition-all duration-500">
+      <div className="p-6 bg-gradient-to-b from-white/90 dark:from-gray-800/90 via-white/80 dark:via-gray-800/80 to-gray-50/90 dark:to-gray-900/90 backdrop-blur-sm flex-1 flex flex-col">
+        <h3 className="font-bold text-xl text-gray-900 dark:text-gray-100 mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-red-600 dark:group-hover:from-red-400 group-hover:to-red-500 dark:group-hover:to-red-300 transition-all duration-500">
           {promotion.title}
         </h3>
-        <p className="text-sm text-gray-600 line-clamp-2 mb-4 leading-relaxed group-hover:text-gray-700 transition-colors flex-1">
+        <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 mb-4 leading-relaxed group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors flex-1">
           {promotion.description}
         </p>
 
@@ -153,8 +153,8 @@ export default function PromotionCard({ promotion }: PromotionCardProps) {
         )}
 
         {/* Info Row */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-          <div className="flex items-center gap-4 text-xs text-gray-600">
+        <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
+          <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-300">
             {promotion.minOrder && (
               <div className="flex items-center gap-1.5">
                 <svg className="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">

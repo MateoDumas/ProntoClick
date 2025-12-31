@@ -101,7 +101,7 @@ export default function ReferralCard() {
 
       <button
         onClick={handleShare}
-        className="w-full px-6 py-3 bg-white text-purple-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors shadow-lg"
+        className="w-full px-6 py-3 bg-white dark:bg-gray-700 text-purple-600 dark:text-purple-400 font-semibold rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors shadow-lg"
       >
         Compartir código
       </button>

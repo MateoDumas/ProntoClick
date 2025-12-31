@@ -94,7 +94,7 @@ export default function MarketProductCard({ product, onAddToCart }: MarketProduc
             </h3>
             <div className="flex items-center gap-2">
               {product.brand && (
-                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full whitespace-nowrap">
+                <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full whitespace-nowrap">
                   {product.brand}
                 </span>
               )}
@@ -107,11 +107,11 @@ export default function MarketProductCard({ product, onAddToCart }: MarketProduc
           {product.stock !== undefined && (
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
               Stock: {product.stock > 10 ? (
-                <span className="text-green-600 font-medium">Disponible</span>
+                <span className="text-green-600 dark:text-green-400 font-medium">Disponible</span>
               ) : product.stock > 0 ? (
-                <span className="text-orange-600 font-medium">Últimas unidades</span>
+                <span className="text-orange-600 dark:text-orange-400 font-medium">Últimas unidades</span>
               ) : (
-                <span className="text-red-600 font-medium">Sin stock</span>
+                <span className="text-red-600 dark:text-red-400 font-medium">Sin stock</span>
               )}
             </p>
           )}

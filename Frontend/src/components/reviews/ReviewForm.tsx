@@ -83,7 +83,7 @@ export default function ReviewForm({ onSubmit, initialRating, initialComment, on
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           rows={4}
-          className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+          className="w-full px-4 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400 focus:border-red-500 dark:focus:border-red-400 transition-colors"
           placeholder="Comparte tu experiencia..."
         />
       </div>
@@ -92,7 +92,7 @@ export default function ReviewForm({ onSubmit, initialRating, initialComment, on
         <button
           type="submit"
           disabled={rating === 0 || isSubmitting}
-          className="flex-1 bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:from-red-600 hover:to-red-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex-1 bg-gradient-to-r from-red-500 to-red-600 dark:from-red-600 dark:to-red-700 text-white px-6 py-2 rounded-lg font-semibold hover:from-red-600 hover:to-red-700 dark:hover:from-red-700 dark:hover:to-red-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isSubmitting ? 'Enviando...' : 'Enviar reseña'}
         </button>
@@ -100,7 +100,7 @@ export default function ReviewForm({ onSubmit, initialRating, initialComment, on
           <button
             type="button"
             onClick={onCancel}
-            className="px-6 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-all"
+            className="px-6 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all"
           >
             Cancelar
           </button>

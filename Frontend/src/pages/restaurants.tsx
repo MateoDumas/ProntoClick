@@ -65,7 +65,7 @@ function RestaurantsPageContent() {
   }, [searchQuery, filter, restaurants]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-white relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-white dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 relative overflow-hidden transition-colors duration-200">
       {/* Animated background blobs */}
       <div className="absolute -top-40 -left-40 w-80 h-80 bg-red-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
       <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-red-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
@@ -121,7 +121,7 @@ function RestaurantsPageContent() {
             <h2 className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-red-600 via-red-500 to-red-600 bg-clip-text text-transparent mb-2">
               {filteredRestaurants.length} Restaurantes Disponibles
             </h2>
-            <p className="text-gray-600">Encuentra tu comida favorita</p>
+            <p className="text-gray-600 dark:text-gray-400">Encuentra tu comida favorita</p>
           </div>
           
           <div className="flex gap-3 flex-wrap">
@@ -129,8 +129,8 @@ function RestaurantsPageContent() {
               onClick={() => setFilter('all')}
               className={`px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-110 relative overflow-hidden group ${
                 filter === 'all'
-                  ? 'bg-gradient-to-r from-red-600 to-red-500 text-white shadow-glow-lg scale-105'
-                  : 'glass text-gray-700 hover:bg-gradient-to-r hover:from-red-50 hover:to-red-50 hover:text-red-600 shadow-md border border-white/30'
+                  ? 'bg-gradient-to-r from-red-600 to-red-500 dark:from-red-500 dark:to-red-600 text-white shadow-glow-lg scale-105'
+                  : 'glass dark:bg-gray-700/80 text-gray-700 dark:text-white hover:bg-gradient-to-r hover:from-red-50 dark:hover:from-red-900/30 hover:to-red-50 dark:hover:to-red-900/30 hover:text-red-600 dark:hover:text-red-300 shadow-md border border-white/30 dark:border-gray-600'
               }`}
             >
               <span className="relative z-10">Todos</span>
@@ -142,8 +142,8 @@ function RestaurantsPageContent() {
               onClick={() => setFilter('fast')}
               className={`px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-110 relative overflow-hidden group ${
                 filter === 'fast'
-                  ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-glow-lg scale-105'
-                  : 'glass text-gray-700 hover:bg-gradient-to-r hover:from-green-50 hover:to-emerald-50 hover:text-green-600 shadow-md border border-white/30'
+                  ? 'bg-gradient-to-r from-green-500 to-emerald-600 dark:from-green-600 dark:to-emerald-700 text-white shadow-glow-lg scale-105'
+                  : 'glass dark:bg-gray-700/80 text-gray-700 dark:text-white hover:bg-gradient-to-r hover:from-green-50 dark:hover:from-green-900/30 hover:to-emerald-50 dark:hover:to-emerald-900/30 hover:text-green-600 dark:hover:text-green-300 shadow-md border border-white/30 dark:border-gray-600'
               }`}
             >
               <span className="relative z-10">⚡ Rápido</span>
@@ -152,8 +152,8 @@ function RestaurantsPageContent() {
               onClick={() => setFilter('rating')}
               className={`px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-110 relative overflow-hidden group ${
                 filter === 'rating'
-                  ? 'bg-gradient-to-r from-yellow-500 to-orange-600 text-white shadow-glow-lg scale-105'
-                  : 'glass text-gray-700 hover:bg-gradient-to-r hover:from-yellow-50 hover:to-orange-50 hover:text-yellow-600 shadow-md border border-white/30'
+                  ? 'bg-gradient-to-r from-yellow-500 to-orange-600 dark:from-yellow-600 dark:to-orange-700 text-white shadow-glow-lg scale-105'
+                  : 'glass dark:bg-gray-700/80 text-gray-700 dark:text-white hover:bg-gradient-to-r hover:from-yellow-50 dark:hover:from-yellow-900/30 hover:to-orange-50 dark:hover:to-orange-900/30 hover:text-yellow-600 dark:hover:text-yellow-300 shadow-md border border-white/30 dark:border-gray-600'
               }`}
             >
               <span className="relative z-10">⭐ Mejor Valorados</span>
@@ -162,8 +162,8 @@ function RestaurantsPageContent() {
               onClick={() => setFilter('price')}
               className={`px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-110 relative overflow-hidden group ${
                 filter === 'price'
-                  ? 'bg-gradient-to-r from-red-600 to-red-500 text-white shadow-glow-lg scale-105'
-                  : 'glass text-gray-700 hover:bg-gradient-to-r hover:from-red-50 hover:to-red-50 hover:text-red-600 shadow-md border border-white/30'
+                  ? 'bg-gradient-to-r from-red-600 to-red-500 dark:from-red-500 dark:to-red-600 text-white shadow-glow-lg scale-105'
+                  : 'glass dark:bg-gray-700/80 text-gray-700 dark:text-white hover:bg-gradient-to-r hover:from-red-50 dark:hover:from-red-900/30 hover:to-red-50 dark:hover:to-red-900/30 hover:text-red-600 dark:hover:text-red-300 shadow-md border border-white/30 dark:border-gray-600'
               }`}
             >
               <span className="relative z-10">💰 Menor Precio</span>
@@ -173,10 +173,10 @@ function RestaurantsPageContent() {
 
         {/* Restaurants Grid */}
         {filteredRestaurants.length === 0 ? (
-          <div className="text-center py-24 glass rounded-3xl border-2 border-gray-200/50 p-12 fade-in-scale">
-            <div className="inline-flex items-center justify-center w-32 h-32 bg-gradient-to-br from-red-100 via-red-50 to-white rounded-full mb-6 morph-blob shadow-glow">
+          <div className="text-center py-24 glass dark:bg-gray-800/50 rounded-3xl border-2 border-gray-200/50 dark:border-gray-700/50 p-12 fade-in-scale">
+            <div className="inline-flex items-center justify-center w-32 h-32 bg-gradient-to-br from-red-100 via-red-50 to-white dark:from-red-900/30 dark:via-red-800/20 dark:to-gray-800 rounded-full mb-6 morph-blob shadow-glow">
               <svg
-                className="w-16 h-16 text-gray-400 animate-pulse"
+                className="w-16 h-16 text-gray-400 dark:text-gray-500 animate-pulse"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -189,10 +189,10 @@ function RestaurantsPageContent() {
                 />
               </svg>
             </div>
-            <h3 className="text-3xl font-extrabold bg-gradient-to-r from-red-600 to-red-500 bg-clip-text text-transparent mb-3">
+            <h3 className="text-3xl font-extrabold bg-gradient-to-r from-red-600 to-red-500 dark:from-red-400 dark:to-red-300 bg-clip-text text-transparent mb-3">
               No se encontraron restaurantes
             </h3>
-            <p className="text-gray-600 text-lg">
+            <p className="text-gray-600 dark:text-gray-400 text-lg">
               Intenta con otros términos de búsqueda o filtros
             </p>
           </div>

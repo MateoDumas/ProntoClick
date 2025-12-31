@@ -36,10 +36,10 @@ export default function PromotionsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-white">
+    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-white dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 transition-colors duration-200">
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-red-600 via-red-500 to-red-600 gradient-animated mb-12">
-        <div className="absolute inset-0 bg-gradient-to-r from-red-600/80 via-red-500/80 to-red-600/80"></div>
+      <div className="relative overflow-hidden bg-gradient-to-r from-red-600 via-red-500 to-red-600 dark:from-red-700 dark:via-red-600 dark:to-red-800 gradient-animated mb-12">
+        <div className="absolute inset-0 bg-gradient-to-r from-red-600/80 via-red-500/80 to-red-600/80 dark:from-red-700/80 dark:via-red-600/80 dark:to-red-800/80"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center fade-in-up">
             <div className="text-6xl mb-4 transform hover:scale-110 transition-transform duration-300 inline-block">
@@ -48,7 +48,7 @@ export default function PromotionsPage() {
             <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-4 drop-shadow-2xl neon-text">
               Promociones Especiales
             </h1>
-            <p className="text-xl text-red-100 mb-8 max-w-2xl mx-auto font-light">
+            <p className="text-xl text-red-100 dark:text-red-200 mb-8 max-w-2xl mx-auto font-light">
               Aprovecha nuestras ofertas exclusivas que cambian cada día. ¡No te las pierdas!
             </p>
           </div>
@@ -59,10 +59,10 @@ export default function PromotionsPage() {
         {/* Filters */}
         <div className="mb-10 flex flex-wrap items-center justify-between gap-6 fade-in-up">
           <div>
-            <h2 className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-red-600 via-red-500 to-red-600 bg-clip-text text-transparent mb-2">
+            <h2 className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-red-600 via-red-500 to-red-600 dark:from-red-400 dark:via-red-300 dark:to-red-400 bg-clip-text text-transparent mb-2">
               {filteredPromotions.length} Promociones Disponibles
             </h2>
-            <p className="text-gray-600">Ofertas que rotan diariamente</p>
+            <p className="text-gray-600 dark:text-gray-400">Ofertas que rotan diariamente</p>
           </div>
 
           <div className="flex gap-3 flex-wrap">
@@ -70,8 +70,8 @@ export default function PromotionsPage() {
               onClick={() => setFilter('all')}
               className={`px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-110 relative overflow-hidden group ${
                 filter === 'all'
-                  ? 'bg-gradient-to-r from-red-600 to-red-500 text-white shadow-glow-lg scale-105'
-                  : 'glass text-gray-700 hover:bg-gradient-to-r hover:from-red-50 hover:to-red-50 hover:text-red-600 shadow-md border border-white/30'
+                  ? 'bg-gradient-to-r from-red-600 to-red-500 dark:from-red-500 dark:to-red-600 text-white shadow-glow-lg scale-105'
+                  : 'glass dark:bg-gray-700/80 text-gray-700 dark:text-white hover:bg-gradient-to-r hover:from-red-50 dark:hover:from-red-900/30 hover:to-red-50 dark:hover:to-red-900/30 hover:text-red-600 dark:hover:text-red-300 shadow-md border border-white/30 dark:border-gray-600'
               }`}
             >
               <span className="relative z-10">Todas</span>
@@ -80,8 +80,8 @@ export default function PromotionsPage() {
               onClick={() => setFilter('restaurant')}
               className={`px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-110 relative overflow-hidden group ${
                 filter === 'restaurant'
-                  ? 'bg-gradient-to-r from-red-600 to-red-500 text-white shadow-glow-lg scale-105'
-                  : 'glass text-gray-700 hover:bg-gradient-to-r hover:from-red-50 hover:to-red-50 hover:text-red-600 shadow-md border border-white/30'
+                  ? 'bg-gradient-to-r from-red-600 to-red-500 dark:from-red-500 dark:to-red-600 text-white shadow-glow-lg scale-105'
+                  : 'glass dark:bg-gray-700/80 text-gray-700 dark:text-white hover:bg-gradient-to-r hover:from-red-50 dark:hover:from-red-900/30 hover:to-red-50 dark:hover:to-red-900/30 hover:text-red-600 dark:hover:text-red-300 shadow-md border border-white/30 dark:border-gray-600'
               }`}
             >
               <span className="relative z-10">🍔 Restaurantes</span>
@@ -90,8 +90,8 @@ export default function PromotionsPage() {
               onClick={() => setFilter('market')}
               className={`px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-110 relative overflow-hidden group ${
                 filter === 'market'
-                  ? 'bg-gradient-to-r from-red-600 to-red-500 text-white shadow-glow-lg scale-105'
-                  : 'glass text-gray-700 hover:bg-gradient-to-r hover:from-red-50 hover:to-red-50 hover:text-red-600 shadow-md border border-white/30'
+                  ? 'bg-gradient-to-r from-red-600 to-red-500 dark:from-red-500 dark:to-red-600 text-white shadow-glow-lg scale-105'
+                  : 'glass dark:bg-gray-700/80 text-gray-700 dark:text-white hover:bg-gradient-to-r hover:from-red-50 dark:hover:from-red-900/30 hover:to-red-50 dark:hover:to-red-900/30 hover:text-red-600 dark:hover:text-red-300 shadow-md border border-white/30 dark:border-gray-600'
               }`}
             >
               <span className="relative z-10">🛒 Mercado</span>

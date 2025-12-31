@@ -135,7 +135,7 @@ export default function AdvancedFilters({ filters, onFiltersChange, onClose }: A
           <div className="flex gap-3 mt-8">
             <button
               onClick={handleReset}
-              className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+              className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg font-semibold hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             >
               Limpiar
             </button>

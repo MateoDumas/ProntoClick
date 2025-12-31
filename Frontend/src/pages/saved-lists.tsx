@@ -60,18 +60,18 @@ function SavedListsContent() {
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Cargando listas...</p>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Cargando listas...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-white py-12">
+    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-white dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 py-12 transition-colors duration-200">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Mis Listas</h1>
-          <p className="text-gray-600">Guarda tus carritos favoritos para pedir más rápido</p>
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-2">Mis Listas</h1>
+          <p className="text-gray-600 dark:text-gray-400">Guarda tus carritos favoritos para pedir más rápido</p>
         </div>
 
         {lists && lists.length > 0 ? (
@@ -86,13 +86,13 @@ function SavedListsContent() {
               return (
                 <div
                   key={list.id}
-                  className="bg-white rounded-xl border-2 border-gray-200 hover:border-red-300 transition-all shadow-lg hover:shadow-xl"
+                  className="bg-white dark:bg-gray-800 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-red-300 dark:hover:border-red-500 transition-all shadow-lg hover:shadow-xl"
                 >
                   <div className="p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <h3 className="text-xl font-bold text-gray-900">{list.name}</h3>
+                          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{list.name}</h3>
                           {list.isFavorite && (
                             <span className="text-yellow-500" title="Favorita">
                               ⭐
@@ -100,12 +100,12 @@ function SavedListsContent() {
                           )}
                         </div>
                         {list.description && (
-                          <p className="text-sm text-gray-600">{list.description}</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">{list.description}</p>
                         )}
                       </div>
                       <button
                         onClick={() => favoriteMutation.mutate(list.id)}
-                        className="text-gray-400 hover:text-yellow-500 transition-colors"
+                        className="text-gray-400 dark:text-gray-500 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors"
                         title={list.isFavorite ? 'Quitar de favoritos' : 'Marcar como favorita'}
                       >
                         <svg
@@ -126,25 +126,25 @@ function SavedListsContent() {
 
                     <div className="space-y-2 mb-4">
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-600">Items:</span>
-                        <span className="font-semibold text-gray-900">{totalItems}</span>
+                        <span className="text-gray-600 dark:text-gray-400">Items:</span>
+                        <span className="font-semibold text-gray-900 dark:text-gray-100">{totalItems}</span>
                       </div>
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-600">Total:</span>
-                        <span className="font-bold text-red-600">${totalPrice.toFixed(2)}</span>
+                        <span className="text-gray-600 dark:text-gray-400">Total:</span>
+                        <span className="font-bold text-red-600 dark:text-red-400">${totalPrice.toFixed(2)}</span>
                       </div>
                     </div>
 
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleLoadList(list)}
-                        className="flex-1 px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg font-semibold hover:from-red-600 hover:to-red-700 transition-all"
+                        className="flex-1 px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 dark:from-red-600 dark:to-red-700 text-white rounded-lg font-semibold hover:from-red-600 hover:to-red-700 dark:hover:from-red-700 dark:hover:to-red-800 transition-all"
                       >
                         Cargar al Carrito
                       </button>
                       <button
                         onClick={() => handleDelete(list.id, list.name)}
-                        className="px-4 py-2 border border-red-300 text-red-600 rounded-lg font-semibold hover:bg-red-50 transition-colors"
+                        className="px-4 py-2 border border-red-300 dark:border-red-600 text-red-600 dark:text-red-400 rounded-lg font-semibold hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                         title="Eliminar lista"
                       >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -163,10 +163,10 @@ function SavedListsContent() {
             })}
           </div>
         ) : (
-          <div className="text-center py-24 bg-white rounded-xl border border-gray-200">
-            <div className="inline-flex items-center justify-center w-32 h-32 bg-gradient-to-br from-red-100 via-red-50 to-white rounded-full mb-6">
+          <div className="text-center py-24 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 transition-colors duration-200">
+            <div className="inline-flex items-center justify-center w-32 h-32 bg-gradient-to-br from-red-100 via-red-50 to-white dark:from-red-900/30 dark:via-red-800/20 dark:to-gray-800 rounded-full mb-6">
               <svg
-                className="w-16 h-16 text-gray-400"
+                className="w-16 h-16 text-gray-400 dark:text-gray-500"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -179,13 +179,13 @@ function SavedListsContent() {
                 />
               </svg>
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">No tienes listas guardadas</h3>
-            <p className="text-gray-600 mb-6">
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">No tienes listas guardadas</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
               Guarda tu carrito como lista para pedir más rápido la próxima vez
             </p>
             <button
               onClick={() => router.push('/')}
-              className="px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg font-semibold hover:from-red-600 hover:to-red-700 transition-all"
+              className="px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 dark:from-red-600 dark:to-red-700 text-white rounded-lg font-semibold hover:from-red-600 hover:to-red-700 dark:hover:from-red-700 dark:hover:to-red-800 transition-all"
             >
               Explorar Restaurantes
             </button>
