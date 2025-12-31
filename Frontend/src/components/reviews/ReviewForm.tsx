@@ -43,11 +43,11 @@ export default function ReviewForm({ onSubmit, initialRating, initialComment, on
           className="text-3xl transition-transform hover:scale-110 focus:outline-none"
         >
           <span
-            className={
-              starValue <= (hoveredStar || rating)
-                ? 'text-yellow-400'
-                : 'text-gray-400'
-            }
+          className={
+            starValue <= (hoveredStar || rating)
+              ? 'text-yellow-400 dark:text-yellow-500'
+              : 'text-gray-400 dark:text-gray-500'
+          }
           >
             ★
           </span>
@@ -57,14 +57,14 @@ export default function ReviewForm({ onSubmit, initialRating, initialComment, on
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-      <h3 className="text-xl font-bold text-gray-900 mb-4">Deja tu reseña</h3>
+    <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm transition-colors duration-200">
+      <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">Deja tu reseña</h3>
       
       <div className="mb-4">
-        <label className="block text-gray-900 mb-2 font-semibold">Calificación</label>
+        <label className="block text-gray-900 dark:text-gray-100 mb-2 font-semibold">Calificación</label>
         <div className="flex gap-2">{renderStars()}</div>
         {rating > 0 && (
-          <p className="text-gray-600 text-sm mt-2">
+          <p className="text-gray-600 dark:text-gray-400 text-sm mt-2">
             {rating === 1 && 'Muy malo'}
             {rating === 2 && 'Malo'}
             {rating === 3 && 'Regular'}
@@ -75,7 +75,7 @@ export default function ReviewForm({ onSubmit, initialRating, initialComment, on
       </div>
 
       <div className="mb-4">
-        <label htmlFor="comment" className="block text-gray-900 mb-2 font-semibold">
+        <label htmlFor="comment" className="block text-gray-900 dark:text-gray-100 mb-2 font-semibold">
           Comentario (opcional)
         </label>
         <textarea

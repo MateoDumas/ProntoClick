@@ -45,19 +45,19 @@ export default function ReviewsSection({ restaurantId, productId, orderId }: Rev
   });
 
   if (isLoading) {
-    return <div className="text-gray-600">Cargando reseñas...</div>;
+    return <div className="text-gray-600 dark:text-gray-400">Cargando reseñas...</div>;
   }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-2xl font-bold text-gray-900 mb-2">Reseñas</h3>
+          <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">Reseñas</h3>
           {data && (
-            <div className="flex items-center gap-4 text-gray-600">
+            <div className="flex items-center gap-4 text-gray-600 dark:text-gray-400">
               <div className="flex items-center gap-1">
-                <span className="text-yellow-400 text-xl">★</span>
-                <span className="font-semibold text-gray-900">
+                <span className="text-yellow-400 dark:text-yellow-500 text-xl">★</span>
+                <span className="font-semibold text-gray-900 dark:text-gray-100">
                   {data.averageRating?.toFixed(1) || 'N/A'}
                 </span>
               </div>
@@ -69,7 +69,7 @@ export default function ReviewsSection({ restaurantId, productId, orderId }: Rev
         {!userReview && !showForm && (
           <button
             onClick={() => setShowForm(true)}
-            className="bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:from-red-600 hover:to-red-700 transition-all"
+            className="bg-gradient-to-r from-red-500 to-red-600 dark:from-red-600 dark:to-red-700 text-white px-6 py-2 rounded-lg font-semibold hover:from-red-600 hover:to-red-700 dark:hover:from-red-700 dark:hover:to-red-800 transition-all"
           >
             Escribir reseña
           </button>
@@ -91,15 +91,15 @@ export default function ReviewsSection({ restaurantId, productId, orderId }: Rev
       )}
 
       {userReview && (
-        <div className="bg-red-50 rounded-xl p-4 border border-red-200">
-          <p className="text-gray-900 mb-2 font-semibold">Tu reseña:</p>
+        <div className="bg-red-50 dark:bg-red-900/20 rounded-xl p-4 border border-red-200 dark:border-red-800/50 transition-colors duration-200">
+          <p className="text-gray-900 dark:text-gray-100 mb-2 font-semibold">Tu reseña:</p>
           <ReviewCard review={userReview} />
         </div>
       )}
 
       <div className="space-y-4">
         {data?.reviews.length === 0 ? (
-          <p className="text-gray-600 text-center py-8">
+          <p className="text-gray-600 dark:text-gray-400 text-center py-8">
             Aún no hay reseñas. ¡Sé el primero en opinar!
           </p>
         ) : (
