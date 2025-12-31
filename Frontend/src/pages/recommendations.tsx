@@ -19,28 +19,28 @@ function RecommendationsPageContent() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50 py-12">
+      <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 py-12 transition-colors duration-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center text-gray-600">Cargando recomendaciones...</div>
+          <div className="text-center text-gray-600 dark:text-gray-400">Cargando recomendaciones...</div>
         </div>
       </div>
     );
   }
 
   return (
-      <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50 py-12">
+      <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 py-12 transition-colors duration-200">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent mb-2">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-red-600 to-red-800 dark:from-red-400 dark:to-red-600 bg-clip-text text-transparent mb-2">
               Recomendaciones para Ti
             </h1>
-            <p className="text-gray-600">Basado en tu historial de pedidos</p>
+            <p className="text-gray-600 dark:text-gray-300">Basado en tu historial de pedidos</p>
           </div>
 
           {/* Trending Restaurants */}
           {trending && trending.length > 0 && (
             <section className="mb-12">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">🔥 Restaurantes Trending</h2>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">🔥 Restaurantes Trending</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {trending.map((restaurant: Restaurant) => (
                   <RestaurantCard key={restaurant.id} r={restaurant} />
@@ -52,7 +52,7 @@ function RecommendationsPageContent() {
           {/* Recommended Restaurants */}
           {recommendations?.restaurants && recommendations.restaurants.length > 0 && (
             <section className="mb-12">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">⭐ Restaurantes Recomendados</h2>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">⭐ Restaurantes Recomendados</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {recommendations.restaurants.map((restaurant: Restaurant) => (
                   <RestaurantCard key={restaurant.id} r={restaurant} />
@@ -64,10 +64,10 @@ function RecommendationsPageContent() {
           {/* Recommended Products */}
           {recommendations?.products && recommendations.products.length > 0 && (
             <section className="mb-12">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">🍽️ Productos Recomendados</h2>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">🍽️ Productos Recomendados</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {recommendations.products.map((product: Product & { restaurant: { id: string; name: string; image?: string } }) => (
-                  <div key={product.id} className="glass rounded-xl p-4 border border-white/20">
+                  <div key={product.id} className="glass dark:bg-gray-800/50 rounded-xl p-4 border border-white/20 dark:border-gray-700/50">
                     <MarketProductCard
                       product={product}
                       onAddToCart={() => {}}
@@ -80,10 +80,10 @@ function RecommendationsPageContent() {
 
           {(!recommendations || (recommendations.restaurants.length === 0 && recommendations.products.length === 0)) && (
             <div className="text-center py-12">
-              <p className="text-gray-400 text-lg mb-4">
+              <p className="text-gray-400 dark:text-gray-500 text-lg mb-4">
                 Aún no tenemos suficientes datos para recomendarte
               </p>
-              <p className="text-gray-500">
+              <p className="text-gray-500 dark:text-gray-400">
                 ¡Haz algunos pedidos para recibir recomendaciones personalizadas!
               </p>
             </div>
