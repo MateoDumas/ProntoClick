@@ -1,18 +1,22 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { useLogin } from '../hooks/useAuth';
+import { useLogin, useVerifyTwoFactorAndLogin } from '../hooks/useAuth';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
 
 export default function Login() {
   const router = useRouter();
   const loginMutation = useLogin();
+  const verifyTwoFactorMutation = useVerifyTwoFactorAndLogin();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
-  const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({});
+  const [twoFactorCode, setTwoFactorCode] = useState('');
+  const [requiresTwoFactor, setRequiresTwoFactor] = useState(false);
+  const [pendingUserId, setPendingUserId] = useState<string | null>(null);
+  const [errors, setErrors] = useState<{ email?: string; password?: string; twoFactor?: string; general?: string }>({});
 
   const validateForm = (): boolean => {
     const newErrors: typeof errors = {};
@@ -36,11 +40,43 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (requiresTwoFactor) {
+      // Verificar código 2FA
+      if (!twoFactorCode.trim()) {
+        setErrors({ twoFactor: 'El código de verificación es requerido' });
+        return;
+      }
+
+      if (!pendingUserId) {
+        setErrors({ general: 'Error: ID de usuario no encontrado' });
+        return;
+      }
+
+      try {
+        await verifyTwoFactorMutation.mutateAsync({ userId: pendingUserId, code: twoFactorCode });
+        // La redirección se maneja en el hook
+      } catch (error: any) {
+        setErrors({
+          twoFactor: error?.response?.data?.message || 'Código de verificación incorrecto',
+        });
+      }
+      return;
+    }
+
     if (!validateForm()) return;
 
     try {
-      await loginMutation.mutateAsync(formData);
-      // Redirigir a la página anterior o al home
+      const response = await loginMutation.mutateAsync(formData);
+      
+      // Si requiere 2FA, mostrar campo para código
+      if (response.requiresTwoFactor) {
+        setRequiresTwoFactor(true);
+        setPendingUserId(response.user.id);
+        setErrors({});
+        return;
+      }
+
+      // Si no requiere 2FA, redirigir normalmente
       const redirect = (router.query.redirect as string) || '/';
       router.push(redirect);
     } catch (error: any) {
@@ -78,51 +114,102 @@ export default function Login() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            <Input
-              label="Email"
-              type="email"
-              placeholder="tu@email.com"
-              value={formData.email}
-              onChange={(e) => handleChange('email', e.target.value)}
-              error={errors.email}
-              required
-              autoComplete="email"
-            />
-
-            <Input
-              label="Contraseña"
-              type="password"
-              placeholder="••••••••"
-              value={formData.password}
-              onChange={(e) => handleChange('password', e.target.value)}
-              error={errors.password}
-              required
-              autoComplete="current-password"
-            />
-
-            <div className="flex items-center justify-between">
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  className="rounded border-gray-300 dark:border-gray-600 text-red-600 dark:text-red-500 focus:ring-red-500 dark:focus:ring-red-400"
+            {!requiresTwoFactor ? (
+              <>
+                <Input
+                  label="Email"
+                  type="email"
+                  placeholder="tu@email.com"
+                  value={formData.email}
+                  onChange={(e) => handleChange('email', e.target.value)}
+                  error={errors.email}
+                  required
+                  autoComplete="email"
                 />
-                <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">Recordarme</span>
-              </label>
-              <Link
-                href="/forgot-password"
-                className="text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-500 font-medium transition-colors"
-              >
-                ¿Olvidaste tu contraseña?
-              </Link>
-            </div>
+
+                <Input
+                  label="Contraseña"
+                  type="password"
+                  placeholder="••••••••"
+                  value={formData.password}
+                  onChange={(e) => handleChange('password', e.target.value)}
+                  error={errors.password}
+                  required
+                  autoComplete="current-password"
+                />
+              </>
+            ) : (
+              <>
+                <div className="mb-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg">
+                  <p className="text-sm text-blue-800 dark:text-blue-200">
+                    Ingresa el código de verificación de 6 dígitos de tu aplicación de autenticación (Google Authenticator, Authy, etc.)
+                  </p>
+                </div>
+                <Input
+                  label="Código de verificación"
+                  type="text"
+                  placeholder="000000"
+                  value={twoFactorCode}
+                  onChange={(e) => {
+                    setTwoFactorCode(e.target.value.replace(/\D/g, '').slice(0, 6));
+                    if (errors.twoFactor) {
+                      setErrors((prev) => ({ ...prev, twoFactor: undefined }));
+                    }
+                  }}
+                  error={errors.twoFactor}
+                  required
+                  maxLength={6}
+                  autoComplete="one-time-code"
+                />
+              </>
+            )}
+
+            {!requiresTwoFactor && (
+              <div className="flex items-center justify-between">
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    className="rounded border-gray-300 dark:border-gray-600 text-red-600 dark:text-red-500 focus:ring-red-500 dark:focus:ring-red-400"
+                  />
+                  <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">Recordarme</span>
+                </label>
+                <Link
+                  href="/forgot-password"
+                  className="text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-500 font-medium transition-colors"
+                >
+                  ¿Olvidaste tu contraseña?
+                </Link>
+              </div>
+            )}
 
             <Button
               type="submit"
               className="w-full"
-              disabled={loginMutation.isPending}
+              disabled={loginMutation.isPending || verifyTwoFactorMutation.isPending}
             >
-              {loginMutation.isPending ? 'Iniciando sesión...' : 'Iniciar Sesión'}
+              {requiresTwoFactor
+                ? verifyTwoFactorMutation.isPending
+                  ? 'Verificando...'
+                  : 'Verificar código'
+                : loginMutation.isPending
+                ? 'Iniciando sesión...'
+                : 'Iniciar Sesión'}
             </Button>
+
+            {requiresTwoFactor && (
+              <button
+                type="button"
+                onClick={() => {
+                  setRequiresTwoFactor(false);
+                  setTwoFactorCode('');
+                  setPendingUserId(null);
+                  setErrors({});
+                }}
+                className="w-full text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
+              >
+                ← Volver a inicio de sesión
+              </button>
+            )}
           </form>
 
           {/* Divider */}

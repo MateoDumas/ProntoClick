@@ -10,6 +10,7 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from './jwt.strategy';
 import { LocalAuthGuard } from './local-auth.guard';
+import { TwoFactorService } from './two-factor.service';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { LocalAuthGuard } from './local-auth.guard';
   controllers: [AuthController],
   providers: [
     AuthService,
+    TwoFactorService,
     JwtStrategy, // estrategia para validar JWT en requests entrantes
     LocalAuthGuard,
   ],

@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
-import { login, register, logout, getCurrentUser, verifyEmail, resendVerificationCode } from '../services/auth.service';
+import { login, register, logout, getCurrentUser, verifyEmail, resendVerificationCode, verifyTwoFactorAndLogin } from '../services/auth.service';
+import { generateTwoFactorSecret, verifyAndEnableTwoFactor, disableTwoFactor, regenerateBackupCodes } from '../services/two-factor.service';
 import { updateProfile, changePassword, deleteAccount, type UpdateProfileDto, type ChangePasswordDto } from '../services/user.service';
 import { User } from '../types';
 import type { LoginDto, RegisterDto } from '../services/auth.service';
@@ -118,5 +119,52 @@ export const useVerifyEmail = () => {
 export const useResendVerificationCode = () => {
   return useMutation({
     mutationFn: resendVerificationCode,
+  });
+};
+
+export const useVerifyTwoFactorAndLogin = () => {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: ({ userId, code }: { userId: string; code: string }) => verifyTwoFactorAndLogin(userId, code),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['me'] });
+      router.push('/');
+    },
+  });
+};
+
+export const useGenerateTwoFactorSecret = () => {
+  return useMutation({
+    mutationFn: generateTwoFactorSecret,
+  });
+};
+
+export const useVerifyAndEnableTwoFactor = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (code: string) => verifyAndEnableTwoFactor(code),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['me'] });
+    },
+  });
+};
+
+export const useDisableTwoFactor = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: disableTwoFactor,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['me'] });
+    },
+  });
+};
+
+export const useRegenerateBackupCodes = () => {
+  return useMutation({
+    mutationFn: regenerateBackupCodes,
   });
 };

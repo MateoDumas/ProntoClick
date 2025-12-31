@@ -1,5 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useCurrentUser, useUpdateProfile, useChangePassword, useDeleteAccount } from '../hooks/useAuth';
+import { 
+  useCurrentUser, 
+  useUpdateProfile, 
+  useChangePassword, 
+  useDeleteAccount,
+  useGenerateTwoFactorSecret,
+  useVerifyAndEnableTwoFactor,
+  useDisableTwoFactor,
+  useRegenerateBackupCodes,
+} from '../hooks/useAuth';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
@@ -46,6 +55,21 @@ function ProfilePageContent() {
 
   const [reports, setReports] = useState<Report[]>([]);
   const [loadingReports, setLoadingReports] = useState(false);
+
+  // Estados para 2FA
+  const generateSecretMutation = useGenerateTwoFactorSecret();
+  const verifyAndEnableMutation = useVerifyAndEnableTwoFactor();
+  const disableTwoFactorMutation = useDisableTwoFactor();
+  const regenerateBackupCodesMutation = useRegenerateBackupCodes();
+  
+  const [twoFactorSetup, setTwoFactorSetup] = useState<{
+    qrCodeUrl?: string;
+    backupCodes?: string[];
+    secret?: string;
+  } | null>(null);
+  const [twoFactorCode, setTwoFactorCode] = useState('');
+  const [twoFactorError, setTwoFactorError] = useState('');
+  const [showBackupCodes, setShowBackupCodes] = useState(false);
 
   // Cargar datos del usuario
   useEffect(() => {
@@ -486,6 +510,12 @@ function ProfilePageContent() {
                   </span>
                 </div>
                 <div className="flex justify-between">
+                  <span className="text-gray-600 dark:text-gray-400">Autenticación de dos factores:</span>
+                  <span className={`font-medium ${user.twoFactorEnabled ? 'text-green-600' : 'text-gray-600'}`}>
+                    {user.twoFactorEnabled ? '✓ Activada' : '✗ Desactivada'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
                   <span className="text-gray-600 dark:text-gray-400">Miembro desde:</span>
                   <span className="font-medium text-gray-900 dark:text-gray-100">
                     {new Date(user.createdAt || Date.now()).toLocaleDateString('es-ES', {
@@ -496,6 +526,188 @@ function ProfilePageContent() {
                   </span>
                 </div>
               </div>
+            </div>
+
+            {/* Sección de 2FA */}
+            <div className="mb-8 p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                🔐 Autenticación de Dos Factores (2FA)
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+                Añade una capa extra de seguridad a tu cuenta. Cuando 2FA esté activado, necesitarás ingresar un código
+                de tu aplicación de autenticación (Google Authenticator, Authy, etc.) además de tu contraseña al iniciar sesión.
+              </p>
+
+              {user.twoFactorEnabled ? (
+                <div className="space-y-4">
+                  <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 rounded-lg">
+                    <p className="text-sm text-green-800 dark:text-green-200">
+                      ✓ 2FA está activado en tu cuenta. Tu cuenta está más segura.
+                    </p>
+                  </div>
+                  
+                  <div className="flex gap-3">
+                    <Button
+                      variant="outline"
+                      onClick={async () => {
+                        try {
+                          const result = await regenerateBackupCodesMutation.mutateAsync();
+                          setTwoFactorSetup({ backupCodes: result.backupCodes });
+                          setShowBackupCodes(true);
+                          success('Códigos de respaldo regenerados');
+                        } catch (error: any) {
+                          toastError(error.response?.data?.message || 'Error al regenerar códigos');
+                        }
+                      }}
+                      disabled={regenerateBackupCodesMutation.isPending}
+                    >
+                      {regenerateBackupCodesMutation.isPending ? 'Regenerando...' : 'Regenerar Códigos de Respaldo'}
+                    </Button>
+                    <Button
+                      variant="danger"
+                      onClick={async () => {
+                        if (window.confirm('¿Estás seguro de que quieres desactivar 2FA? Tu cuenta será menos segura.')) {
+                          try {
+                            await disableTwoFactorMutation.mutateAsync();
+                            success('2FA desactivado correctamente');
+                            setTwoFactorSetup(null);
+                          } catch (error: any) {
+                            toastError(error.response?.data?.message || 'Error al desactivar 2FA');
+                          }
+                        }
+                      }}
+                      disabled={disableTwoFactorMutation.isPending}
+                    >
+                      {disableTwoFactorMutation.isPending ? 'Desactivando...' : 'Desactivar 2FA'}
+                    </Button>
+                  </div>
+
+                  {showBackupCodes && twoFactorSetup?.backupCodes && (
+                    <div className="mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg">
+                      <p className="text-sm font-semibold text-yellow-800 dark:text-yellow-200 mb-2">
+                        ⚠️ Guarda estos códigos de respaldo en un lugar seguro:
+                      </p>
+                      <div className="grid grid-cols-2 gap-2 mb-3">
+                        {twoFactorSetup.backupCodes.map((code, index) => (
+                          <code key={index} className="text-xs bg-white dark:bg-gray-800 p-2 rounded border">
+                            {code}
+                          </code>
+                        ))}
+                      </div>
+                      <p className="text-xs text-yellow-700 dark:text-yellow-300">
+                        Estos códigos te permitirán acceder a tu cuenta si pierdes acceso a tu aplicación de autenticación.
+                        Cada código solo se puede usar una vez.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {!twoFactorSetup ? (
+                    <Button
+                      onClick={async () => {
+                        try {
+                          const result = await generateSecretMutation.mutateAsync();
+                          setTwoFactorSetup(result);
+                          setTwoFactorError('');
+                        } catch (error: any) {
+                          toastError(error.response?.data?.message || 'Error al generar código QR');
+                        }
+                      }}
+                      disabled={generateSecretMutation.isPending}
+                    >
+                      {generateSecretMutation.isPending ? 'Generando...' : 'Activar 2FA'}
+                    </Button>
+                  ) : (
+                    <div className="space-y-4">
+                      <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg">
+                        <p className="text-sm text-blue-800 dark:text-blue-200 mb-3">
+                          1. Escanea este código QR con tu aplicación de autenticación (Google Authenticator, Authy, etc.)
+                        </p>
+                        {twoFactorSetup.qrCodeUrl && (
+                          <div className="flex justify-center mb-3">
+                            <img src={twoFactorSetup.qrCodeUrl} alt="QR Code" className="w-48 h-48 border-2 border-gray-300 rounded" />
+                          </div>
+                        )}
+                        <p className="text-sm text-blue-800 dark:text-blue-200 mb-3">
+                          2. Ingresa el código de 6 dígitos que aparece en tu aplicación para verificar y activar 2FA:
+                        </p>
+                        <Input
+                          label="Código de verificación"
+                          type="text"
+                          placeholder="000000"
+                          value={twoFactorCode}
+                          onChange={(e) => {
+                            setTwoFactorCode(e.target.value.replace(/\D/g, '').slice(0, 6));
+                            setTwoFactorError('');
+                          }}
+                          error={twoFactorError}
+                          maxLength={6}
+                          className="mb-3"
+                        />
+                        <div className="flex gap-3">
+                          <Button
+                            onClick={async () => {
+                              if (!twoFactorCode || twoFactorCode.length !== 6) {
+                                setTwoFactorError('El código debe tener 6 dígitos');
+                                return;
+                              }
+                              try {
+                                await verifyAndEnableMutation.mutateAsync(twoFactorCode);
+                                success('2FA activado correctamente');
+                                setTwoFactorSetup({ backupCodes: twoFactorSetup.backupCodes });
+                                setShowBackupCodes(true);
+                                setTwoFactorCode('');
+                              } catch (error: any) {
+                                setTwoFactorError(error.response?.data?.message || 'Código incorrecto');
+                              }
+                            }}
+                            disabled={verifyAndEnableMutation.isPending || !twoFactorCode || twoFactorCode.length !== 6}
+                          >
+                            {verifyAndEnableMutation.isPending ? 'Verificando...' : 'Verificar y Activar'}
+                          </Button>
+                          <Button
+                            variant="outline"
+                            onClick={() => {
+                              setTwoFactorSetup(null);
+                              setTwoFactorCode('');
+                              setTwoFactorError('');
+                            }}
+                          >
+                            Cancelar
+                          </Button>
+                        </div>
+                      </div>
+
+                      {showBackupCodes && twoFactorSetup.backupCodes && (
+                        <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg">
+                          <p className="text-sm font-semibold text-yellow-800 dark:text-yellow-200 mb-2">
+                            ⚠️ Guarda estos códigos de respaldo en un lugar seguro:
+                          </p>
+                          <div className="grid grid-cols-2 gap-2 mb-3">
+                            {twoFactorSetup.backupCodes.map((code, index) => (
+                              <code key={index} className="text-xs bg-white dark:bg-gray-800 p-2 rounded border">
+                                {code}
+                              </code>
+                            ))}
+                          </div>
+                          <p className="text-xs text-yellow-700 dark:text-yellow-300">
+                            Estos códigos te permitirán acceder a tu cuenta si pierdes acceso a tu aplicación de autenticación.
+                            Cada código solo se puede usar una vez.
+                          </p>
+                          <Button
+                            variant="outline"
+                            onClick={() => setShowBackupCodes(false)}
+                            className="mt-3"
+                          >
+                            Entendido
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Zona de Peligro - Borrar Cuenta */}

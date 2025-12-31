@@ -15,8 +15,9 @@ export interface RegisterDto {
 
 export interface AuthResponse {
   user: User;
-  token: string;
+  token?: string;
   requiresVerification?: boolean;
+  requiresTwoFactor?: boolean;
 }
 
 export const login = async (credentials: LoginDto): Promise<AuthResponse> => {
@@ -66,6 +67,14 @@ export const verifyEmail = async (code: string): Promise<{ success: boolean; mes
 
 export const resendVerificationCode = async (): Promise<{ success: boolean; message: string }> => {
   const { data } = await api.post<{ success: boolean; message: string }>('/auth/resend-verification');
+  return data;
+};
+
+export const verifyTwoFactorAndLogin = async (userId: string, code: string): Promise<AuthResponse> => {
+  const { data } = await api.post<AuthResponse>('/auth/verify-two-factor', { userId, code });
+  if (data.token) {
+    localStorage.setItem('token', data.token);
+  }
   return data;
 };
 

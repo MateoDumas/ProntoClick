@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { ReferralsService } from '../referrals/referrals.service';
+import { TwoFactorService } from './two-factor.service';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -12,6 +13,7 @@ export class AuthService {
     private jwtService: JwtService,
     private notificationsService: NotificationsService,
     private referralsService: ReferralsService,
+    private twoFactorService: TwoFactorService,
   ) {}
 
   async validateUser(email: string, password: string): Promise<any> {
@@ -30,9 +32,40 @@ export class AuthService {
   }
 
   async login(user: any) {
+    // Verificar si el usuario tiene 2FA activado
+    const fullUser = await this.usersService.findById(user.id);
+    if (fullUser?.twoFactorEnabled) {
+      // Retornar sin token, indicando que se requiere 2FA
+      return {
+        user,
+        requiresTwoFactor: true,
+      };
+    }
+
+    // Si no tiene 2FA, retornar token normalmente
     const payload = { email: user.email, sub: user.id };
     return {
       user,
+      token: this.jwtService.sign(payload),
+      requiresTwoFactor: false,
+    };
+  }
+
+  async verifyTwoFactorAndLogin(userId: string, code: string) {
+    // Verificar código 2FA
+    await this.twoFactorService.verifyCode(userId, code);
+
+    // Obtener usuario completo
+    const user = await this.usersService.findById(userId);
+    if (!user) {
+      throw new UnauthorizedException('Usuario no encontrado');
+    }
+
+    const { password: _, ...userWithoutPassword } = user;
+    const payload = { email: user.email, sub: user.id };
+
+    return {
+      user: userWithoutPassword,
       token: this.jwtService.sign(payload),
     };
   }
