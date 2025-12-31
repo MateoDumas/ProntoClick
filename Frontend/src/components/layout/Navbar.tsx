@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCurrentUser } from '../../hooks/useAuth';
+import { useHoliday } from '../../contexts/HolidayContext';
 import SearchBar from '../search/SearchBar';
 import UserMenu from './UserMenu';
 import PointsDisplay from '../rewards/PointsDisplay';
@@ -9,6 +10,7 @@ import ThemeToggle from '../ui/ThemeToggle';
 export default function Navbar() {
   const router = useRouter();
   const { data: user } = useCurrentUser();
+  const { theme: holidayTheme } = useHoliday();
 
   const isActive = (path: string) => {
     if (path === '/') {
@@ -29,10 +31,10 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group flex-shrink-0">
-            <div className="w-10 h-10 bg-gradient-to-br from-red-600 via-red-500 to-red-600 rounded-xl flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-12 transition-all duration-300 shadow-lg">
-              <span className="text-white font-bold text-lg">P</span>
+            <div className={`w-10 h-10 bg-gradient-to-br ${holidayTheme.gradient} ${holidayTheme.darkGradient} rounded-xl flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-12 transition-all duration-300 shadow-lg`}>
+              <span className="text-white font-bold text-lg">{holidayTheme.emoji}</span>
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-red-600 to-red-800 dark:from-red-400 dark:to-red-600 bg-clip-text text-transparent">
+            <span className={`text-xl font-bold bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} bg-clip-text text-transparent`}>
               ProntoClick
             </span>
           </Link>
@@ -50,7 +52,7 @@ export default function Navbar() {
                 href={link.href}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                   isActive(link.href)
-                    ? 'bg-red-600 text-white shadow-md'
+                    ? `bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} text-white shadow-md`
                     : 'text-gray-700 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-gray-800 hover:text-red-600 dark:hover:text-red-400'
                 }`}
               >
@@ -79,7 +81,7 @@ export default function Navbar() {
                 </Link>
                 <Link
                   href="/register"
-                  className="px-4 py-2 bg-red-600 dark:bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-700 dark:hover:bg-red-600 transition-colors shadow-sm"
+                  className={`px-4 py-2 bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} text-white text-sm font-medium rounded-lg hover:opacity-90 transition-all shadow-sm`}
                 >
                   Registrarse
                 </Link>

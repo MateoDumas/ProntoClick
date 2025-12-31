@@ -8,6 +8,7 @@ import MarketCategories from '../components/market/MarketCategories';
 import FeaturedPromotions from '../components/promotions/FeaturedPromotions';
 import LiveOrderTracking from '../components/orders/LiveOrderTracking';
 import { useCurrentUser } from '../hooks/useAuth';
+import { useHoliday } from '../contexts/HolidayContext';
 
 const Home: NextPage = () => {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
@@ -16,6 +17,7 @@ const Home: NextPage = () => {
   const [loadingFavorites, setLoadingFavorites] = useState(true);
   const [activeOrderId, setActiveOrderId] = useState<string | null>(null);
   const { data: user } = useCurrentUser();
+  const { theme: holidayTheme, holiday } = useHoliday();
 
   // Verificar si hay un pedido activo
   useEffect(() => {
@@ -77,22 +79,49 @@ const Home: NextPage = () => {
 
       {/* Hero Section */}
       <section className="mb-12 md:mb-16">
-        <div className="bg-gradient-to-r from-red-600 to-red-700 dark:from-red-700 dark:to-red-800 rounded-2xl p-6 md:p-10 lg:p-12 text-white shadow-xl">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-            Comida deliciosa,{' '}
-            <span className="text-white">entregada rápido</span>
-          </h1>
-          <p className="text-lg md:text-xl text-red-100 dark:text-red-200 mb-6 max-w-2xl">
-            Descubre los mejores restaurantes cerca de ti y disfruta de tus platillos favoritos
-            sin salir de casa.
-          </p>
-          <div className="flex flex-wrap gap-3">
-            <a href="/restaurants" className="px-6 py-3 bg-white dark:bg-gray-800 text-red-600 dark:text-red-400 font-semibold rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-lg text-sm">
-              Explorar Restaurantes
-            </a>
-            <a href="/promotions" className="px-6 py-3 bg-red-800 dark:bg-red-900 text-white font-semibold rounded-lg hover:bg-red-900 dark:hover:bg-red-950 transition-colors border border-red-500 dark:border-red-700 text-sm">
-              Ver Promociones
-            </a>
+        <div className={`bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} rounded-2xl p-6 md:p-10 lg:p-12 text-white shadow-xl relative overflow-hidden`}>
+          {/* Decorative emojis for holidays */}
+          {holidayTheme.decorations && holiday !== 'none' && (
+            <div className="absolute inset-0 pointer-events-none opacity-20">
+              {holidayTheme.decorations.map((emoji, idx) => (
+                <span
+                  key={idx}
+                  className="absolute text-4xl animate-float"
+                  style={{
+                    left: `${(idx * 20) % 80}%`,
+                    top: `${(idx * 15) % 70}%`,
+                    animationDelay: `${idx * 0.5}s`,
+                  }}
+                >
+                  {emoji}
+                </span>
+              ))}
+            </div>
+          )}
+          <div className="relative z-10">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 flex items-center gap-3">
+              <span>{holidayTheme.emoji}</span>
+              <span>Comida deliciosa,{' '}
+                <span className="text-white">entregada rápido</span>
+              </span>
+            </h1>
+            {holiday !== 'none' && (
+              <p className="text-lg font-semibold mb-2 opacity-90">
+                ¡Celebra {holidayTheme.name} con nosotros!
+              </p>
+            )}
+            <p className="text-lg md:text-xl text-white/90 dark:text-white/80 mb-6 max-w-2xl">
+              Descubre los mejores restaurantes cerca de ti y disfruta de tus platillos favoritos
+              sin salir de casa.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <a href="/restaurants" className="px-6 py-3 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 font-semibold rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-lg text-sm">
+                Explorar Restaurantes
+              </a>
+              <a href="/promotions" className="px-6 py-3 bg-white/20 dark:bg-white/10 backdrop-blur-sm text-white font-semibold rounded-lg hover:bg-white/30 dark:hover:bg-white/20 transition-all border border-white/30 text-sm">
+                Ver Promociones
+              </a>
+            </div>
           </div>
         </div>
       </section>

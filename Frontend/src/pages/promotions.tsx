@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getActivePromotions } from '../services/promotion.service';
+import { useHoliday } from '../contexts/HolidayContext';
 import type { Promotion } from '../types/promotion';
 import PromotionCard from '../components/promotions/PromotionCard';
 
@@ -7,6 +8,7 @@ export default function PromotionsPage() {
   const [promotions, setPromotions] = useState<Promotion[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'restaurant' | 'market'>('all');
+  const { theme: holidayTheme, holiday } = useHoliday();
 
   useEffect(() => {
     loadPromotions();
@@ -38,17 +40,34 @@ export default function PromotionsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-white dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 transition-colors duration-200">
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-red-600 via-red-500 to-red-600 dark:from-red-700 dark:via-red-600 dark:to-red-800 gradient-animated mb-12">
-        <div className="absolute inset-0 bg-gradient-to-r from-red-600/80 via-red-500/80 to-red-600/80 dark:from-red-700/80 dark:via-red-600/80 dark:to-red-800/80"></div>
+      <div className={`relative overflow-hidden bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} gradient-animated mb-12`}>
+        <div className={`absolute inset-0 bg-gradient-to-r ${holidayTheme.gradient} opacity-80`}></div>
+        {holidayTheme.decorations && holiday !== 'none' && (
+          <div className="absolute inset-0 pointer-events-none opacity-10">
+            {holidayTheme.decorations.map((emoji, idx) => (
+              <span
+                key={idx}
+                className="absolute text-5xl animate-float"
+                style={{
+                  left: `${(idx * 25) % 85}%`,
+                  top: `${(idx * 20) % 80}%`,
+                  animationDelay: `${idx * 0.6}s`,
+                }}
+              >
+                {emoji}
+              </span>
+            ))}
+          </div>
+        )}
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center fade-in-up">
             <div className="text-6xl mb-4 transform hover:scale-110 transition-transform duration-300 inline-block">
-              🎉
+              {holidayTheme.emoji}
             </div>
             <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-4 drop-shadow-2xl neon-text">
-              Promociones Especiales
+              {holiday !== 'none' ? `Promociones de ${holidayTheme.name}` : 'Promociones Especiales'}
             </h1>
-            <p className="text-xl text-red-100 dark:text-red-200 mb-8 max-w-2xl mx-auto font-light">
+            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto font-light">
               Aprovecha nuestras ofertas exclusivas que cambian cada día. ¡No te las pierdas!
             </p>
           </div>
@@ -59,7 +78,7 @@ export default function PromotionsPage() {
         {/* Filters */}
         <div className="mb-10 flex flex-wrap items-center justify-between gap-6 fade-in-up">
           <div>
-            <h2 className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-red-600 via-red-500 to-red-600 dark:from-red-400 dark:via-red-300 dark:to-red-400 bg-clip-text text-transparent mb-2">
+            <h2 className={`text-3xl md:text-4xl font-extrabold bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} bg-clip-text text-transparent mb-2`}>
               {filteredPromotions.length} Promociones Disponibles
             </h2>
             <p className="text-gray-600 dark:text-gray-400">Ofertas que rotan diariamente</p>

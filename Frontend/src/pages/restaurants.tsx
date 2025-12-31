@@ -3,6 +3,7 @@ import { Restaurant } from '../types/restaurant';
 import RestaurantCard from '../components/restaurants/RestaurantCard';
 import { mockRestaurants } from '../mocks/restaurants.mock';
 import { getRestaurants } from '../services/restaurant.service';
+import { useHoliday } from '../contexts/HolidayContext';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 
 type FilterType = 'all' | 'fast' | 'rating' | 'price';
@@ -12,6 +13,7 @@ function RestaurantsPageContent() {
   const [filter, setFilter] = useState<FilterType>('all');
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [loading, setLoading] = useState(true);
+  const { theme: holidayTheme, holiday } = useHoliday();
 
   useEffect(() => {
     // Cargar restaurantes desde el backend
@@ -72,15 +74,39 @@ function RestaurantsPageContent() {
       <div className="absolute top-1/2 left-1/4 w-72 h-72 bg-red-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
       
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-red-600 via-red-500 to-red-600 gradient-animated">
-        <div className="absolute inset-0 bg-gradient-to-r from-red-600/80 via-red-500/80 to-red-600/80"></div>
+      <div className={`relative overflow-hidden bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} gradient-animated`}>
+        <div className={`absolute inset-0 bg-gradient-to-r ${holidayTheme.gradient} opacity-80`}></div>
+        {holidayTheme.decorations && holiday !== 'none' && (
+          <div className="absolute inset-0 pointer-events-none opacity-10">
+            {holidayTheme.decorations.map((emoji, idx) => (
+              <span
+                key={idx}
+                className="absolute text-5xl animate-float"
+                style={{
+                  left: `${(idx * 25) % 85}%`,
+                  top: `${(idx * 20) % 80}%`,
+                  animationDelay: `${idx * 0.6}s`,
+                }}
+              >
+                {emoji}
+              </span>
+            ))}
+          </div>
+        )}
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <div className="text-center fade-in-up">
-            <h1 className="text-6xl md:text-7xl font-extrabold text-white mb-6 drop-shadow-2xl neon-text">
-              Descubre los Mejores
-              <span className="block text-white mt-3 animate-pulse">Restaurantes</span>
+            <h1 className="text-6xl md:text-7xl font-extrabold text-white mb-6 drop-shadow-2xl neon-text flex items-center justify-center gap-3">
+              <span>{holidayTheme.emoji}</span>
+              <span>Descubre los Mejores
+                <span className="block text-white mt-3 animate-pulse">Restaurantes</span>
+              </span>
             </h1>
-            <p className="text-2xl text-red-100 mb-10 max-w-2xl mx-auto font-light">
+            {holiday !== 'none' && (
+              <p className="text-xl font-semibold mb-3 text-white/90">
+                ¡Celebra {holidayTheme.name} con deliciosa comida!
+              </p>
+            )}
+            <p className="text-2xl text-white/90 mb-10 max-w-2xl mx-auto font-light">
               Más de <span className="font-bold text-white">{restaurants.length}</span> restaurantes esperando por ti. 
               Comida deliciosa entregada rápido.
             </p>
@@ -118,7 +144,7 @@ function RestaurantsPageContent() {
         {/* Filters */}
         <div className="mb-10 flex flex-wrap items-center justify-between gap-6 fade-in-up">
           <div>
-            <h2 className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-red-600 via-red-500 to-red-600 bg-clip-text text-transparent mb-2">
+            <h2 className={`text-3xl md:text-4xl font-extrabold bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} bg-clip-text text-transparent mb-2`}>
               {filteredRestaurants.length} Restaurantes Disponibles
             </h2>
             <p className="text-gray-600 dark:text-gray-400">Encuentra tu comida favorita</p>

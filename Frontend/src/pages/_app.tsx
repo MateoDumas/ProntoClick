@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { GoogleMapsProvider } from '../contexts/GoogleMapsContext';
 import { ThemeProvider } from '../contexts/ThemeContext';
+import { HolidayProvider } from '../contexts/HolidayContext';
 
 import MainLayout from '../components/layout/MainLayout';
 
@@ -24,11 +25,13 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <GoogleMapsProvider>
-          <MainLayout>
-            <Component {...pageProps} />
-          </MainLayout>
-        </GoogleMapsProvider>
+        <HolidayProvider>
+          <GoogleMapsProvider>
+            <MainLayout>
+              <Component {...pageProps} />
+            </MainLayout>
+          </GoogleMapsProvider>
+        </HolidayProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
