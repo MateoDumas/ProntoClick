@@ -13,7 +13,7 @@ export default function AboutPage() {
           </div>
 
           {/* Mission Section */}
-          <section className="bg-white dark:bg-gray-800 rounded-2xl p-8 md:p-12 mb-8 shadow-lg border border-gray-200 dark:border-gray-700 transition-colors duration-200">
+          <section className="bg-white dark:bg-gray-800/90 dark:backdrop-blur-sm rounded-2xl p-8 md:p-12 mb-8 shadow-lg dark:shadow-xl dark:shadow-black/20 border border-gray-200 dark:border-gray-700/50 transition-all duration-200">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6">Nuestra Misión</h2>
             <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed mb-4">
               En ProntoClick, nos dedicamos a conectar a nuestros usuarios con los mejores restaurantes y productos de su ciudad, 
@@ -26,7 +26,7 @@ export default function AboutPage() {
           </section>
 
           {/* Values Section */}
-          <section className="bg-white dark:bg-gray-800 rounded-2xl p-8 md:p-12 mb-8 shadow-lg border border-gray-200 dark:border-gray-700 transition-colors duration-200">
+          <section className="bg-white dark:bg-gray-800/90 dark:backdrop-blur-sm rounded-2xl p-8 md:p-12 mb-8 shadow-lg dark:shadow-xl dark:shadow-black/20 border border-gray-200 dark:border-gray-700/50 transition-all duration-200">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6">Nuestros Valores</h2>
             <div className="grid md:grid-cols-3 gap-6">
               <div className="text-center">
@@ -60,7 +60,7 @@ export default function AboutPage() {
           </section>
 
           {/* Features Section */}
-          <section className="bg-white dark:bg-gray-800 rounded-2xl p-8 md:p-12 mb-8 shadow-lg border border-gray-200 dark:border-gray-700 transition-colors duration-200">
+          <section className="bg-white dark:bg-gray-800/90 dark:backdrop-blur-sm rounded-2xl p-8 md:p-12 mb-8 shadow-lg dark:shadow-xl dark:shadow-black/20 border border-gray-200 dark:border-gray-700/50 transition-all duration-200">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6">¿Por qué elegir ProntoClick?</h2>
             <div className="space-y-4">
               <div className="flex items-start gap-4">
@@ -111,7 +111,7 @@ export default function AboutPage() {
           </section>
 
           {/* CTA Section */}
-          <section className="bg-gradient-to-r from-red-600 to-red-700 dark:from-red-700 dark:to-red-800 rounded-2xl p-8 md:p-12 text-white text-center transition-colors duration-200">
+          <section className="bg-gradient-to-r from-red-600 to-red-700 dark:from-red-700 dark:via-red-800 dark:to-red-900 rounded-2xl p-8 md:p-12 text-white text-center shadow-xl dark:shadow-2xl dark:shadow-red-900/30 transition-all duration-200">
             <h2 className="text-3xl font-bold mb-4">¿Listo para comenzar?</h2>
             <p className="text-xl text-red-100 dark:text-red-200 mb-6">
               Únete a miles de usuarios que ya disfrutan de ProntoClick

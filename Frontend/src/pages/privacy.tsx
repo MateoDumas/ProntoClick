@@ -12,7 +12,7 @@ export default function PrivacyPage() {
             </p>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 md:p-12 shadow-lg border border-gray-200 dark:border-gray-700 space-y-8 transition-colors duration-200">
+          <div className="bg-white dark:bg-gray-800/90 dark:backdrop-blur-sm rounded-2xl p-8 md:p-12 shadow-lg dark:shadow-xl dark:shadow-black/20 border border-gray-200 dark:border-gray-700/50 space-y-8 transition-all duration-200">
             {/* Section 1 */}
             <section>
               <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">1. Información que Recopilamos</h2>
