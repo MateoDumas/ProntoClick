@@ -3,10 +3,12 @@ import { recommendationService } from '../services/recommendation.service';
 import RestaurantCard from '../components/restaurants/RestaurantCard';
 import MarketProductCard from '../components/market/MarketProductCard';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
+import { useHoliday } from '../contexts/HolidayContext';
 import { Restaurant } from '../types/restaurant';
 import { Product } from '../types/product';
 
 function RecommendationsPageContent() {
+  const { theme: holidayTheme, holiday } = useHoliday();
   const { data: recommendations, isLoading } = useQuery({
     queryKey: ['recommendations'],
     queryFn: () => recommendationService.getRecommendations(10),
@@ -31,9 +33,17 @@ function RecommendationsPageContent() {
       <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 py-12 transition-colors duration-200">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-red-600 to-red-800 dark:from-red-400 dark:to-red-600 bg-clip-text text-transparent mb-2">
-              Recomendaciones para Ti
-            </h1>
+            <div className="flex items-center justify-center gap-3 mb-2">
+              <span className="text-5xl">{holidayTheme.emoji}</span>
+              <h1 className={`text-4xl font-bold bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} bg-clip-text text-transparent`}>
+                Recomendaciones para Ti
+              </h1>
+            </div>
+            {holiday !== 'none' && (
+              <p className="text-lg font-semibold mb-2 text-gray-700 dark:text-gray-300">
+                ¡Recomendaciones especiales para {holidayTheme.name}!
+              </p>
+            )}
             <p className="text-gray-600 dark:text-gray-300">Basado en tu historial de pedidos</p>
           </div>
 

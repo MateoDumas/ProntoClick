@@ -1,12 +1,24 @@
+import { useHoliday } from '../contexts/HolidayContext';
+
 export default function AboutPage() {
+  const { theme: holidayTheme, holiday } = useHoliday();
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 py-12 transition-colors duration-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-red-600 to-red-800 dark:from-red-400 dark:to-red-600 bg-clip-text text-transparent mb-4">
-              Sobre Nosotros
-            </h1>
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <span className="text-5xl">{holidayTheme.emoji}</span>
+              <h1 className={`text-4xl md:text-5xl font-bold bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} bg-clip-text text-transparent`}>
+                Sobre Nosotros
+              </h1>
+            </div>
+            {holiday !== 'none' && (
+              <p className="text-lg font-semibold mb-2 text-gray-700 dark:text-gray-300">
+                ¡Celebrando {holidayTheme.name} contigo!
+              </p>
+            )}
             <p className="text-xl text-gray-600 dark:text-gray-300">
               Tu plataforma de delivery favorita
             </p>

@@ -7,6 +7,7 @@ import ProtectedRoute from '../components/auth/ProtectedRoute';
 import AddressAutocomplete from '../components/maps/AddressAutocomplete';
 import InteractiveMap from '../components/maps/InteractiveMap';
 import GoogleMapsLoader from '../components/maps/GoogleMapsLoader';
+import { useHoliday } from '../contexts/HolidayContext';
 import { Location, calculateDistance, estimateDeliveryTime, calculateDeliveryFee, formatDistance, formatDeliveryTime, getCurrentLocation } from '../utils/maps';
 
 interface FormData {
@@ -26,6 +27,7 @@ function CheckoutContent() {
   const router = useRouter();
   const { items, getTotal, clear } = useCart();
   const [loading, setLoading] = useState(false);
+  const { theme: holidayTheme, holiday } = useHoliday();
   const [formData, setFormData] = useState<FormData>({
     street: '',
     city: '',
@@ -132,7 +134,19 @@ function CheckoutContent() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">Checkout</h1>
+      <div className="mb-8">
+        <div className="flex items-center gap-3 mb-2">
+          <span className="text-4xl">{holidayTheme.emoji}</span>
+          <h1 className={`text-3xl font-bold bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} bg-clip-text text-transparent`}>
+            Checkout
+          </h1>
+        </div>
+        {holiday !== 'none' && (
+          <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+            ¡Finaliza tu pedido para {holidayTheme.name}!
+          </p>
+        )}
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Formulario */}

@@ -8,6 +8,7 @@ import type { MarketProduct } from '../../types/market';
 import MarketProductCard from '../../components/market/MarketProductCard';
 import ProtectedRoute from '../../components/auth/ProtectedRoute';
 import { useToast } from '../../hooks/useToast';
+import { useHoliday } from '../../contexts/HolidayContext';
 
 const categoryInfo: Record<string, { name: string; icon: string; description: string }> = {
   tecnologia: {
@@ -65,6 +66,7 @@ const MarketCategoryPageContent: NextPage = () => {
   const [products, setProducts] = useState<MarketProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const { theme: holidayTheme, holiday } = useHoliday();
 
   const categoryId = typeof id === 'string' ? id : '';
   const category = categoryInfo[categoryId];
@@ -142,17 +144,40 @@ const MarketCategoryPageContent: NextPage = () => {
       <div className="absolute top-1/2 left-1/4 w-72 h-72 bg-red-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
 
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-red-600 via-red-500 to-red-600 dark:from-red-700 dark:via-red-600 dark:to-red-800 gradient-animated">
-        <div className="absolute inset-0 bg-gradient-to-r from-red-600/80 via-red-500/80 to-red-600/80 dark:from-red-700/80 dark:via-red-600/80 dark:to-red-800/80"></div>
+      <div className={`relative overflow-hidden bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} gradient-animated`}>
+        <div className={`absolute inset-0 bg-gradient-to-r ${holidayTheme.gradient} opacity-80`}></div>
+        {holidayTheme.decorations && holiday !== 'none' && (
+          <div className="absolute inset-0 pointer-events-none opacity-10">
+            {holidayTheme.decorations.map((emoji, idx) => (
+              <span
+                key={idx}
+                className="absolute text-5xl animate-float"
+                style={{
+                  left: `${(idx * 25) % 85}%`,
+                  top: `${(idx * 20) % 80}%`,
+                  animationDelay: `${idx * 0.6}s`,
+                }}
+              >
+                {emoji}
+              </span>
+            ))}
+          </div>
+        )}
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center fade-in-up">
-            <div className="text-6xl mb-4 transform hover:scale-110 transition-transform duration-300 inline-block">
-              {category.icon}
+            <div className="text-6xl mb-4 transform hover:scale-110 transition-transform duration-300 inline-block flex items-center justify-center gap-2">
+              <span>{holidayTheme.emoji}</span>
+              <span>{category.icon}</span>
             </div>
             <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-4 drop-shadow-2xl neon-text">
               {category.name}
             </h1>
-            <p className="text-xl text-red-100 dark:text-red-200 mb-8 max-w-2xl mx-auto font-light">
+            {holiday !== 'none' && (
+              <p className="text-lg font-semibold mb-2 text-white/90">
+                ¡Celebra {holidayTheme.name} con productos especiales!
+              </p>
+            )}
+            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto font-light">
               {category.description}
             </p>
 

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { getOrders } from '../services/order.service';
 import type { Order } from '../types/order';
 import { useCurrentUser } from '../hooks/useAuth';
+import { useHoliday } from '../contexts/HolidayContext';
 
 const statusColors: Record<Order['status'], string> = {
   pending: 'bg-yellow-100 text-yellow-800',
@@ -28,6 +29,7 @@ export default function Orders() {
   const { data: user } = useCurrentUser();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const { theme: holidayTheme, holiday } = useHoliday();
 
   useEffect(() => {
     // Redirigir si no está autenticado
@@ -82,8 +84,18 @@ export default function Orders() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Mis Pedidos</h1>
-        <p className="text-gray-600">Historial de todos tus pedidos</p>
+        <div className="flex items-center gap-3 mb-2">
+          <span className="text-4xl">{holidayTheme.emoji}</span>
+          <h1 className={`text-3xl font-bold bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} bg-clip-text text-transparent`}>
+            Mis Pedidos
+          </h1>
+        </div>
+        {holiday !== 'none' && (
+          <p className="text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300">
+            ¡Celebra {holidayTheme.name} con tus pedidos!
+          </p>
+        )}
+        <p className="text-gray-600 dark:text-gray-400">Historial de todos tus pedidos</p>
       </div>
 
       {orders.length === 0 ? (

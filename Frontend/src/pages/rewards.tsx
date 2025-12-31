@@ -4,8 +4,10 @@ import RewardCard from '../components/rewards/RewardCard';
 import PointsDisplay from '../components/rewards/PointsDisplay';
 import ReferralCard from '../components/referrals/ReferralCard';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
+import { useHoliday } from '../contexts/HolidayContext';
 
 function RewardsPageContent() {
+  const { theme: holidayTheme, holiday } = useHoliday();
   const { data: userPoints } = useQuery({
     queryKey: ['userPoints'],
     queryFn: rewardService.getUserPoints,
@@ -31,9 +33,17 @@ function RewardsPageContent() {
         <div className="container mx-auto px-4 max-w-6xl">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-red-600 to-red-800 dark:from-red-400 dark:to-red-300 bg-clip-text text-transparent mb-2">
-              ProntoPuntos
-            </h1>
+            <div className="flex items-center justify-center gap-3 mb-2">
+              <span className="text-5xl">{holidayTheme.emoji}</span>
+              <h1 className={`text-4xl font-bold bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} bg-clip-text text-transparent`}>
+                ProntoPuntos
+              </h1>
+            </div>
+            {holiday !== 'none' && (
+              <p className="text-lg font-semibold mb-2 text-gray-700 dark:text-gray-300">
+                ¡Celebra {holidayTheme.name} con puntos extra!
+              </p>
+            )}
             <p className="text-gray-600 dark:text-gray-400">Gana puntos con cada compra y canjéalos por increíbles recompensas</p>
           </div>
 

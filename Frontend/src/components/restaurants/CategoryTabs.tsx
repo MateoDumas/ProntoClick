@@ -1,3 +1,5 @@
+import { useHoliday } from '../../contexts/HolidayContext';
+
 interface CategoryTabsProps {
   categories: string[];
   activeCategory: string | null;
@@ -9,6 +11,8 @@ export default function CategoryTabs({
   activeCategory,
   onCategoryChange,
 }: CategoryTabsProps) {
+  const { theme: holidayTheme, holiday } = useHoliday();
+  const isHoliday = holiday !== 'none';
   return (
     <div className="flex gap-3 overflow-x-auto pb-3 mb-6 custom-scrollbar">
       {categories.length > 0 && (
@@ -16,7 +20,7 @@ export default function CategoryTabs({
           onClick={() => onCategoryChange(null)}
           className={`px-6 py-3 rounded-full whitespace-nowrap transition-all duration-300 font-medium relative overflow-hidden group ${
             activeCategory === null
-              ? 'bg-gradient-to-r from-red-600 to-red-500 dark:from-red-500 dark:to-red-600 text-white shadow-glow scale-105'
+              ? `${isHoliday ? `bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient}` : 'bg-gradient-to-r from-red-600 to-red-500 dark:from-red-500 dark:to-red-600'} text-white shadow-glow scale-105`
               : 'bg-white/80 dark:bg-gray-700/80 backdrop-blur-sm text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-red-50 dark:hover:from-red-900/30 hover:to-red-50 dark:hover:to-red-900/30 hover:text-red-600 dark:hover:text-red-300 hover:scale-105 border border-gray-200 dark:border-gray-600'
           }`}
         >
@@ -32,7 +36,7 @@ export default function CategoryTabs({
           onClick={() => onCategoryChange(category)}
           className={`px-6 py-3 rounded-full whitespace-nowrap transition-all duration-300 font-medium relative overflow-hidden group ${
             activeCategory === category
-              ? 'bg-gradient-to-r from-red-600 to-red-500 dark:from-red-500 dark:to-red-600 text-white shadow-glow scale-105'
+              ? `${isHoliday ? `bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient}` : 'bg-gradient-to-r from-red-600 to-red-500 dark:from-red-500 dark:to-red-600'} text-white shadow-glow scale-105`
               : 'bg-white/80 dark:bg-gray-700/80 backdrop-blur-sm text-gray-700 dark:text-gray-200 hover:bg-gradient-to-r hover:from-red-50 dark:hover:from-red-900/30 hover:to-red-50 dark:hover:to-red-900/30 hover:text-red-600 dark:hover:text-red-300 hover:scale-105 border border-gray-200 dark:border-gray-600'
           }`}
         >

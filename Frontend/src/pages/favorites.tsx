@@ -6,8 +6,10 @@ import RestaurantCard from '../components/restaurants/RestaurantCard';
 import MarketProductCard from '../components/market/MarketProductCard';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 import { useToast } from '../hooks/useToast';
+import { useHoliday } from '../contexts/HolidayContext';
 
 function FavoritesPageContent() {
+  const { theme: holidayTheme, holiday } = useHoliday();
   const { error: toastError } = useToast();
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
@@ -48,10 +50,18 @@ function FavoritesPageContent() {
     <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">
-          <h1 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-red-600 via-red-500 to-red-600 bg-clip-text text-transparent mb-2">
-            Mis Favoritos
-          </h1>
-          <p className="text-gray-600">
+          <div className="flex items-center gap-3 mb-2">
+            <span className="text-5xl">{holidayTheme.emoji}</span>
+            <h1 className={`text-4xl md:text-5xl font-extrabold bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} bg-clip-text text-transparent`}>
+              Mis Favoritos
+            </h1>
+          </div>
+          {holiday !== 'none' && (
+            <p className="text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300">
+              ¡Favoritos especiales para {holidayTheme.name}!
+            </p>
+          )}
+          <p className="text-gray-600 dark:text-gray-400">
             {totalFavorites === 0
               ? 'Aún no tienes favoritos'
               : `${totalFavorites} ${totalFavorites === 1 ? 'favorito' : 'favoritos'} guardados`}
