@@ -37,7 +37,7 @@ export default function UserMenu() {
     <div ref={menuRef} className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-red-50 transition-all duration-300 group relative"
+        className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/30 transition-all duration-300 group relative"
       >
         {user.avatar ? (
           <div className="relative">
@@ -46,18 +46,18 @@ export default function UserMenu() {
               alt={user.name}
               className="w-10 h-10 rounded-full object-cover border-2 border-red-500 group-hover:border-red-600 transition-all duration-300 group-hover:scale-110 group-hover:shadow-glow"
             />
-            <span className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></span>
+            <span className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"></span>
           </div>
         ) : (
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-red-500 via-red-400 to-red-600 flex items-center justify-center text-white text-sm font-bold border-2 border-red-500 group-hover:border-red-600 transition-all duration-300 group-hover:scale-110 group-hover:shadow-glow group-hover:rotate-12">
             {user.name.charAt(0).toUpperCase()}
           </div>
         )}
-        <span className="hidden sm:block text-sm font-medium text-gray-700 group-hover:text-red-600 transition-colors">
+        <span className="hidden sm:block text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
           {user.name.split(' ')[0]}
         </span>
         <svg
-          className={`w-4 h-4 text-gray-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
+          className={`w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -73,9 +73,9 @@ export default function UserMenu() {
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-2xl border border-gray-200 z-50 overflow-hidden animate-fade-in">
+        <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden animate-fade-in transition-colors duration-200">
           {/* User Info */}
-          <div className="p-4 border-b border-gray-100 bg-gradient-to-r from-red-50 to-white">
+          <div className="p-4 border-b border-gray-100 dark:border-gray-700 bg-gradient-to-r from-red-50 to-white dark:from-red-900/20 dark:to-gray-800 transition-colors duration-200">
             <div className="flex items-center gap-3">
               {user.avatar ? (
                 <img
@@ -89,8 +89,8 @@ export default function UserMenu() {
                 </div>
               )}
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-gray-900 truncate">{user.name}</p>
-                <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                <p className="font-semibold text-gray-900 dark:text-gray-100 truncate">{user.name}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user.email}</p>
               </div>
             </div>
           </div>
@@ -102,8 +102,8 @@ export default function UserMenu() {
               onClick={() => setIsOpen(false)}
               className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors ${
                 router.pathname === '/profile'
-                  ? 'bg-red-50 text-red-600 border-l-4 border-red-600'
-                  : 'text-gray-700 hover:bg-red-50 hover:text-red-600'
+                  ? 'bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 border-l-4 border-red-600 dark:border-red-500'
+                  : 'text-gray-700 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 dark:hover:text-red-400'
               }`}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -122,8 +122,8 @@ export default function UserMenu() {
               onClick={() => setIsOpen(false)}
               className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors ${
                 router.pathname === '/orders'
-                  ? 'bg-red-50 text-red-600 border-l-4 border-red-600'
-                  : 'text-gray-700 hover:bg-red-50 hover:text-red-600'
+                  ? 'bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 border-l-4 border-red-600 dark:border-red-500'
+                  : 'text-gray-700 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 dark:hover:text-red-400'
               }`}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -142,8 +142,8 @@ export default function UserMenu() {
               onClick={() => setIsOpen(false)}
               className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors ${
                 router.pathname === '/favorites'
-                  ? 'bg-red-50 text-red-600 border-l-4 border-red-600'
-                  : 'text-gray-700 hover:bg-red-50 hover:text-red-600'
+                  ? 'bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 border-l-4 border-red-600 dark:border-red-500'
+                  : 'text-gray-700 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 dark:hover:text-red-400'
               }`}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -162,8 +162,8 @@ export default function UserMenu() {
               onClick={() => setIsOpen(false)}
               className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors ${
                 router.pathname === '/rewards'
-                  ? 'bg-red-50 text-red-600 border-l-4 border-red-600'
-                  : 'text-gray-700 hover:bg-red-50 hover:text-red-600'
+                  ? 'bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 border-l-4 border-red-600 dark:border-red-500'
+                  : 'text-gray-700 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-600 dark:hover:text-red-400'
               }`}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -179,7 +179,7 @@ export default function UserMenu() {
 
             {/* Dashboard de Soporte - Solo para usuarios con rol support o admin */}
             {(user.role === 'support' || user.role === 'admin') && (
-              <div className="border-t border-gray-100 my-2"></div>
+              <div className="border-t border-gray-100 dark:border-gray-700 my-2"></div>
             )}
             {(user.role === 'support' || user.role === 'admin') && (
               <Link
@@ -187,8 +187,8 @@ export default function UserMenu() {
                 onClick={() => setIsOpen(false)}
                 className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors ${
                   router.pathname === '/support/dashboard'
-                    ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600'
-                    : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
+                    ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border-l-4 border-blue-600 dark:border-blue-500'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 dark:hover:text-blue-400'
                 }`}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -205,11 +205,11 @@ export default function UserMenu() {
           </div>
 
           {/* Logout */}
-          <div className="border-t border-gray-100 p-2">
+          <div className="border-t border-gray-100 dark:border-gray-700 p-2 transition-colors duration-200">
             <button
               onClick={handleLogout}
               disabled={logoutMutation.isPending}
-              className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 rounded-xl transition-colors disabled:opacity-50"
+              className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl transition-colors disabled:opacity-50"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
