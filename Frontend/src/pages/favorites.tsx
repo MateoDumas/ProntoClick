@@ -48,11 +48,11 @@ function FavoritesPageContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-white dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 transition-colors duration-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <span className="text-5xl">{holidayTheme.emoji}</span>
-            <h1 className={`text-4xl md:text-5xl font-extrabold bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} bg-clip-text text-transparent`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12">
+        <div className="mb-6 sm:mb-8">
+          <div className="flex items-center gap-2 sm:gap-3 mb-2">
+            <span className="text-4xl sm:text-5xl">{holidayTheme.emoji}</span>
+            <h1 className={`text-3xl sm:text-4xl md:text-5xl font-extrabold bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} bg-clip-text text-transparent`}>
               Mis Favoritos
             </h1>
           </div>
@@ -69,10 +69,10 @@ function FavoritesPageContent() {
         </div>
 
         {totalFavorites === 0 ? (
-          <div className="text-center py-24 glass dark:bg-gray-800/50 rounded-3xl border-2 border-gray-200/50 dark:border-gray-700/50 p-12 transition-colors duration-200">
-            <div className="inline-flex items-center justify-center w-32 h-32 bg-gradient-to-br from-red-100 via-red-50 to-white dark:from-red-900/30 dark:via-red-800/20 dark:to-gray-800 rounded-full mb-6 morph-blob shadow-glow transition-colors duration-200">
+          <div className="text-center py-12 sm:py-16 md:py-24 glass dark:bg-gray-800/50 rounded-2xl sm:rounded-3xl border-2 border-gray-200/50 dark:border-gray-700/50 p-6 sm:p-8 md:p-12 transition-colors duration-200">
+            <div className="inline-flex items-center justify-center w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-br from-red-100 via-red-50 to-white dark:from-red-900/30 dark:via-red-800/20 dark:to-gray-800 rounded-full mb-4 sm:mb-6 morph-blob shadow-glow transition-colors duration-200">
               <svg
-                className="w-16 h-16 text-gray-400 dark:text-gray-500"
+                className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 dark:text-gray-500"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -85,22 +85,22 @@ function FavoritesPageContent() {
                 />
               </svg>
             </div>
-            <h3 className={`text-3xl font-extrabold bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} bg-clip-text text-transparent mb-3`}>
+            <h3 className={`text-2xl sm:text-3xl font-extrabold bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} bg-clip-text text-transparent mb-3`}>
               No tienes favoritos aún
             </h3>
-            <p className="text-gray-600 dark:text-gray-400 text-lg mb-6">
+            <p className="text-gray-600 dark:text-gray-400 text-base sm:text-lg mb-6 max-w-md mx-auto px-4">
               Agrega restaurantes y productos a tus favoritos para encontrarlos fácilmente
             </p>
-            <div className="flex gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
               <a
                 href="/restaurants"
-                className="px-6 py-3 bg-red-600 dark:bg-red-500 text-white rounded-xl hover:bg-red-700 dark:hover:bg-red-600 transition-colors font-semibold"
+                className="px-6 py-3 bg-red-600 dark:bg-red-500 text-white rounded-xl hover:bg-red-700 dark:hover:bg-red-600 transition-colors font-semibold text-sm sm:text-base w-full sm:w-auto text-center"
               >
                 Explorar Restaurantes
               </a>
               <a
                 href="/"
-                className="px-6 py-3 bg-white dark:bg-gray-700 text-red-600 dark:text-red-400 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors font-semibold border-2 border-red-600 dark:border-red-500"
+                className="px-6 py-3 bg-white dark:bg-gray-700 text-red-600 dark:text-red-400 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors font-semibold border-2 border-red-600 dark:border-red-500 text-sm sm:text-base w-full sm:w-auto text-center"
               >
                 Ver Mercado
               </a>
@@ -110,11 +110,11 @@ function FavoritesPageContent() {
           <>
             {/* Restaurantes Favoritos */}
             {restaurants.length > 0 && (
-              <section className="mb-12">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
+              <section className="mb-8 sm:mb-12">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4 sm:mb-6">
                   Restaurantes Favoritos ({restaurants.length})
                 </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                   {restaurants.map((restaurant) => (
                     <RestaurantCard key={restaurant.id} r={restaurant} />
                   ))}
@@ -125,10 +125,10 @@ function FavoritesPageContent() {
             {/* Productos Favoritos */}
             {products.length > 0 && (
               <section>
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4 sm:mb-6">
                   Productos Favoritos ({products.length})
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                   {products.map((product) => {
                     // Convertir Product a MarketProduct para el componente
                     const marketProduct = {

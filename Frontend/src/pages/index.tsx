@@ -78,8 +78,8 @@ const Home: NextPage = () => {
       )}
 
       {/* Hero Section */}
-      <section className="mb-12 md:mb-16">
-        <div className={`bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} rounded-2xl p-6 md:p-10 lg:p-12 text-white shadow-xl relative overflow-hidden`}>
+      <section className="mb-8 sm:mb-12 md:mb-16">
+        <div className={`bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-10 lg:p-12 text-white shadow-xl relative overflow-hidden`}>
           {/* Decorative emojis for holidays */}
           {holidayTheme.decorations && holiday !== 'none' && (
             <div className="absolute inset-0 pointer-events-none opacity-20">
@@ -99,26 +99,27 @@ const Home: NextPage = () => {
             </div>
           )}
           <div className="relative z-10">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 flex items-center gap-3">
-              <span>{holidayTheme.emoji}</span>
-              <span>Comida deliciosa,{' '}
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
+              <span className="text-3xl sm:text-4xl">{holidayTheme.emoji}</span>
+              <span className="flex flex-col sm:inline">
+                <span>Comida deliciosa,</span>
                 <span className="text-white">entregada rápido</span>
               </span>
             </h1>
             {holiday !== 'none' && (
-              <p className="text-lg font-semibold mb-2 opacity-90">
+              <p className="text-base sm:text-lg font-semibold mb-2 opacity-90">
                 ¡Celebra {holidayTheme.name} con nosotros!
               </p>
             )}
-            <p className="text-lg md:text-xl text-white/90 dark:text-white/80 mb-6 max-w-2xl">
+            <p className="text-base sm:text-lg md:text-xl text-white/90 dark:text-white/80 mb-6 max-w-2xl">
               Descubre los mejores restaurantes cerca de ti y disfruta de tus platillos favoritos
               sin salir de casa.
             </p>
-            <div className="flex flex-wrap gap-3">
-              <a href="/restaurants" className="px-6 py-3 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 font-semibold rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-lg text-sm">
+            <div className="flex flex-col sm:flex-row flex-wrap gap-3">
+              <a href="/restaurants" className="px-6 py-3 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 font-semibold rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-lg text-sm text-center">
                 Explorar Restaurantes
               </a>
-              <a href="/promotions" className="px-6 py-3 bg-white/20 dark:bg-white/10 backdrop-blur-sm text-white font-semibold rounded-lg hover:bg-white/30 dark:hover:bg-white/20 transition-all border border-white/30 text-sm">
+              <a href="/promotions" className="px-6 py-3 bg-white/20 dark:bg-white/10 backdrop-blur-sm text-white font-semibold rounded-lg hover:bg-white/30 dark:hover:bg-white/20 transition-all border border-white/30 text-sm text-center">
                 Ver Promociones
               </a>
             </div>
@@ -140,13 +141,13 @@ const Home: NextPage = () => {
       {user && favoriteRestaurants.length > 0 && (
         <section className="mb-12 md:mb-16">
           <div className="mb-8">
-            <div className="flex items-center gap-3 mb-2">
-              <span className="text-3xl">🔄</span>
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100">
+            <div className="flex items-center gap-2 sm:gap-3 mb-2">
+              <span className="text-2xl sm:text-3xl">🔄</span>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100">
                 Repite tus favoritos
               </h2>
             </div>
-            <p className="text-base text-gray-600 dark:text-gray-300">
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">
               Los restaurantes que más pediste están aquí para que vuelvas a disfrutarlos
             </p>
           </div>
@@ -159,7 +160,7 @@ const Home: NextPage = () => {
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {favoriteRestaurants.map((r) => (
                 <RestaurantCard key={r.id} r={r} />
               ))}
@@ -170,11 +171,11 @@ const Home: NextPage = () => {
 
       {/* Restaurants Section */}
       <section className="mb-8">
-        <div className="mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+        <div className="mb-6 sm:mb-8">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
             Restaurantes cerca tuyo
           </h2>
-          <p className="text-base text-gray-600 dark:text-gray-300">
+          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">
             Elige entre los mejores locales y disfruta de una experiencia culinaria única
           </p>
         </div>
@@ -213,16 +214,16 @@ const Home: NextPage = () => {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {restaurants.slice(0, Math.ceil(restaurants.length / 2)).map((r) => (
                 <RestaurantCard key={r.id} r={r} />
               ))}
             </div>
             {restaurants.length > Math.ceil(restaurants.length / 2) && (
-              <div className="mt-8 text-center">
+              <div className="mt-6 sm:mt-8 text-center">
                 <a
                   href="/restaurants"
-                  className="inline-block px-8 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-lg hover:from-red-600 hover:to-red-700 transition-all shadow-lg transform hover:scale-105"
+                  className="inline-block px-6 sm:px-8 py-2 sm:py-3 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm sm:text-base font-semibold rounded-lg hover:from-red-600 hover:to-red-700 transition-all shadow-lg transform hover:scale-105"
                 >
                   Ver todos los restaurantes ({restaurants.length})
                 </a>
