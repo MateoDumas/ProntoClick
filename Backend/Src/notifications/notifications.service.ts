@@ -677,6 +677,155 @@ export class NotificationsService {
   }
 
   /**
+   * Envía email con código de recuperación de contraseña
+   */
+  async sendPasswordResetEmail(userEmail: string, userName: string, resetCode: string): Promise<boolean> {
+    if (!this.isConfigured) {
+      this.logger.warn('SendGrid no configurado. Email no enviado.');
+      return false;
+    }
+
+    try {
+      const fromEmail = this.configService.get<string>('FROM_EMAIL') || 'noreply@prontoclick.com';
+      
+      const msg = {
+        to: userEmail,
+        from: fromEmail,
+        subject: '🔑 Recuperación de Contraseña - ProntoClick',
+        html: `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <style>
+              * { margin: 0; padding: 0; box-sizing: border-box; }
+              body { 
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; 
+                line-height: 1.6; 
+                color: #333; 
+                background-color: #f4f4f4;
+              }
+              .email-container { 
+                max-width: 600px; 
+                margin: 0 auto;
+                background: white;
+              }
+              .header {
+                background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+                color: white;
+                padding: 40px 30px;
+                text-align: center;
+              }
+              .header h1 {
+                font-size: 28px;
+                margin-bottom: 10px;
+              }
+              .content {
+                padding: 40px 30px;
+              }
+              .code-box {
+                background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+                border: 2px solid #dc2626;
+                border-radius: 12px;
+                padding: 30px;
+                text-align: center;
+                margin: 30px 0;
+              }
+              .code-label {
+                font-size: 14px;
+                color: #666;
+                margin-bottom: 10px;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+              }
+              .reset-code {
+                font-size: 36px;
+                font-weight: 700;
+                color: #dc2626;
+                letter-spacing: 8px;
+                font-family: 'Courier New', monospace;
+                margin: 15px 0;
+              }
+              .warning-box {
+                background: #fff3cd;
+                border-left: 4px solid #ffc107;
+                padding: 15px;
+                margin: 20px 0;
+                border-radius: 4px;
+              }
+              .footer { 
+                background: #2c3e50;
+                color: #ecf0f1;
+                padding: 30px;
+                text-align: center;
+                font-size: 14px;
+              }
+            </style>
+          </head>
+          <body>
+            <div class="email-container">
+              <div class="header">
+                <h1>🔑 Recuperación de Contraseña</h1>
+                <p>Restablece tu contraseña de ProntoClick</p>
+              </div>
+              
+              <div class="content">
+                <p style="font-size: 16px; margin-bottom: 20px;">
+                  Hola <strong>${userName}</strong>,
+                </p>
+                
+                <p style="font-size: 16px; margin-bottom: 20px;">
+                  Recibimos una solicitud para restablecer la contraseña de tu cuenta en ProntoClick. 
+                  Si no fuiste tú, puedes ignorar este email de forma segura.
+                </p>
+
+                <div class="code-box">
+                  <div class="code-label">Tu código de recuperación</div>
+                  <div class="reset-code">${resetCode}</div>
+                  <p style="font-size: 14px; color: #666; margin-top: 15px;">
+                    Este código expira en 15 minutos
+                  </p>
+                </div>
+
+                <p style="font-size: 16px; margin-top: 30px;">
+                  Ingresa este código en la página de recuperación de contraseña para crear una nueva contraseña.
+                </p>
+
+                <div class="warning-box">
+                  <p style="margin: 0; color: #856404;">
+                    <strong>⚠️ Importante:</strong> No compartas este código con nadie. Si no solicitaste este cambio, 
+                    tu cuenta permanecerá segura.
+                  </p>
+                </div>
+              </div>
+
+              <div class="footer">
+                <p style="margin-bottom: 15px;">
+                  <strong>ProntoClick</strong><br>
+                  Tu comida favorita, a un click de distancia
+                </p>
+                <p style="margin-top: 20px; font-size: 12px; color: #95a5a6;">
+                  Este es un email automático, por favor no respondas a este mensaje.<br>
+                  © ${new Date().getFullYear()} ProntoClick. Todos los derechos reservados.
+                </p>
+              </div>
+            </div>
+          </body>
+          </html>
+        `,
+      };
+
+      await sgMail.send(msg);
+      this.logger.log(`Email de recuperación de contraseña enviado a ${userEmail}`);
+      return true;
+    } catch (error) {
+      this.logger.error(`Error al enviar email de recuperación a ${userEmail}:`, error);
+      return false;
+    }
+  }
+
+  /**
    * Verifica si el servicio está configurado
    */
   isEmailConfigured(): boolean {

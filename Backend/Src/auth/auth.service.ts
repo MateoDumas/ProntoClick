@@ -199,5 +199,69 @@ export class AuthService {
       throw new UnauthorizedException('Error al enviar código de verificación');
     }
   }
+
+  async requestPasswordReset(email: string): Promise<boolean> {
+    const user = await this.usersService.findByEmail(email);
+    if (!user) {
+      // Por seguridad, no revelamos si el email existe o no
+      return true;
+    }
+
+    // Generar código de reset (6 dígitos)
+    const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const resetCodeExpires = new Date();
+    resetCodeExpires.setMinutes(resetCodeExpires.getMinutes() + 15); // Expira en 15 minutos
+
+    // Actualizar usuario con código de reset
+    await this.usersService.update(user.id, {
+      passwordResetCode: resetCode,
+      passwordResetCodeExpires: resetCodeExpires,
+    });
+
+    // Enviar email con código de reset
+    try {
+      await this.notificationsService.sendPasswordResetEmail(user.email, user.name, resetCode);
+      return true;
+    } catch (error) {
+      console.error('Error al enviar email de reset de contraseña:', error);
+      throw new UnauthorizedException('Error al enviar email de recuperación');
+    }
+  }
+
+  async resetPassword(email: string, code: string, newPassword: string): Promise<boolean> {
+    const user = await this.usersService.findByEmail(email);
+    if (!user) {
+      throw new UnauthorizedException('Usuario no encontrado');
+    }
+
+    if (!user.passwordResetCode || !user.passwordResetCodeExpires) {
+      throw new UnauthorizedException('Código de recuperación no encontrado');
+    }
+
+    if (new Date() > user.passwordResetCodeExpires) {
+      throw new UnauthorizedException('El código de recuperación ha expirado');
+    }
+
+    if (user.passwordResetCode !== code) {
+      throw new UnauthorizedException('Código de recuperación incorrecto');
+    }
+
+    // Validar nueva contraseña
+    if (newPassword.length < 6) {
+      throw new UnauthorizedException('La contraseña debe tener al menos 6 caracteres');
+    }
+
+    // Hash de la nueva contraseña
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Actualizar contraseña y limpiar código de reset
+    await this.usersService.update(user.id, {
+      password: hashedPassword,
+      passwordResetCode: null,
+      passwordResetCodeExpires: null,
+    });
+
+    return true;
+  }
 }
 

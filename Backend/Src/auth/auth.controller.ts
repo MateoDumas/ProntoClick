@@ -89,5 +89,25 @@ export class AuthController {
       message: 'Códigos de respaldo regenerados',
     };
   }
+
+  // ========== Password Reset Endpoints ==========
+
+  @Post('forgot-password')
+  async requestPasswordReset(@Body() body: { email: string }) {
+    await this.authService.requestPasswordReset(body.email);
+    return {
+      success: true,
+      message: 'Si el email existe, recibirás un código de recuperación',
+    };
+  }
+
+  @Post('reset-password')
+  async resetPassword(@Body() body: { email: string; code: string; newPassword: string }) {
+    await this.authService.resetPassword(body.email, body.code, body.newPassword);
+    return {
+      success: true,
+      message: 'Contraseña restablecida correctamente',
+    };
+  }
 }
 

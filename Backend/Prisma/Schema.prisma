@@ -16,6 +16,8 @@ model User {
   emailVerified  Boolean            @default(false)
   verificationCode String?
   verificationCodeExpires DateTime?
+  passwordResetCode String?
+  passwordResetCodeExpires DateTime?
   twoFactorEnabled Boolean          @default(false)
   twoFactorSecret String?
   twoFactorBackupCodes String[]
