@@ -59,35 +59,35 @@ export default function PromotionsPage() {
             ))}
           </div>
         )}
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-14 md:py-16">
           <div className="text-center fade-in-up">
-            <div className="text-6xl mb-4 transform hover:scale-110 transition-transform duration-300 inline-block">
+            <div className="text-4xl sm:text-5xl md:text-6xl mb-3 sm:mb-4 transform hover:scale-110 transition-transform duration-300 inline-block">
               {holidayTheme.emoji}
             </div>
-            <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-4 drop-shadow-2xl neon-text">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-3 sm:mb-4 drop-shadow-2xl neon-text px-4">
               {holiday !== 'none' ? `Promociones de ${holidayTheme.name}` : 'Promociones Especiales'}
             </h1>
-            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto font-light">
+            <p className="text-base sm:text-lg md:text-xl text-white/90 mb-6 sm:mb-8 max-w-2xl mx-auto font-light px-4">
               Aprovecha nuestras ofertas exclusivas que cambian cada día. ¡No te las pierdas!
             </p>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12">
         {/* Filters */}
-        <div className="mb-10 flex flex-wrap items-center justify-between gap-6 fade-in-up">
+        <div className="mb-6 sm:mb-8 md:mb-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-6 fade-in-up">
           <div>
-            <h2 className={`text-3xl md:text-4xl font-extrabold bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} bg-clip-text text-transparent mb-2`}>
+            <h2 className={`text-2xl sm:text-3xl md:text-4xl font-extrabold bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} bg-clip-text text-transparent mb-2`}>
               {filteredPromotions.length} Promociones Disponibles
             </h2>
-            <p className="text-gray-600 dark:text-gray-400">Ofertas que rotan diariamente</p>
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">Ofertas que rotan diariamente</p>
           </div>
 
-          <div className="flex gap-3 flex-wrap">
+          <div className="flex gap-2 sm:gap-3 flex-wrap">
             <button
               onClick={() => setFilter('all')}
-              className={`px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-110 relative overflow-hidden group ${
+              className={`px-4 sm:px-6 py-2 sm:py-3 rounded-full text-sm sm:text-base font-bold transition-all duration-300 transform hover:scale-110 relative overflow-hidden group ${
                 filter === 'all'
                   ? 'bg-gradient-to-r from-red-600 to-red-500 dark:from-red-500 dark:to-red-600 text-white shadow-glow-lg scale-105'
                   : 'glass dark:bg-gray-700/80 text-gray-700 dark:text-white hover:bg-gradient-to-r hover:from-red-50 dark:hover:from-red-900/30 hover:to-red-50 dark:hover:to-red-900/30 hover:text-red-600 dark:hover:text-red-300 shadow-md border border-white/30 dark:border-gray-600'
@@ -97,7 +97,7 @@ export default function PromotionsPage() {
             </button>
             <button
               onClick={() => setFilter('restaurant')}
-              className={`px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-110 relative overflow-hidden group ${
+              className={`px-4 sm:px-6 py-2 sm:py-3 rounded-full text-sm sm:text-base font-bold transition-all duration-300 transform hover:scale-110 relative overflow-hidden group ${
                 filter === 'restaurant'
                   ? 'bg-gradient-to-r from-red-600 to-red-500 dark:from-red-500 dark:to-red-600 text-white shadow-glow-lg scale-105'
                   : 'glass dark:bg-gray-700/80 text-gray-700 dark:text-white hover:bg-gradient-to-r hover:from-red-50 dark:hover:from-red-900/30 hover:to-red-50 dark:hover:to-red-900/30 hover:text-red-600 dark:hover:text-red-300 shadow-md border border-white/30 dark:border-gray-600'
@@ -107,7 +107,7 @@ export default function PromotionsPage() {
             </button>
             <button
               onClick={() => setFilter('market')}
-              className={`px-6 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-110 relative overflow-hidden group ${
+              className={`px-4 sm:px-6 py-2 sm:py-3 rounded-full text-sm sm:text-base font-bold transition-all duration-300 transform hover:scale-110 relative overflow-hidden group ${
                 filter === 'market'
                   ? 'bg-gradient-to-r from-red-600 to-red-500 dark:from-red-500 dark:to-red-600 text-white shadow-glow-lg scale-105'
                   : 'glass dark:bg-gray-700/80 text-gray-700 dark:text-white hover:bg-gradient-to-r hover:from-red-50 dark:hover:from-red-900/30 hover:to-red-50 dark:hover:to-red-900/30 hover:text-red-600 dark:hover:text-red-300 shadow-md border border-white/30 dark:border-gray-600'

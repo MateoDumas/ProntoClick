@@ -93,36 +93,37 @@ function RestaurantsPageContent() {
             ))}
           </div>
         )}
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20 lg:py-24">
           <div className="text-center fade-in-up">
-            <h1 className="text-6xl md:text-7xl font-extrabold text-white mb-6 drop-shadow-2xl neon-text flex items-center justify-center gap-3">
-              <span>{holidayTheme.emoji}</span>
-              <span>Descubre los Mejores
-                <span className="block text-white mt-3 animate-pulse">Restaurantes</span>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-white mb-4 sm:mb-6 drop-shadow-2xl neon-text flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3">
+              <span className="text-4xl sm:text-5xl">{holidayTheme.emoji}</span>
+              <span className="flex flex-col">
+                <span>Descubre los Mejores</span>
+                <span className="block text-white mt-2 sm:mt-3 animate-pulse">Restaurantes</span>
               </span>
             </h1>
             {holiday !== 'none' && (
-              <p className="text-xl font-semibold mb-3 text-white/90">
+              <p className="text-base sm:text-lg md:text-xl font-semibold mb-2 sm:mb-3 text-white/90">
                 ¡Celebra {holidayTheme.name} con deliciosa comida!
               </p>
             )}
-            <p className="text-2xl text-white/90 mb-10 max-w-2xl mx-auto font-light">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 mb-6 sm:mb-8 md:mb-10 max-w-2xl mx-auto font-light px-4">
               Más de <span className="font-bold text-white">{restaurants.length}</span> restaurantes esperando por ti. 
               Comida deliciosa entregada rápido.
             </p>
 
             {/* Search Bar */}
-            <div className="max-w-2xl mx-auto fade-in-up animation-delay-400">
+            <div className="max-w-2xl mx-auto fade-in-up animation-delay-400 px-4">
               <div className="relative group">
                 <input
                   type="text"
                   placeholder="Buscar restaurantes, comida, tipo de cocina..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-6 py-5 pl-16 rounded-3xl text-lg shadow-glow-lg border-2 border-white/30 focus:ring-4 focus:ring-white focus:outline-none glass backdrop-blur-xl focus:scale-105 transition-all duration-300"
+                  className="w-full px-4 sm:px-6 py-3 sm:py-4 md:py-5 pl-12 sm:pl-16 rounded-2xl sm:rounded-3xl text-sm sm:text-base md:text-lg shadow-glow-lg border-2 border-white/30 focus:ring-4 focus:ring-white focus:outline-none glass backdrop-blur-xl focus:scale-105 transition-all duration-300"
                 />
                 <svg
-                  className="absolute left-5 top-1/2 transform -translate-y-1/2 w-6 h-6 text-gray-400 group-hover:text-white transition-colors"
+                  className="absolute left-3 sm:left-5 top-1/2 transform -translate-y-1/2 w-5 h-5 sm:w-6 sm:h-6 text-gray-400 group-hover:text-white transition-colors"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -140,14 +141,14 @@ function RestaurantsPageContent() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12 relative z-10">
         {/* Filters */}
-        <div className="mb-10 flex flex-wrap items-center justify-between gap-6 fade-in-up">
+        <div className="mb-6 sm:mb-8 md:mb-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-6 fade-in-up">
           <div>
-            <h2 className={`text-3xl md:text-4xl font-extrabold bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} bg-clip-text text-transparent mb-2`}>
+            <h2 className={`text-2xl sm:text-3xl md:text-4xl font-extrabold bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} bg-clip-text text-transparent mb-2`}>
               {filteredRestaurants.length} Restaurantes Disponibles
             </h2>
-            <p className="text-gray-600 dark:text-gray-400">Encuentra tu comida favorita</p>
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">Encuentra tu comida favorita</p>
           </div>
           
           <div className="flex gap-3 flex-wrap">
@@ -199,7 +200,7 @@ function RestaurantsPageContent() {
 
         {/* Restaurants Grid */}
         {filteredRestaurants.length === 0 ? (
-          <div className="text-center py-24 glass dark:bg-gray-800/50 rounded-3xl border-2 border-gray-200/50 dark:border-gray-700/50 p-12 fade-in-scale">
+          <div className="text-center py-12 sm:py-16 md:py-24 glass dark:bg-gray-800/50 rounded-2xl sm:rounded-3xl border-2 border-gray-200/50 dark:border-gray-700/50 p-6 sm:p-8 md:p-12 fade-in-scale">
             <div className="inline-flex items-center justify-center w-32 h-32 bg-gradient-to-br from-red-100 via-red-50 to-white dark:from-red-900/30 dark:via-red-800/20 dark:to-gray-800 rounded-full mb-6 morph-blob shadow-glow">
               <svg
                 className="w-16 h-16 text-gray-400 dark:text-gray-500 animate-pulse"
