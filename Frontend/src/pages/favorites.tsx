@@ -37,8 +37,8 @@ function FavoritesPageContent() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Cargando favoritos...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 dark:border-red-400 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Cargando favoritos...</p>
         </div>
       </div>
     );
@@ -47,7 +47,7 @@ function FavoritesPageContent() {
   const totalFavorites = restaurants.length + products.length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-white">
+    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-white dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-2">
@@ -69,10 +69,10 @@ function FavoritesPageContent() {
         </div>
 
         {totalFavorites === 0 ? (
-          <div className="text-center py-24 glass rounded-3xl border-2 border-gray-200/50 p-12">
-            <div className="inline-flex items-center justify-center w-32 h-32 bg-gradient-to-br from-red-100 via-red-50 to-white rounded-full mb-6 morph-blob shadow-glow">
+          <div className="text-center py-24 glass dark:bg-gray-800/50 rounded-3xl border-2 border-gray-200/50 dark:border-gray-700/50 p-12 transition-colors duration-200">
+            <div className="inline-flex items-center justify-center w-32 h-32 bg-gradient-to-br from-red-100 via-red-50 to-white dark:from-red-900/30 dark:via-red-800/20 dark:to-gray-800 rounded-full mb-6 morph-blob shadow-glow transition-colors duration-200">
               <svg
-                className="w-16 h-16 text-gray-400"
+                className="w-16 h-16 text-gray-400 dark:text-gray-500"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -85,22 +85,22 @@ function FavoritesPageContent() {
                 />
               </svg>
             </div>
-            <h3 className="text-3xl font-extrabold bg-gradient-to-r from-red-600 to-red-500 bg-clip-text text-transparent mb-3">
+            <h3 className={`text-3xl font-extrabold bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} bg-clip-text text-transparent mb-3`}>
               No tienes favoritos aún
             </h3>
-            <p className="text-gray-600 text-lg mb-6">
+            <p className="text-gray-600 dark:text-gray-400 text-lg mb-6">
               Agrega restaurantes y productos a tus favoritos para encontrarlos fácilmente
             </p>
             <div className="flex gap-4 justify-center">
               <a
                 href="/restaurants"
-                className="px-6 py-3 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors font-semibold"
+                className="px-6 py-3 bg-red-600 dark:bg-red-500 text-white rounded-xl hover:bg-red-700 dark:hover:bg-red-600 transition-colors font-semibold"
               >
                 Explorar Restaurantes
               </a>
               <a
                 href="/"
-                className="px-6 py-3 bg-white text-red-600 rounded-xl hover:bg-red-50 transition-colors font-semibold border-2 border-red-600"
+                className="px-6 py-3 bg-white dark:bg-gray-700 text-red-600 dark:text-red-400 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors font-semibold border-2 border-red-600 dark:border-red-500"
               >
                 Ver Mercado
               </a>
@@ -111,7 +111,7 @@ function FavoritesPageContent() {
             {/* Restaurantes Favoritos */}
             {restaurants.length > 0 && (
               <section className="mb-12">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
                   Restaurantes Favoritos ({restaurants.length})
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -125,7 +125,7 @@ function FavoritesPageContent() {
             {/* Productos Favoritos */}
             {products.length > 0 && (
               <section>
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
                   Productos Favoritos ({products.length})
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
