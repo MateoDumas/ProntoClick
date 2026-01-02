@@ -38,12 +38,18 @@
 
 ## 📋 Paso 4: Variables de Entorno
 
-Haz clic en **"Environment Variables"** y agrega:
+⚠️ **IMPORTANTE:** El archivo `.env.local` NO se sube a GitHub (está en `.gitignore`). Debes configurar las variables **directamente en Vercel**.
 
-### Variable Obligatoria:
+### Cómo Agregar Variables:
+
+1. Haz clic en **"Environment Variables"** en la configuración del proyecto
+2. Haz clic en **"Add New"**
+3. Agrega cada variable:
+
+### Variables Obligatorias:
 
 ```
-NEXT_PUBLIC_API_BASE=https://prontoclick-backend.onrender.com
+NEXT_PUBLIC_API_URL=https://prontoclick-backend.onrender.com
 ```
 
 **Nota:** En Next.js, las variables que empiezan con `NEXT_PUBLIC_` son accesibles en el cliente.
@@ -51,9 +57,21 @@ NEXT_PUBLIC_API_BASE=https://prontoclick-backend.onrender.com
 ### Variables Opcionales (si las necesitas):
 
 ```
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=tu_clave_google_maps
-NEXT_PUBLIC_STRIPE_PUBLIC_KEY=tu_clave_stripe_publica
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=AIzaSyDI1Q_6uBUVRRNB6P_BvgQGA0bWtoxM8uk
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
 ```
+
+### Seleccionar Entornos:
+
+Para cada variable, selecciona en qué entornos aplicará:
+- ✅ **Production** (producción - OBLIGATORIO)
+- ✅ **Preview** (previews de PRs - recomendado)
+- ☐ **Development** (opcional)
+
+4. Haz clic en **"Save"**
+5. Vercel hará un nuevo deploy automáticamente
+
+📖 **Guía detallada:** Ver `/CONFIGURAR_VARIABLES_PRODUCCION.md`
 
 ---
 

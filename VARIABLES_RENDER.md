@@ -71,13 +71,27 @@ GOOGLE_MAPS_API_KEY=tu_clave_google_maps
 
 ## 📝 Cómo Agregar en Render
 
-1. En la sección "Environment Variables"
-2. Click en **"+ Add Environment Variable"**
-3. Agrega cada variable:
-   - **Name:** `NODE_ENV`
+⚠️ **IMPORTANTE:** El archivo `.env` NO se sube a GitHub. Debes configurar las variables **directamente en Render**.
+
+### Pasos:
+
+1. Ve a tu servicio en Render Dashboard
+2. Click en **"Environment"** (en el menú lateral)
+3. Click en **"+ Add Environment Variable"**
+4. Agrega cada variable:
+   - **Key:** `NODE_ENV`
    - **Value:** `production`
-4. Repite para cada variable
-5. Click en **"Deploy Web Service"**
+5. Click en **"Save Changes"**
+6. Repite para cada variable
+7. Render hará un **redeploy automático** después de guardar
+
+### Verificación:
+
+- Todas las variables deben aparecer en la lista
+- Render redeployará automáticamente después de guardar
+- Espera ~3-5 minutos para que el redeploy complete
+
+📖 **Guía detallada:** Ver `/CONFIGURAR_VARIABLES_PRODUCCION.md`
 
 ---
 
