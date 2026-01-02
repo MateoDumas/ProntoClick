@@ -10,14 +10,14 @@ interface OrderTrackingProps {
   restaurantLocation?: Location;
 }
 
-const statusConfig: Record<string, { label: string; color: string; icon: string }> = {
-  pending: { label: 'Pendiente', color: 'bg-yellow-100 text-yellow-800', icon: '⏳' },
-  confirmed: { label: 'Confirmado', color: 'bg-blue-100 text-blue-800', icon: '✅' },
-  preparing: { label: 'En preparación', color: 'bg-orange-100 text-orange-800', icon: '👨‍🍳' },
-  ready: { label: 'Listo', color: 'bg-purple-100 text-purple-800', icon: '📦' },
-  on_the_way: { label: 'En camino', color: 'bg-indigo-100 text-indigo-800', icon: '🚗' },
-  delivered: { label: 'Entregado', color: 'bg-green-100 text-green-800', icon: '🎉' },
-  cancelled: { label: 'Cancelado', color: 'bg-red-100 text-red-800', icon: '❌' },
+const statusConfig: Record<string, { label: string; color: string; darkColor: string; icon: string }> = {
+  pending: { label: 'Pendiente', color: 'bg-yellow-100 text-yellow-800', darkColor: 'dark:bg-yellow-900/30 dark:text-yellow-300', icon: '⏳' },
+  confirmed: { label: 'Confirmado', color: 'bg-blue-100 text-blue-800', darkColor: 'dark:bg-blue-900/30 dark:text-blue-300', icon: '✅' },
+  preparing: { label: 'En preparación', color: 'bg-orange-100 text-orange-800', darkColor: 'dark:bg-orange-900/30 dark:text-orange-300', icon: '👨‍🍳' },
+  ready: { label: 'Listo', color: 'bg-purple-100 text-purple-800', darkColor: 'dark:bg-purple-900/30 dark:text-purple-300', icon: '📦' },
+  on_the_way: { label: 'En camino', color: 'bg-indigo-100 text-indigo-800', darkColor: 'dark:bg-indigo-900/30 dark:text-indigo-300', icon: '🚗' },
+  delivered: { label: 'Entregado', color: 'bg-green-100 text-green-800', darkColor: 'dark:bg-green-900/30 dark:text-green-300', icon: '🎉' },
+  cancelled: { label: 'Cancelado', color: 'bg-red-100 text-red-800', darkColor: 'dark:bg-red-900/30 dark:text-red-300', icon: '❌' },
 };
 
 export default function OrderTracking({ orderId, initialStatus, restaurantLocation }: OrderTrackingProps) {
@@ -67,31 +67,31 @@ export default function OrderTracking({ orderId, initialStatus, restaurantLocati
   return (
     <div className="space-y-6">
       {/* Estado actual */}
-      <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm transition-colors duration-200">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">Estado del pedido</h3>
-          <div className={`px-4 py-2 rounded-lg font-medium ${currentStatusConfig.color}`}>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Estado del pedido</h3>
+          <div className={`px-4 py-2 rounded-lg font-medium ${currentStatusConfig.color} ${currentStatusConfig.darkColor}`}>
             <span className="mr-2">{currentStatusConfig.icon}</span>
             {currentStatusConfig.label}
           </div>
         </div>
 
         {!isConnected && (
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4">
-            <p className="text-sm text-yellow-800 flex items-center gap-2">
-              <span className="w-2 h-2 bg-yellow-500 rounded-full"></span>
+          <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3 mb-4 transition-colors duration-200">
+            <p className="text-sm text-yellow-800 dark:text-yellow-300 flex items-center gap-2">
+              <span className="w-2 h-2 bg-yellow-500 dark:bg-yellow-400 rounded-full"></span>
               No conectado. Las actualizaciones en tiempo real no están disponibles.
             </p>
-            <p className="text-xs text-yellow-700 mt-1">
+            <p className="text-xs text-yellow-700 dark:text-yellow-400 mt-1">
               Verifica que el backend esté corriendo en el puerto 3001. Abre la consola del navegador para más detalles.
             </p>
           </div>
         )}
         
         {isConnected && (
-          <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
-            <p className="text-sm text-green-800 flex items-center gap-2">
-              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+          <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3 mb-4 transition-colors duration-200">
+            <p className="text-sm text-green-800 dark:text-green-300 flex items-center gap-2">
+              <span className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full animate-pulse"></span>
               Conectado. Recibiendo actualizaciones en tiempo real.
             </p>
           </div>
@@ -108,8 +108,8 @@ export default function OrderTracking({ orderId, initialStatus, restaurantLocati
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center ${
                     isActive || isPast
-                      ? config.color
-                      : 'bg-gray-100 text-gray-400'
+                      ? `${config.color} ${config.darkColor}`
+                      : 'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500'
                   }`}
                 >
                   {config.icon}
@@ -117,7 +117,7 @@ export default function OrderTracking({ orderId, initialStatus, restaurantLocati
                 <div className="flex-1">
                   <p
                     className={`font-medium ${
-                      isActive || isPast ? 'text-gray-900' : 'text-gray-400'
+                      isActive || isPast ? 'text-gray-900 dark:text-gray-100' : 'text-gray-400 dark:text-gray-500'
                     }`}
                   >
                     {config.label}
@@ -156,7 +156,7 @@ export default function OrderTracking({ orderId, initialStatus, restaurantLocati
             </div>
           )}
           {deliveryLocation && (
-            <p className="text-sm text-gray-600 mt-2">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
               Última actualización: {new Date().toLocaleTimeString('es-ES')}
             </p>
           )}
@@ -165,20 +165,20 @@ export default function OrderTracking({ orderId, initialStatus, restaurantLocati
 
       {/* Historial de cambios */}
       {statusHistory.length > 0 && (
-        <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Historial de actualizaciones</h3>
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm transition-colors duration-200">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Historial de actualizaciones</h3>
           <div className="space-y-3">
             {statusHistory.map((entry, index) => (
-              <div key={index} className="flex items-start gap-3 pb-3 border-b border-gray-100 last:border-0">
-                <div className="w-2 h-2 rounded-full bg-red-500 mt-2"></div>
+              <div key={index} className="flex items-start gap-3 pb-3 border-b border-gray-100 dark:border-gray-700 last:border-0">
+                <div className="w-2 h-2 rounded-full bg-red-500 dark:bg-red-400 mt-2"></div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-900">
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                     {statusConfig[entry.status]?.label || entry.status}
                   </p>
                   {entry.message && (
-                    <p className="text-xs text-gray-600 mt-1">{entry.message}</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{entry.message}</p>
                   )}
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
                     {new Date(entry.timestamp).toLocaleString('es-ES')}
                   </p>
                 </div>

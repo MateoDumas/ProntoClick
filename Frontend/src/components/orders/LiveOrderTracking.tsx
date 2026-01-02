@@ -104,11 +104,11 @@ export default function LiveOrderTracking({ orderId, onDismiss }: LiveOrderTrack
   if (loading) {
     return (
       <section className="mb-12 md:mb-16">
-        <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-lg">
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-lg transition-colors duration-200">
           <div className="flex items-center justify-center min-h-[200px]">
             <div className="text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-600 mx-auto"></div>
-              <p className="mt-4 text-gray-600 text-sm">Cargando seguimiento...</p>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-600 dark:border-red-400 mx-auto"></div>
+              <p className="mt-4 text-gray-600 dark:text-gray-300 text-sm">Cargando seguimiento...</p>
             </div>
           </div>
         </div>
@@ -122,24 +122,24 @@ export default function LiveOrderTracking({ orderId, onDismiss }: LiveOrderTrack
 
   return (
     <section className="mb-12 md:mb-16">
-      <div className="bg-gradient-to-r from-red-600 to-red-700 rounded-2xl p-6 md:p-8 shadow-xl">
+      <div className="bg-gradient-to-r from-red-600 to-red-700 dark:from-red-500 dark:to-red-600 rounded-2xl p-6 md:p-8 shadow-xl transition-colors duration-200">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+            <div className="w-12 h-12 bg-white/20 dark:bg-white/30 rounded-full flex items-center justify-center">
               <span className="text-2xl">📦</span>
             </div>
             <div>
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-1">
                 Sigue tu pedido en vivo
               </h2>
-              <p className="text-red-100 text-sm">
+              <p className="text-red-100 dark:text-red-200 text-sm">
                 Pedido #{order.id.slice(0, 8)}
               </p>
             </div>
           </div>
           <button
             onClick={handleDismiss}
-            className="text-white/80 hover:text-white transition-colors p-2"
+            className="text-white/80 dark:text-white/90 hover:text-white transition-colors p-2"
             title="Ocultar seguimiento"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -148,7 +148,7 @@ export default function LiveOrderTracking({ orderId, onDismiss }: LiveOrderTrack
           </button>
         </div>
 
-        <div className="bg-white rounded-xl p-6 shadow-lg">
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg transition-colors duration-200">
           <OrderTracking
             orderId={order.id}
             initialStatus={order.status}
@@ -160,7 +160,7 @@ export default function LiveOrderTracking({ orderId, onDismiss }: LiveOrderTrack
           {canCancel && (
             <button
               onClick={() => setShowCancelModal(true)}
-              className="px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors shadow-lg"
+              className="px-6 py-3 bg-red-600 dark:bg-red-500 text-white font-semibold rounded-lg hover:bg-red-700 dark:hover:bg-red-600 transition-colors shadow-lg"
             >
               Cancelar Pedido
             </button>
@@ -173,7 +173,7 @@ export default function LiveOrderTracking({ orderId, onDismiss }: LiveOrderTrack
           </Link>
           <Link
             href="/orders"
-            className="px-6 py-3 bg-white/20 text-white font-semibold rounded-lg hover:bg-white/30 transition-colors border border-white/30"
+            className="px-6 py-3 bg-white/20 dark:bg-white/30 text-white font-semibold rounded-lg hover:bg-white/30 dark:hover:bg-white/40 transition-colors border border-white/30 dark:border-white/40"
           >
             Ver todos mis pedidos
           </Link>
