@@ -65,7 +65,7 @@ export default function PromotionCard({ promotion }: PromotionCardProps) {
   };
 
   const cardContent = (
-    <div className="glass rounded-3xl overflow-hidden hover-lift relative card-3d border border-white/30 h-full flex flex-col group">
+    <div className="glass dark:bg-gray-800/50 dark:backdrop-blur-sm rounded-3xl overflow-hidden hover-lift relative card-3d border border-white/30 dark:border-gray-700/50 h-full flex flex-col group transition-colors duration-200">
       {/* Image Container */}
       <div className={`relative h-48 w-full bg-gradient-to-br ${getCategoryColor()} overflow-hidden`}>
         {promotion.image ? (
@@ -96,8 +96,8 @@ export default function PromotionCard({ promotion }: PromotionCardProps) {
         )}
 
         {/* Discount Badge */}
-        <div className="absolute top-4 right-4 glass px-4 py-2 rounded-full flex items-center gap-2 shadow-glow transform group-hover:scale-110 group-hover:rotate-12 transition-all duration-300 z-10">
-          <span className="text-white font-bold text-lg">{getDiscountText()}</span>
+        <div className="absolute top-4 right-4 glass dark:bg-gray-800/90 dark:backdrop-blur-sm px-4 py-2 rounded-full flex items-center gap-2 shadow-glow transform group-hover:scale-110 group-hover:rotate-12 transition-all duration-300 z-10 border border-white/20 dark:border-gray-700/50">
+          <span className="text-white dark:text-gray-100 font-bold text-lg">{getDiscountText()}</span>
         </div>
 
         {/* Code Badge */}
@@ -109,7 +109,7 @@ export default function PromotionCard({ promotion }: PromotionCardProps) {
       </div>
 
       {/* Content */}
-      <div className="p-6 bg-gradient-to-b from-white/90 dark:from-gray-800/90 via-white/80 dark:via-gray-800/80 to-gray-50/90 dark:to-gray-900/90 backdrop-blur-sm flex-1 flex flex-col">
+      <div className="p-6 bg-gradient-to-b from-white/90 dark:from-gray-800/90 via-white/80 dark:via-gray-800/80 to-gray-50/90 dark:to-gray-900/90 backdrop-blur-sm flex-1 flex flex-col transition-colors duration-200">
         <h3 className="font-bold text-xl text-gray-900 dark:text-gray-100 mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-red-600 dark:group-hover:from-red-400 group-hover:to-red-500 dark:group-hover:to-red-300 transition-all duration-500">
           {promotion.title}
         </h3>

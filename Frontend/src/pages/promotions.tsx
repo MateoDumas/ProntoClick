@@ -122,15 +122,15 @@ export default function PromotionsPage() {
         {loading ? (
           <div className="flex items-center justify-center min-h-[400px]">
             <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto"></div>
-              <p className="mt-4 text-gray-600">Cargando promociones...</p>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 dark:border-red-400 mx-auto"></div>
+              <p className="mt-4 text-gray-600 dark:text-gray-300">Cargando promociones...</p>
             </div>
           </div>
         ) : filteredPromotions.length === 0 ? (
-          <div className="text-center py-24 glass rounded-3xl border-2 border-gray-200/50 p-12 fade-in-scale">
-            <div className="inline-flex items-center justify-center w-32 h-32 bg-gradient-to-br from-red-100 via-red-50 to-white rounded-full mb-6 morph-blob shadow-glow">
+          <div className="text-center py-24 glass dark:bg-gray-800/50 dark:backdrop-blur-sm rounded-3xl border-2 border-gray-200/50 dark:border-gray-700/50 p-12 fade-in-scale transition-colors duration-200">
+            <div className="inline-flex items-center justify-center w-32 h-32 bg-gradient-to-br from-red-100 via-red-50 to-white dark:from-red-900/30 dark:via-red-800/20 dark:to-gray-800 rounded-full mb-6 morph-blob shadow-glow transition-colors duration-200">
               <svg
-                className="w-16 h-16 text-gray-400 animate-pulse"
+                className="w-16 h-16 text-gray-400 dark:text-gray-500 animate-pulse"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -143,10 +143,10 @@ export default function PromotionsPage() {
                 />
               </svg>
             </div>
-            <h3 className="text-3xl font-extrabold bg-gradient-to-r from-red-600 to-red-500 bg-clip-text text-transparent mb-3">
+            <h3 className="text-3xl font-extrabold bg-gradient-to-r from-red-600 to-red-500 dark:from-red-400 dark:to-red-300 bg-clip-text text-transparent mb-3">
               No hay promociones disponibles
             </h3>
-            <p className="text-gray-600 text-lg">
+            <p className="text-gray-600 dark:text-gray-300 text-lg">
               {filter === 'all'
                 ? 'Vuelve mañana para ver nuevas promociones'
                 : `No hay promociones de ${filter === 'restaurant' ? 'restaurantes' : 'mercado'} en este momento`}
@@ -167,9 +167,9 @@ export default function PromotionsPage() {
         )}
 
         {/* Info sobre rotación */}
-        <div className="mt-12 glass rounded-2xl p-6 border border-white/30">
+        <div className="mt-12 glass dark:bg-gray-800/50 dark:backdrop-blur-sm rounded-2xl p-6 border border-white/30 dark:border-gray-700/50 transition-colors duration-200">
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center flex-shrink-0">
+            <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 dark:from-red-400 dark:to-red-500 rounded-xl flex items-center justify-center flex-shrink-0">
               <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
@@ -180,8 +180,8 @@ export default function PromotionsPage() {
               </svg>
             </div>
             <div>
-              <h3 className="font-bold text-lg text-gray-900 mb-2">¿Cómo funcionan las promociones?</h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
+              <h3 className="font-bold text-lg text-gray-900 dark:text-gray-100 mb-2">¿Cómo funcionan las promociones?</h3>
+              <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
                 Nuestras promociones rotan automáticamente según el día de la semana. Cada día encontrarás ofertas
                 diferentes y exclusivas. Algunas promociones aplican todos los días, mientras que otras son
                 específicas de ciertos días. ¡Vuelve cada día para descubrir nuevas ofertas!
