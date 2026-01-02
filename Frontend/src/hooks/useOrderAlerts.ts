@@ -4,7 +4,7 @@ import { useToast } from './useToast';
 import { useCurrentUser } from './useAuth';
 import { orderStatusSounds } from '../utils/sounds';
 
-const WS_URL = process.env.NEXT_PUBLIC_WS_URL || 'http://localhost:3001';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 interface StatusChangeEvent {
   orderId: string;
@@ -34,7 +34,7 @@ export function useOrderAlerts(orderId?: string) {
     if (!token) return;
 
     // Conectar al WebSocket
-    const socket = io(`${WS_URL}/orders`, {
+    const socket = io(`${API_URL}/orders`, {
       auth: { token },
       transports: ['websocket', 'polling'],
     });

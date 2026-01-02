@@ -14,12 +14,12 @@ import CreateReportModal from '../../components/reports/CreateReportModal';
 import { createReport } from '../../services/reports.service';
 
 const statusColors: Record<Order['status'], string> = {
-  pending: 'bg-yellow-100 text-yellow-800',
-  confirmed: 'bg-blue-100 text-blue-800',
-  preparing: 'bg-purple-100 text-purple-800',
-  ready: 'bg-green-100 text-green-800',
-  delivered: 'bg-gray-100 text-gray-800',
-  cancelled: 'bg-red-100 text-red-800',
+  pending: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300',
+  confirmed: 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300',
+  preparing: 'bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300',
+  ready: 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300',
+  delivered: 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200',
+  cancelled: 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300',
 };
 
 const statusLabels: Record<Order['status'], string> = {
@@ -133,8 +133,8 @@ export default function OrderDetail() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Cargando pedido...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 dark:border-blue-400 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-300">Cargando pedido...</p>
         </div>
       </div>
     );
@@ -143,9 +143,9 @@ export default function OrderDetail() {
   if (!order) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Pedido no encontrado</h2>
-          <p className="text-gray-600 mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-12 text-center transition-colors duration-200">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">Pedido no encontrado</h2>
+          <p className="text-gray-600 dark:text-gray-300 mb-6">
             El pedido que buscas no existe o no tienes permiso para verlo.
           </p>
           <Link href="/orders">
@@ -164,7 +164,7 @@ export default function OrderDetail() {
       <div className="mb-6">
         <Link
           href="/orders"
-          className="inline-flex items-center text-sm text-blue-600 hover:text-blue-700 mb-4"
+          className="inline-flex items-center text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 mb-4 transition-colors"
         >
           <svg
             className="w-4 h-4 mr-2"
@@ -183,10 +183,10 @@ export default function OrderDetail() {
         </Link>
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
               Pedido #{order.id.slice(0, 8)}
             </h1>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-300">
               Realizado el {formatDate(order.createdAt)}
             </p>
           </div>
@@ -208,13 +208,13 @@ export default function OrderDetail() {
       </div>
 
       {/* Order Items */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Artículos del pedido</h2>
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 mb-6 transition-colors duration-200">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Artículos del pedido</h2>
         <div className="space-y-4">
           {order.items.map((item) => (
             <div
               key={item.product.id}
-              className="flex items-center gap-4 pb-4 border-b border-gray-100 last:border-0"
+              className="flex items-center gap-4 pb-4 border-b border-gray-100 dark:border-gray-700 last:border-0"
             >
               {item.product.image && (
                 <img
@@ -224,14 +224,14 @@ export default function OrderDetail() {
                 />
               )}
               <div className="flex-1">
-                <h3 className="font-semibold text-gray-900">{item.product.name}</h3>
-                <p className="text-sm text-gray-600">{item.product.description}</p>
+                <h3 className="font-semibold text-gray-900 dark:text-gray-100">{item.product.name}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{item.product.description}</p>
               </div>
               <div className="text-right">
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   Cantidad: {item.quantity}
                 </p>
-                <p className="font-semibold text-gray-900">
+                <p className="font-semibold text-gray-900 dark:text-gray-100">
                   ${(item.product.price * item.quantity).toFixed(2)}
                 </p>
               </div>
@@ -241,34 +241,34 @@ export default function OrderDetail() {
       </div>
 
       {/* Order Summary */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Resumen</h2>
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 transition-colors duration-200">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Resumen</h2>
         <div className="space-y-3">
-          <div className="flex justify-between text-gray-600">
+          <div className="flex justify-between text-gray-600 dark:text-gray-400">
             <span>Subtotal</span>
             <span>${order.total.toFixed(2)}</span>
           </div>
           {order.discountAmount && order.discountAmount > 0 && (
-            <div className="flex justify-between text-green-600 font-semibold">
+            <div className="flex justify-between text-green-600 dark:text-green-400 font-semibold">
               <span>Descuento</span>
               <span>-${order.discountAmount.toFixed(2)}</span>
             </div>
           )}
           {order.tipAmount && order.tipAmount > 0 && (
-            <div className="flex justify-between text-green-600 font-semibold">
+            <div className="flex justify-between text-green-600 dark:text-green-400 font-semibold">
               <span>Propina 💝</span>
               <span>${order.tipAmount.toFixed(2)}</span>
             </div>
           )}
           {order.appliedPenalty && order.appliedPenalty > 0 && (
-            <div className="flex justify-between text-red-600 font-semibold">
+            <div className="flex justify-between text-red-600 dark:text-red-400 font-semibold">
               <span>Penalización por cancelación</span>
               <span>${order.appliedPenalty.toFixed(2)}</span>
             </div>
           )}
-          <div className="pt-3 border-t border-gray-200 flex justify-between">
-            <span className="text-lg font-semibold text-gray-900">Total</span>
-            <span className="text-lg font-bold text-gray-900">
+          <div className="pt-3 border-t border-gray-200 dark:border-gray-700 flex justify-between">
+            <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">Total</span>
+            <span className="text-lg font-bold text-gray-900 dark:text-gray-100">
               ${order.total.toFixed(2)}
             </span>
           </div>

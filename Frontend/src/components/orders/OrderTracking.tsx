@@ -32,21 +32,34 @@ export default function OrderTracking({ orderId, initialStatus, restaurantLocati
       joinOrder(orderId);
 
       const unsubscribeUpdate = onOrderUpdate((data) => {
+        console.log('📦 Order update recibido:', data);
         if (data.status) {
           setCurrentStatus(data.status);
         }
       });
 
       const unsubscribeStatus = onStatusChange((data) => {
-        setCurrentStatus(data.status);
-        setStatusHistory((prev) => [
-          ...prev,
-          {
-            status: data.status,
-            timestamp: data.timestamp,
-            message: data.message,
-          },
-        ]);
+        console.log('🔄 Status change recibido:', data);
+        // Actualizar el estado actual
+        if (data.status) {
+          setCurrentStatus(data.status);
+        }
+        // Agregar al historial solo si es un cambio nuevo
+        setStatusHistory((prev) => {
+          // Evitar duplicados
+          const lastEntry = prev[prev.length - 1];
+          if (lastEntry && lastEntry.status === data.status && lastEntry.timestamp === data.timestamp) {
+            return prev;
+          }
+          return [
+            ...prev,
+            {
+              status: data.status,
+              timestamp: data.timestamp || new Date().toISOString(),
+              message: data.message,
+            },
+          ];
+        });
       });
 
       const unsubscribeLocation = onDeliveryLocation((data) => {
