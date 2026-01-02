@@ -549,8 +549,8 @@ export class OrdersService {
     // Calcular costo de cancelación si el pedido está en camino
     let cancellationFee: number | null = null;
     if (order.status === 'on_the_way') {
-      // 20% del total como costo de cancelación
-      cancellationFee = order.total * 0.2;
+      // 5% del total como costo de cancelación
+      cancellationFee = order.total * 0.05;
     }
 
     // Actualizar el pedido

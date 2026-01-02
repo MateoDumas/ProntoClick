@@ -63,41 +63,41 @@ export class OrderStatusSchedulerService implements OnModuleInit {
 
         // Lógica de transición de estados basada en tiempo desde la última actualización
         if (isProduction) {
-          // Tiempos de producción (en minutos desde último cambio)
+          // Tiempos de producción (en minutos desde último cambio) - Total: ~5 minutos
           switch (order.status) {
             case 'pending':
-              if (timeUnit >= 1) newStatus = 'confirmed';
+              if (timeUnit >= 0.5) newStatus = 'confirmed'; // 30 segundos
               break;
             case 'confirmed':
-              if (timeUnit >= 2) newStatus = 'preparing'; // 2 minutos desde confirmado
+              if (timeUnit >= 1) newStatus = 'preparing'; // 1 minuto desde confirmado
               break;
             case 'preparing':
-              if (timeUnit >= 5) newStatus = 'ready'; // 5 minutos desde preparación
+              if (timeUnit >= 2) newStatus = 'ready'; // 2 minutos desde preparación
               break;
             case 'ready':
-              if (timeUnit >= 2) newStatus = 'on_the_way'; // 2 minutos desde listo
+              if (timeUnit >= 0.5) newStatus = 'on_the_way'; // 30 segundos desde listo
               break;
             case 'on_the_way':
-              if (timeUnit >= 10) newStatus = 'delivered'; // 10 minutos desde en camino
+              if (timeUnit >= 1) newStatus = 'delivered'; // 1 minuto desde en camino
               break;
           }
         } else {
-          // Tiempos de desarrollo (en segundos desde último cambio) - MUCHO MÁS RÁPIDO para pruebas
+          // Tiempos de desarrollo (en segundos desde último cambio) - Total: ~30 segundos para pruebas rápidas
           switch (order.status) {
             case 'pending':
-              if (timeUnit >= 10) newStatus = 'confirmed'; // 10 segundos
+              if (timeUnit >= 3) newStatus = 'confirmed'; // 3 segundos
               break;
             case 'confirmed':
-              if (timeUnit >= 15) newStatus = 'preparing'; // 15 segundos desde confirmado
+              if (timeUnit >= 5) newStatus = 'preparing'; // 5 segundos desde confirmado
               break;
             case 'preparing':
-              if (timeUnit >= 20) newStatus = 'ready'; // 20 segundos desde preparación
+              if (timeUnit >= 10) newStatus = 'ready'; // 10 segundos desde preparación
               break;
             case 'ready':
-              if (timeUnit >= 15) newStatus = 'on_the_way'; // 15 segundos desde listo
+              if (timeUnit >= 3) newStatus = 'on_the_way'; // 3 segundos desde listo
               break;
             case 'on_the_way':
-              if (timeUnit >= 20) newStatus = 'delivered'; // 20 segundos desde en camino
+              if (timeUnit >= 5) newStatus = 'delivered'; // 5 segundos desde en camino
               break;
           }
         }
