@@ -131,8 +131,8 @@ export default function OrderTracking({ orderId, initialStatus, restaurantLocati
 
       {/* Mapa de tracking */}
       {(currentStatus === 'on_the_way' || deliveryLocation) && (
-        <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm transition-colors duration-200">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
             Seguimiento en tiempo real
           </h3>
           {process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ? (
@@ -144,9 +144,14 @@ export default function OrderTracking({ orderId, initialStatus, restaurantLocati
               />
             </GoogleMapsLoader>
           ) : (
-            <div className="bg-gray-100 rounded-lg p-8 text-center">
-              <p className="text-gray-600">
+            <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-8 text-center transition-colors duration-200">
+              <p className="text-gray-600 dark:text-gray-400">
                 Para ver el mapa, configura NEXT_PUBLIC_GOOGLE_MAPS_API_KEY en tu archivo .env.local
+              </p>
+              <p className="text-sm text-blue-600 dark:text-blue-400 mt-2">
+                <a href="/CONFIGURAR_API_KEY.md" target="_blank" className="underline hover:no-underline">
+                  Ver instrucciones →
+                </a>
               </p>
             </div>
           )}
