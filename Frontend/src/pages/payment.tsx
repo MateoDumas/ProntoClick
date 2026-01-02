@@ -225,11 +225,11 @@ function PaymentPageContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 px-4 transition-colors duration-200">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-red-600 to-red-700 rounded-3xl mb-6 shadow-2xl transform hover:rotate-12 transition-transform">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-red-600 to-red-700 dark:from-red-500 dark:to-red-600 rounded-3xl mb-6 shadow-2xl transform hover:rotate-12 transition-transform">
             <svg
               className="w-10 h-10 text-white"
               fill="none"
@@ -244,10 +244,10 @@ function PaymentPageContent() {
               />
             </svg>
           </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-red-600 via-red-500 to-red-700 bg-clip-text text-transparent mb-4">
+          <h1 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-red-600 via-red-500 to-red-700 dark:from-red-400 dark:via-red-500 dark:to-red-600 bg-clip-text text-transparent mb-4">
             Completa tu Pago
           </h1>
-          <p className="text-gray-600 text-lg">
+          <p className="text-gray-600 dark:text-gray-300 text-lg">
             Último paso para recibir tu pedido
           </p>
         </div>
@@ -256,8 +256,8 @@ function PaymentPageContent() {
           {/* Payment Form */}
           <div className="lg:col-span-2 space-y-6">
             {/* Payment Method Selection */}
-            <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Método de Pago</h2>
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700 transition-colors duration-200">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">Método de Pago</h2>
               <div className="grid grid-cols-2 gap-4">
                 <button
                   type="button"
@@ -274,7 +274,7 @@ function PaymentPageContent() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                       </svg>
                     </div>
-                    <span className="font-semibold text-gray-900">Tarjeta</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100">Tarjeta</span>
                   </div>
                 </button>
 
@@ -284,7 +284,7 @@ function PaymentPageContent() {
                   className={`p-6 rounded-xl border-2 transition-all duration-300 transform hover:scale-105 ${
                     paymentMethod === 'cash'
                       ? 'border-red-600 dark:border-red-500 bg-red-50 dark:bg-red-900/20 shadow-lg'
-                      : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                      : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800'
                   }`}
                 >
                   <div className="flex flex-col items-center gap-3">
@@ -293,7 +293,7 @@ function PaymentPageContent() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
                       </svg>
                     </div>
-                    <span className="font-semibold text-gray-900">Efectivo</span>
+                    <span className="font-semibold text-gray-900 dark:text-gray-100">Efectivo</span>
                   </div>
                 </button>
               </div>
@@ -301,8 +301,8 @@ function PaymentPageContent() {
 
             {/* Card Form */}
             {paymentMethod === 'card' && (
-              <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200 space-y-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Información de la Tarjeta</h2>
+              <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700 space-y-6 transition-colors duration-200">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">Información de la Tarjeta</h2>
 
                 <Input
                   label="Número de Tarjeta"
@@ -356,11 +356,11 @@ function PaymentPageContent() {
                 </div>
 
                 {/* Security Badge */}
-                <div className="flex items-center gap-2 p-4 bg-green-50 border border-green-200 rounded-lg">
-                  <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="flex items-center gap-2 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg transition-colors duration-200">
+                  <svg className="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                   </svg>
-                  <span className="text-sm text-green-700 font-medium">
+                  <span className="text-sm text-green-700 dark:text-green-300 font-medium">
                     Pago seguro con encriptación SSL
                   </span>
                 </div>
@@ -387,17 +387,17 @@ function PaymentPageContent() {
 
             {/* Cash Payment */}
             {paymentMethod === 'cash' && (
-              <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700 transition-colors duration-200">
                 <div className="text-center py-8">
                   <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full mb-6">
                     <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
                     Pago en Efectivo
                   </h3>
-                  <p className="text-gray-600 mb-8">
+                  <p className="text-gray-600 dark:text-gray-300 mb-8">
                     Pagarás cuando recibas tu pedido. El repartidor traerá el cambio necesario.
                   </p>
                   <Button
@@ -429,12 +429,12 @@ function PaymentPageContent() {
             />
 
             {/* Schedule Order Section */}
-            <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200">
-              <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700 transition-colors duration-200">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
                 <span>📅</span>
                 Programar Pedido
               </h3>
-              <p className="text-sm text-gray-600 mb-4">
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
                 Programa tu pedido para una fecha y hora específica
               </p>
               
@@ -452,15 +452,15 @@ function PaymentPageContent() {
                   }}
                   className="w-5 h-5 text-red-600 dark:text-red-400 border-gray-300 dark:border-gray-600 rounded focus:ring-red-500 dark:focus:ring-red-400"
                 />
-                <label htmlFor="scheduleOrder" className="text-sm font-medium text-gray-700 cursor-pointer">
+                <label htmlFor="scheduleOrder" className="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
                   Programar este pedido
                 </label>
               </div>
 
               {isScheduled && (
-                <div className="space-y-4 pt-4 border-t border-gray-200">
+                <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Fecha
                     </label>
                     <input
@@ -495,12 +495,12 @@ function PaymentPageContent() {
             </div>
 
             {/* Tip Section */}
-            <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200">
-              <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700 transition-colors duration-200">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
                 <span>💝</span>
                 Propina para el repartidor
               </h3>
-              <p className="text-sm text-gray-600 mb-4">
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
                 Agradece a tu repartidor con una propina (opcional)
               </p>
               
@@ -515,7 +515,7 @@ function PaymentPageContent() {
                     className={`px-4 py-2 rounded-lg font-semibold transition-all ${
                       tipAmount === amount && !customTip
                         ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                     }`}
                   >
                     ${amount}
@@ -535,7 +535,7 @@ function PaymentPageContent() {
                     setTipAmount(value);
                   }}
                   placeholder="Monto personalizado"
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400 focus:border-red-500 dark:focus:border-red-400 transition-colors"
                 />
                 <button
                   onClick={() => {
@@ -549,21 +549,21 @@ function PaymentPageContent() {
               </div>
 
               {tipAmount > 0 && (
-                <p className="text-sm text-green-600 font-semibold mt-3">
+                <p className="text-sm text-green-600 dark:text-green-400 font-semibold mt-3">
                   Propina: ${tipAmount.toFixed(2)}
                 </p>
               )}
             </div>
 
-            <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-200 sticky top-24">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">Resumen del Pedido</h2>
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700 sticky top-24 transition-colors duration-200">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-6">Resumen del Pedido</h2>
 
               {/* Items */}
               <div className="space-y-4 mb-6 max-h-64 overflow-y-auto custom-scrollbar">
                 {items.map((item) => (
                   <div
                     key={item.product.id}
-                    className="flex items-center gap-3 pb-4 border-b border-gray-100 last:border-0"
+                    className="flex items-center gap-3 pb-4 border-b border-gray-100 dark:border-gray-700 last:border-0"
                   >
                     {item.product.image && (
                       <img
@@ -573,14 +573,14 @@ function PaymentPageContent() {
                       />
                     )}
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-gray-900 truncate">
+                      <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">
                         {item.product.name}
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
                         Cantidad: {item.quantity}
                       </p>
                     </div>
-                    <p className="text-sm font-bold text-gray-900">
+                    <p className="text-sm font-bold text-gray-900 dark:text-gray-100">
                       ${(item.product.price * item.quantity).toFixed(2)}
                     </p>
                   </div>
@@ -588,40 +588,40 @@ function PaymentPageContent() {
               </div>
 
               {/* Totals */}
-              <div className="space-y-3 pt-6 border-t border-gray-200">
-                <div className="flex justify-between text-sm text-gray-600">
+              <div className="space-y-3 pt-6 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
                   <span>Subtotal</span>
                   <span>${subtotal.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-sm text-gray-600">
+                <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
                   <span>Envío</span>
                   <span>${deliveryFee.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-sm text-gray-600">
+                <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
                   <span>Impuestos</span>
                   <span>${tax.toFixed(2)}</span>
                 </div>
                 {couponDiscount > 0 && (
-                  <div className="flex justify-between text-sm text-green-600 font-semibold">
+                  <div className="flex justify-between text-sm text-green-600 dark:text-green-400 font-semibold">
                     <span>Descuento ({couponCode})</span>
                     <span>-${couponDiscount.toFixed(2)}</span>
                   </div>
                 )}
                 {tipAmount > 0 && (
-                  <div className="flex justify-between text-sm text-green-600 font-semibold">
+                  <div className="flex justify-between text-sm text-green-600 dark:text-green-400 font-semibold">
                     <span>Propina 💝</span>
                     <span>${tipAmount.toFixed(2)}</span>
                   </div>
                 )}
                 {pendingPenalty > 0 && (
-                  <div className="flex justify-between text-sm text-red-600 font-semibold">
+                  <div className="flex justify-between text-sm text-red-600 dark:text-red-400 font-semibold">
                     <span>Penalización por cancelación</span>
                     <span>${pendingPenalty.toFixed(2)}</span>
                   </div>
                 )}
-                <div className="flex justify-between text-lg font-bold text-gray-900 pt-3 border-t border-gray-200">
+                <div className="flex justify-between text-lg font-bold text-gray-900 dark:text-gray-100 pt-3 border-t border-gray-200 dark:border-gray-700">
                   <span>Total</span>
-                  <span className="text-2xl bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent">
+                  <span className="text-2xl bg-gradient-to-r from-red-600 to-red-700 dark:from-red-400 dark:to-red-500 bg-clip-text text-transparent">
                     ${total.toFixed(2)}
                   </span>
                 </div>
@@ -629,10 +629,10 @@ function PaymentPageContent() {
 
               {/* User Info */}
               {user && (
-                <div className="mt-6 pt-6 border-t border-gray-200">
-                  <p className="text-xs text-gray-500 mb-1">Pedido para</p>
-                  <p className="font-semibold text-gray-900">{user.name}</p>
-                  <p className="text-sm text-gray-600">{user.email}</p>
+                <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Pedido para</p>
+                  <p className="font-semibold text-gray-900 dark:text-gray-100">{user.name}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{user.email}</p>
                 </div>
               )}
             </div>
