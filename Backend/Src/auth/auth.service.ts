@@ -85,30 +85,35 @@ export class AuthService {
     const verificationCodeExpires = new Date();
     verificationCodeExpires.setMinutes(verificationCodeExpires.getMinutes() + 15); // Expira en 15 minutos
 
-    // Crear usuario
+    // Extraer referralCode antes de crear el usuario (no debe incluirse en la creación)
+    const referralCodeToProcess = data.referralCode;
+    
+    // Crear usuario (sin referralCode, ya que ese campo es para el código propio del usuario)
     const user = await this.usersService.create({
-      ...data,
+      email: data.email,
       password: hashedPassword,
+      name: data.name,
       emailVerified: false,
       verificationCode,
       verificationCodeExpires,
     });
 
-    // Procesar código de referido si existe
-    if (data.referralCode) {
+    // Procesar código de referido si existe (este es el código de OTRO usuario)
+    if (referralCodeToProcess) {
       try {
-        await this.referralsService.processReferral(data.referralCode, user.id);
+        await this.referralsService.processReferral(referralCodeToProcess, user.id);
       } catch (error) {
         console.error('Error al procesar código de referido:', error);
         // No fallar el registro si hay error con el código de referido
       }
     }
 
-    // Generar código de referido para el nuevo usuario
+    // Generar código de referido único para el nuevo usuario (su propio código para compartir)
     try {
       await this.referralsService.generateReferralCode(user.id);
     } catch (error) {
       console.error('Error al generar código de referido:', error);
+      // No fallar el registro si hay error generando el código
     }
 
     const { password: _, ...userWithoutPassword } = user;
