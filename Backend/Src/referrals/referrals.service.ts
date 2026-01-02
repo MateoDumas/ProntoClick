@@ -113,6 +113,20 @@ export class ReferralsService {
       where: { id: newUserId },
       data: { referredBy: validation.referrerId },
     });
+
+    // Recompensa inmediata al referidor por tener un nuevo referido
+    const REGISTRATION_REWARD_POINTS = 50; // Puntos por cada nuevo referido registrado
+    try {
+      await this.rewardsService.addPoints(
+        validation.referrerId,
+        REGISTRATION_REWARD_POINTS,
+        'referral_registration',
+        'Puntos por referir a un nuevo usuario',
+      );
+    } catch (error) {
+      console.error('Error al otorgar puntos de registro al referidor:', error);
+      // No fallar el proceso si hay error con los puntos
+    }
   }
 
   /**
@@ -128,9 +142,9 @@ export class ReferralsService {
       return; // Ya fue completado o no existe
     }
 
-    // Puntos para el referidor (ej: 100 puntos)
-    const REFERRER_POINTS = 100;
-    // Puntos para el referido (ej: 50 puntos)
+    // Puntos para el referidor cuando el referido hace su primer pedido
+    const FIRST_ORDER_REWARD_POINTS = 100;
+    // Puntos para el referido
     const REFERRED_POINTS = 50;
 
     // Actualizar estado del referido
@@ -139,7 +153,7 @@ export class ReferralsService {
       data: {
         status: 'completed',
         completedAt: new Date(),
-        rewardPoints: REFERRER_POINTS,
+        rewardPoints: FIRST_ORDER_REWARD_POINTS,
       },
     });
 
@@ -152,9 +166,9 @@ export class ReferralsService {
     // Otorgar puntos al referidor
     await this.rewardsService.addPoints(
       referral.referrerId,
-      REFERRER_POINTS,
+      FIRST_ORDER_REWARD_POINTS,
       'referral_completed',
-      `Puntos por referir a ${referredUser?.name || 'un amigo'}`,
+      `Puntos por referir a ${referredUser?.name || 'un amigo'} - Primer pedido`,
     );
 
     // Otorgar puntos al referido
@@ -174,6 +188,57 @@ export class ReferralsService {
         },
       },
     });
+  }
+
+  /**
+   * Otorga puntos al referidor cuando su referido hace una compra
+   * Solo otorga puntos si la compra cumple con el monto mínimo
+   */
+  async processReferralPurchase(referredUserId: string, orderTotal: number): Promise<void> {
+    // Monto mínimo para otorgar puntos (ej: $15.00)
+    const MIN_ORDER_AMOUNT = 15.0;
+    // Porcentaje de puntos basado en el total de la compra (ej: 5% del total)
+    const POINTS_PERCENTAGE = 0.05;
+
+    // Verificar monto mínimo
+    if (orderTotal < MIN_ORDER_AMOUNT) {
+      return; // No otorgar puntos si no cumple el monto mínimo
+    }
+
+    // Buscar el referido
+    const referral = await this.prisma.referral.findUnique({
+      where: { referredUserId },
+    });
+
+    if (!referral || referral.status !== 'completed') {
+      return; // Solo otorgar puntos si el referido ya completó su primer pedido
+    }
+
+    // Calcular puntos (redondear hacia abajo)
+    const pointsToAward = Math.floor(orderTotal * POINTS_PERCENTAGE);
+    
+    // Mínimo de puntos a otorgar (ej: 5 puntos)
+    const MIN_POINTS = 5;
+    const finalPoints = Math.max(MIN_POINTS, pointsToAward);
+
+    // Obtener información del usuario referido
+    const referredUser = await this.prisma.user.findUnique({
+      where: { id: referredUserId },
+      select: { name: true },
+    });
+
+    // Otorgar puntos al referidor
+    try {
+      await this.rewardsService.addPoints(
+        referral.referrerId,
+        finalPoints,
+        'referral_purchase',
+        `Puntos por compra de ${referredUser?.name || 'tu referido'} ($${orderTotal.toFixed(2)})`,
+      );
+    } catch (error) {
+      console.error('Error al otorgar puntos por compra de referido:', error);
+      // No fallar si hay error con los puntos
+    }
   }
 
   /**

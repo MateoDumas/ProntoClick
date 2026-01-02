@@ -187,16 +187,27 @@ export default function Register() {
               autoComplete="new-password"
             />
 
-            {formData.referralCode && (
-              <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                <p className="text-sm text-green-800">
-                  <span className="font-semibold">Código de referido aplicado:</span> {formData.referralCode}
-                </p>
-                <p className="text-xs text-green-600 mt-1">
-                  ¡Ganarás puntos de bienvenida al registrarte!
-                </p>
-              </div>
-            )}
+            <div>
+              <Input
+                label="Código de referido (opcional)"
+                type="text"
+                placeholder="ABC12345"
+                value={formData.referralCode}
+                onChange={(e) => setFormData(prev => ({ ...prev, referralCode: e.target.value.toUpperCase().trim() }))}
+                autoComplete="off"
+                maxLength={8}
+              />
+              {formData.referralCode && (
+                <div className="mt-2 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3">
+                  <p className="text-sm text-green-800 dark:text-green-300">
+                    <span className="font-semibold">Código de referido aplicado:</span> {formData.referralCode}
+                  </p>
+                  <p className="text-xs text-green-600 dark:text-green-400 mt-1">
+                    ¡Ganarás puntos de bienvenida al registrarte y tu amigo también recibirá una recompensa!
+                  </p>
+                </div>
+              )}
+            </div>
 
             <div className="flex items-start">
               <input

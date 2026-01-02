@@ -292,6 +292,14 @@ export class OrdersService {
         // No fallar la orden si hay error con los puntos
       }
 
+      // Procesar puntos para el referidor si el usuario fue referido
+      try {
+        await this.referralsService.processReferralPurchase(userId, total);
+      } catch (error) {
+        console.error('Error al procesar puntos de referido:', error);
+        // No fallar la orden si hay error con los puntos de referido
+      }
+
       // Emitir actualización de pedido vía WebSocket
       try {
         this.webSocketGateway.emitOrderUpdate(order.id, this.transformOrder(order));

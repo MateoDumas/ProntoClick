@@ -200,6 +200,14 @@ export class ScheduledOrdersService implements OnModuleInit {
         console.error('Error al agregar puntos:', error);
       }
 
+      // Procesar puntos para el referidor si el usuario fue referido
+      try {
+        await this.referralsService.processReferralPurchase(scheduledOrder.userId, scheduledOrder.total);
+      } catch (error) {
+        console.error('Error al procesar puntos de referido:', error);
+        // No fallar la orden si hay error con los puntos de referido
+      }
+
       // Emitir actualización de pedido vía WebSocket
       try {
         this.webSocketGateway.emitOrderUpdate(
