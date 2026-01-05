@@ -21,6 +21,9 @@ model User {
   twoFactorEnabled Boolean          @default(false)
   twoFactorSecret String?
   twoFactorBackupCodes String[]
+  phoneNumber    String?
+  securityQuestion String?
+  securityAnswer String?
   createdAt      DateTime           @default(now())
   updatedAt      DateTime           @updatedAt
   avatar         String?

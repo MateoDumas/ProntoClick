@@ -19,7 +19,9 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Request() req) {
-    return this.authService.login(req.user);
+    const ipAddress = req.ip || req.headers['x-forwarded-for'] || req.connection?.remoteAddress;
+    const userAgent = req.headers['user-agent'] || 'Unknown device';
+    return this.authService.login(req.user, ipAddress, userAgent);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -45,8 +47,10 @@ export class AuthController {
   // ========== 2FA Endpoints ==========
 
   @Post('verify-two-factor')
-  async verifyTwoFactorAndLogin(@Body() body: { userId: string; code: string }) {
-    return await this.authService.verifyTwoFactorAndLogin(body.userId, body.code);
+  async verifyTwoFactorAndLogin(@Request() req, @Body() body: { userId: string; code: string }) {
+    const ipAddress = req.ip || req.headers['x-forwarded-for'] || req.connection?.remoteAddress;
+    const userAgent = req.headers['user-agent'] || 'Unknown device';
+    return await this.authService.verifyTwoFactorAndLogin(body.userId, body.code, ipAddress, userAgent);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -94,10 +98,37 @@ export class AuthController {
 
   @Post('forgot-password')
   async requestPasswordReset(@Body() body: { email: string }) {
-    await this.authService.requestPasswordReset(body.email);
+    const result = await this.authService.requestPasswordReset(body.email);
     return {
       success: true,
-      message: 'Si el email existe, recibirás un código de recuperación',
+      ...result,
+    };
+  }
+
+  @Post('forgot-password/method')
+  async requestPasswordResetByMethod(@Body() body: { email: string; method: string }) {
+    await this.authService.requestPasswordResetByMethod(body.email, body.method);
+    return {
+      success: true,
+      message: 'Código de recuperación enviado',
+    };
+  }
+
+  @Post('forgot-password/get-security-question')
+  async getSecurityQuestion(@Body() body: { email: string }) {
+    const question = await this.authService.getSecurityQuestion(body.email);
+    return {
+      success: true,
+      question,
+    };
+  }
+
+  @Post('forgot-password/verify-security-question')
+  async verifySecurityQuestion(@Body() body: { email: string; answer: string }) {
+    await this.authService.verifySecurityQuestion(body.email, body.answer);
+    return {
+      success: true,
+      message: 'Pregunta de seguridad verificada. Código de recuperación enviado por email',
     };
   }
 

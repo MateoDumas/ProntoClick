@@ -826,6 +826,218 @@ export class NotificationsService {
   }
 
   /**
+   * Envía email de notificación de inicio de sesión
+   */
+  async sendLoginNotificationEmail(
+    userEmail: string,
+    userName: string,
+    loginTime: Date,
+    ipAddress?: string,
+    deviceInfo?: string,
+  ): Promise<boolean> {
+    if (!this.isConfigured) {
+      this.logger.warn('SendGrid no configurado. Email no enviado.');
+      return false;
+    }
+
+    try {
+      const fromEmail = this.configService.get<string>('FROM_EMAIL') || 'noreply@prontoclick.com';
+      const frontendUrl = this.configService.get<string>('FRONTEND_URL') || 'https://pronto-click.vercel.app';
+      
+      const formattedTime = loginTime.toLocaleString('es-ES', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZoneName: 'short',
+      });
+
+      const msg = {
+        to: userEmail,
+        from: fromEmail,
+        subject: '🔐 Nueva sesión iniciada en tu cuenta - ProntoClick',
+        html: `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <style>
+              * { margin: 0; padding: 0; box-sizing: border-box; }
+              body { 
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; 
+                line-height: 1.6; 
+                color: #333; 
+                background-color: #f4f4f4;
+              }
+              .email-container { 
+                max-width: 600px; 
+                margin: 0 auto; 
+                background-color: #ffffff;
+              }
+              .header { 
+                background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); 
+                color: white; 
+                padding: 40px 30px; 
+                text-align: center; 
+              }
+              .header h1 { 
+                font-size: 28px; 
+                margin-bottom: 10px;
+                font-weight: 700;
+              }
+              .content { 
+                padding: 40px 30px; 
+              }
+              .alert-box {
+                background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+                border-left: 4px solid #dc2626;
+                padding: 20px;
+                margin: 25px 0;
+                border-radius: 8px;
+              }
+              .info-box {
+                background: #f9f9f9;
+                padding: 20px;
+                border-radius: 8px;
+                margin: 20px 0;
+              }
+              .info-item {
+                display: flex;
+                justify-content: space-between;
+                padding: 10px 0;
+                border-bottom: 1px solid #e5e5e5;
+              }
+              .info-item:last-child {
+                border-bottom: none;
+              }
+              .info-label {
+                font-weight: 600;
+                color: #666;
+              }
+              .info-value {
+                color: #333;
+              }
+              .warning-box {
+                background: #fff3cd;
+                border-left: 4px solid #ffc107;
+                padding: 15px;
+                margin: 20px 0;
+                border-radius: 4px;
+              }
+              .cta-button {
+                display: inline-block;
+                background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+                color: white;
+                padding: 15px 40px;
+                text-decoration: none;
+                border-radius: 8px;
+                font-weight: 600;
+                font-size: 16px;
+                margin: 20px 0;
+                text-align: center;
+                box-shadow: 0 4px 6px rgba(220, 38, 38, 0.3);
+              }
+              .footer { 
+                background: #2c3e50;
+                color: #ecf0f1;
+                padding: 30px;
+                text-align: center;
+                font-size: 14px;
+              }
+            </style>
+          </head>
+          <body>
+            <div class="email-container">
+              <div class="header">
+                <h1>🔐 Nueva Sesión Iniciada</h1>
+                <p>Notificación de seguridad</p>
+              </div>
+              
+              <div class="content">
+                <p style="font-size: 16px; margin-bottom: 20px;">
+                  Hola <strong>${userName}</strong>,
+                </p>
+                
+                <div class="alert-box">
+                  <p style="margin: 0; color: #991b1b; font-weight: 600;">
+                    Se ha iniciado sesión en tu cuenta de ProntoClick
+                  </p>
+                </div>
+
+                <p style="font-size: 16px; margin-bottom: 20px;">
+                  Detectamos que se inició sesión en tu cuenta. Si fuiste tú, puedes ignorar este email de forma segura.
+                </p>
+
+                <div class="info-box">
+                  <div class="info-item">
+                    <span class="info-label">Fecha y hora:</span>
+                    <span class="info-value">${formattedTime}</span>
+                  </div>
+                  ${ipAddress ? `
+                  <div class="info-item">
+                    <span class="info-label">Dirección IP:</span>
+                    <span class="info-value">${ipAddress}</span>
+                  </div>
+                  ` : ''}
+                  ${deviceInfo ? `
+                  <div class="info-item">
+                    <span class="info-label">Dispositivo:</span>
+                    <span class="info-value">${deviceInfo}</span>
+                  </div>
+                  ` : ''}
+                </div>
+
+                <div class="warning-box">
+                  <p style="margin: 0; color: #856404;">
+                    <strong>⚠️ ¿No fuiste tú?</strong><br>
+                    Si no iniciaste sesión, cambia tu contraseña inmediatamente y contacta a nuestro equipo de soporte.
+                  </p>
+                </div>
+
+                <div style="text-align: center; margin: 30px 0;">
+                  <a href="${frontendUrl}/profile" class="cta-button">Ver Mi Cuenta</a>
+                </div>
+
+                <p style="font-size: 14px; color: #666; margin-top: 30px;">
+                  Para mantener tu cuenta segura, te recomendamos:
+                </p>
+                <ul style="font-size: 14px; color: #666; padding-left: 20px; margin-top: 10px;">
+                  <li style="margin-bottom: 8px;">Usar una contraseña única y segura</li>
+                  <li style="margin-bottom: 8px;">Habilitar la autenticación de dos factores (2FA)</li>
+                  <li style="margin-bottom: 8px;">No compartir tus credenciales con nadie</li>
+                  <li>Revisar regularmente los inicios de sesión en tu cuenta</li>
+                </ul>
+              </div>
+
+              <div class="footer">
+                <p style="margin-bottom: 15px;">
+                  <strong>ProntoClick</strong><br>
+                  Tu comida favorita, a un click de distancia
+                </p>
+                <p style="margin-top: 20px; font-size: 12px; color: #95a5a6;">
+                  Este es un email automático de seguridad. Si tienes dudas, contacta a nuestro soporte.<br>
+                  © ${new Date().getFullYear()} ProntoClick. Todos los derechos reservados.
+                </p>
+              </div>
+            </div>
+          </body>
+          </html>
+        `,
+      };
+
+      await sgMail.send(msg);
+      this.logger.log(`Email de notificación de inicio de sesión enviado a ${userEmail}`);
+      return true;
+    } catch (error) {
+      this.logger.error(`Error al enviar email de notificación de inicio de sesión a ${userEmail}:`, error);
+      return false;
+    }
+  }
+
+  /**
    * Verifica si el servicio está configurado
    */
   isEmailConfigured(): boolean {

@@ -31,7 +31,7 @@ export class AuthService {
     return result;
   }
 
-  async login(user: any) {
+  async login(user: any, ipAddress?: string, deviceInfo?: string) {
     // Verificar si el usuario tiene 2FA activado
     const fullUser = await this.usersService.findById(user.id);
     if (fullUser?.twoFactorEnabled) {
@@ -40,6 +40,22 @@ export class AuthService {
         user,
         requiresTwoFactor: true,
       };
+    }
+
+    // Enviar email de notificación de inicio de sesión solo para usuarios (no para soporte)
+    if (fullUser && fullUser.role === 'user') {
+      try {
+        await this.notificationsService.sendLoginNotificationEmail(
+          fullUser.email,
+          fullUser.name,
+          new Date(),
+          ipAddress,
+          deviceInfo,
+        );
+      } catch (error) {
+        console.error('Error al enviar email de notificación de inicio de sesión:', error);
+        // No fallar el login si hay error con el email
+      }
     }
 
     // Si no tiene 2FA, retornar token normalmente
@@ -51,7 +67,7 @@ export class AuthService {
     };
   }
 
-  async verifyTwoFactorAndLogin(userId: string, code: string) {
+  async verifyTwoFactorAndLogin(userId: string, code: string, ipAddress?: string, deviceInfo?: string) {
     // Verificar código 2FA
     await this.twoFactorService.verifyCode(userId, code);
 
@@ -59,6 +75,22 @@ export class AuthService {
     const user = await this.usersService.findById(userId);
     if (!user) {
       throw new UnauthorizedException('Usuario no encontrado');
+    }
+
+    // Enviar email de notificación de inicio de sesión solo para usuarios (no para soporte)
+    if (user.role === 'user') {
+      try {
+        await this.notificationsService.sendLoginNotificationEmail(
+          user.email,
+          user.name,
+          new Date(),
+          ipAddress,
+          deviceInfo,
+        );
+      } catch (error) {
+        console.error('Error al enviar email de notificación de inicio de sesión:', error);
+        // No fallar el login si hay error con el email
+      }
     }
 
     const { password: _, ...userWithoutPassword } = user;
@@ -205,31 +237,150 @@ export class AuthService {
     }
   }
 
-  async requestPasswordReset(email: string): Promise<boolean> {
+  async requestPasswordReset(email: string): Promise<{ availableMethods: string[]; message: string }> {
+    const user = await this.usersService.findByEmail(email);
+    if (!user) {
+      // Por seguridad, no revelamos si el email existe o no
+      return {
+        availableMethods: ['email'],
+        message: 'Si el email existe, recibirás un código de recuperación',
+      };
+    }
+
+    // Determinar métodos de verificación disponibles
+    const availableMethods: string[] = ['email']; // Email siempre está disponible
+    
+    if (user.phoneNumber) {
+      availableMethods.push('sms');
+    }
+    
+    if (user.securityQuestion && user.securityAnswer) {
+      availableMethods.push('securityQuestion');
+    }
+
+    // Si solo hay email, enviar código directamente
+    if (availableMethods.length === 1) {
+      const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
+      const resetCodeExpires = new Date();
+      resetCodeExpires.setMinutes(resetCodeExpires.getMinutes() + 15);
+
+      await this.usersService.update(user.id, {
+        passwordResetCode: resetCode,
+        passwordResetCodeExpires: resetCodeExpires,
+      });
+
+      try {
+        await this.notificationsService.sendPasswordResetEmail(user.email, user.name, resetCode);
+        return {
+          availableMethods: ['email'],
+          message: 'Código de recuperación enviado por email',
+        };
+      } catch (error) {
+        console.error('Error al enviar email de reset de contraseña:', error);
+        throw new UnauthorizedException('Error al enviar email de recuperación');
+      }
+    }
+
+    // Si hay múltiples métodos, retornar opciones
+    return {
+      availableMethods,
+      message: 'Selecciona un método de verificación',
+    };
+  }
+
+  async requestPasswordResetByMethod(email: string, method: string): Promise<boolean> {
     const user = await this.usersService.findByEmail(email);
     if (!user) {
       // Por seguridad, no revelamos si el email existe o no
       return true;
     }
 
-    // Generar código de reset (6 dígitos)
     const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
     const resetCodeExpires = new Date();
-    resetCodeExpires.setMinutes(resetCodeExpires.getMinutes() + 15); // Expira en 15 minutos
+    resetCodeExpires.setMinutes(resetCodeExpires.getMinutes() + 15);
 
-    // Actualizar usuario con código de reset
     await this.usersService.update(user.id, {
       passwordResetCode: resetCode,
       passwordResetCodeExpires: resetCodeExpires,
     });
 
-    // Enviar email con código de reset
+    switch (method) {
+      case 'email':
+        try {
+          await this.notificationsService.sendPasswordResetEmail(user.email, user.name, resetCode);
+          return true;
+        } catch (error) {
+          console.error('Error al enviar email de reset de contraseña:', error);
+          throw new UnauthorizedException('Error al enviar email de recuperación');
+        }
+      
+      case 'sms':
+        if (!user.phoneNumber) {
+          throw new UnauthorizedException('Número de teléfono no configurado');
+        }
+        // TODO: Implementar envío de SMS (requiere servicio de SMS como Twilio)
+        // Por ahora, retornamos true pero no enviamos SMS
+        console.log(`Código SMS para ${user.phoneNumber}: ${resetCode}`);
+        return true;
+      
+      case 'securityQuestion':
+        // No enviamos código, el usuario debe responder la pregunta
+        return true;
+      
+      default:
+        throw new UnauthorizedException('Método de verificación no válido');
+    }
+  }
+
+  async getSecurityQuestion(email: string): Promise<string | null> {
+    const user = await this.usersService.findByEmail(email);
+    if (!user) {
+      // Por seguridad, no revelamos si el email existe o no
+      return null;
+    }
+
+    if (!user.securityQuestion) {
+      return null;
+    }
+
+    return user.securityQuestion;
+  }
+
+  async verifySecurityQuestion(email: string, answer: string): Promise<boolean> {
+    const user = await this.usersService.findByEmail(email);
+    if (!user) {
+      throw new UnauthorizedException('Usuario no encontrado');
+    }
+
+    if (!user.securityQuestion || !user.securityAnswer) {
+      throw new UnauthorizedException('Pregunta de seguridad no configurada');
+    }
+
+    // Comparar respuestas (case-insensitive)
+    const normalizedAnswer = answer.trim().toLowerCase();
+    const normalizedStoredAnswer = user.securityAnswer.trim().toLowerCase();
+
+    if (normalizedAnswer !== normalizedStoredAnswer) {
+      throw new UnauthorizedException('Respuesta incorrecta');
+    }
+
+    // Generar código de reset después de verificar la pregunta
+    const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const resetCodeExpires = new Date();
+    resetCodeExpires.setMinutes(resetCodeExpires.getMinutes() + 15);
+
+    await this.usersService.update(user.id, {
+      passwordResetCode: resetCode,
+      passwordResetCodeExpires: resetCodeExpires,
+    });
+
+    // Enviar código por email después de verificar la pregunta
     try {
       await this.notificationsService.sendPasswordResetEmail(user.email, user.name, resetCode);
       return true;
     } catch (error) {
       console.error('Error al enviar email de reset de contraseña:', error);
-      throw new UnauthorizedException('Error al enviar email de recuperación');
+      throw new UnauthorizedException('Error al enviar código de recuperación');
     }
   }
 
