@@ -87,12 +87,13 @@ Haz clic en **"+ Add Environment Variable"** y agrega cada variable:
 
 ```
 NODE_ENV=production
-DATABASE_URL=postgresql://postgres:...@aws-1-us-east-2.pooler.supabase.com:5432/postgres?sslmode=require
+DATABASE_URL=postgresql://postgres.qkjtnkmmxaeznpwtvppd:ProntoClick2024Secure@aws-1-us-east-2.pooler.supabase.com:6543/postgres?sslmode=require&connection_limit=10&pool_timeout=20
 JWT_SECRET=tu-secreto-super-seguro-de-al-menos-32-caracteres
 JWT_EXPIRES_IN=15m
 PORT=3001
 FRONTEND_URL=https://tu-app.vercel.app
 ```
+**⚠️ IMPORTANTE:** El `DATABASE_URL` ahora incluye parámetros de optimización del pool (`connection_limit=10&pool_timeout=20`) y usa el puerto 6543 (Session Pooler) para evitar errores de conexión.
 
 #### Variables OPCIONALES (si las necesitas):
 
