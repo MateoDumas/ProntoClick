@@ -6,6 +6,15 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
   private readonly logger = new Logger(PrismaService.name);
 
   constructor() {
+    // Agregar parámetro pgbouncer=true a la URL si no está presente
+    // Esto deshabilita prepared statements para connection pooling
+    const databaseUrl = process.env.DATABASE_URL || '';
+    const urlWithPgbouncer = databaseUrl.includes('pgbouncer=true')
+      ? databaseUrl
+      : databaseUrl.includes('?')
+      ? `${databaseUrl}&pgbouncer=true`
+      : `${databaseUrl}?pgbouncer=true`;
+
     super({
       log: [
         { emit: 'event', level: 'query' },
@@ -14,6 +23,11 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
         { emit: 'event', level: 'warn' },
       ],
       errorFormat: 'pretty',
+      datasources: {
+        db: {
+          url: urlWithPgbouncer,
+        },
+      },
     });
 
     // Manejar eventos de Prisma

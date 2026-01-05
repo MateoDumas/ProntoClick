@@ -24,18 +24,21 @@ Para Supabase, agrega parámetros de conexión al `DATABASE_URL`:
 
 #### Formato Recomendado:
 ```
-DATABASE_URL="postgresql://postgres.[PROJECT-REF]:[PASSWORD]@[REGION].pooler.supabase.com:6543/postgres?sslmode=require&connection_limit=10&pool_timeout=20"
+DATABASE_URL="postgresql://postgres.[PROJECT-REF]:[PASSWORD]@[REGION].pooler.supabase.com:6543/postgres?sslmode=require&connection_limit=10&pool_timeout=20&pgbouncer=true"
 ```
 
 #### Parámetros Importantes:
 - `connection_limit=10`: Limita el número máximo de conexiones (ajusta según tu plan de Supabase)
 - `pool_timeout=20`: Tiempo máximo de espera para obtener una conexión (segundos)
 - `sslmode=require`: Requerido para Supabase
+- `pgbouncer=true`: **CRÍTICO** - Deshabilita prepared statements para evitar errores "prepared statement does not exist"
 
 #### Ejemplo Completo:
 ```env
-DATABASE_URL="postgresql://postgres.qkjtnkmmxaeznpwtvppd:TU_PASSWORD@aws-0-us-east-1.pooler.supabase.com:6543/postgres?sslmode=require&connection_limit=10&pool_timeout=20"
+DATABASE_URL="postgresql://postgres.qkjtnkmmxaeznpwtvppd:TU_PASSWORD@aws-0-us-east-1.pooler.supabase.com:6543/postgres?sslmode=require&connection_limit=10&pool_timeout=20&pgbouncer=true"
 ```
+
+**⚠️ IMPORTANTE:** El parámetro `pgbouncer=true` es esencial para evitar el error "prepared statement does not exist" cuando se usa connection pooling.
 
 ### 4. Límites de Supabase
 

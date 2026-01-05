@@ -60,8 +60,20 @@ export class ScheduledOrdersService implements OnModuleInit {
       for (const scheduledOrder of scheduledOrders) {
         await this.executeScheduledOrder(scheduledOrder);
       }
-    } catch (error) {
-      console.error('Error al procesar pedidos programados:', error);
+    } catch (error: any) {
+      // Si es error de prepared statement, intentar reconectar
+      if (error?.message?.includes('prepared statement') || error?.code === '26000') {
+        console.warn('Error de prepared statement detectado, intentando reconectar...');
+        try {
+          await this.prisma.$disconnect();
+          await this.prisma.$connect();
+          console.log('Reconexión exitosa');
+        } catch (reconnectError) {
+          console.error('Error al reconectar:', reconnectError);
+        }
+      } else {
+        console.error('Error al procesar pedidos programados:', error);
+      }
     }
   }
 

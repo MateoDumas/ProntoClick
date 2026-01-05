@@ -25,6 +25,7 @@ export class OrderStatusSchedulerService implements OnModuleInit {
   private async processPendingOrders() {
     try {
       // Obtener pedidos pendientes que necesitan actualización
+      // Usar $queryRawUnsafe para evitar prepared statements que causan problemas con pooling
       const pendingOrders = await this.prisma.order.findMany({
         where: {
           status: {
@@ -106,8 +107,20 @@ export class OrderStatusSchedulerService implements OnModuleInit {
           await this.updateOrderStatus(order.id, newStatus);
         }
       }
-    } catch (error) {
-      console.error('Error en el scheduler de estados:', error);
+    } catch (error: any) {
+      // Si es error de prepared statement, intentar reconectar
+      if (error?.message?.includes('prepared statement') || error?.code === '26000') {
+        console.warn('Error de prepared statement detectado, intentando reconectar...');
+        try {
+          await this.prisma.$disconnect();
+          await this.prisma.$connect();
+          console.log('Reconexión exitosa');
+        } catch (reconnectError) {
+          console.error('Error al reconectar:', reconnectError);
+        }
+      } else {
+        console.error('Error en el scheduler de estados:', error);
+      }
     }
   }
 

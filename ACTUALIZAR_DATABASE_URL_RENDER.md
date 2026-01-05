@@ -25,7 +25,7 @@ postgresql://postgres.qkjtnkmmxaeznpwtvppd:ProntoClick2024Secure@aws-1-us-east-2
 
 **Valor NUEVO (copia y pega esto):**
 ```
-postgresql://postgres.qkjtnkmmxaeznpwtvppd:ProntoClick2024Secure@aws-1-us-east-2.pooler.supabase.com:6543/postgres?sslmode=require&connection_limit=10&pool_timeout=20
+postgresql://postgres.qkjtnkmmxaeznpwtvppd:ProntoClick2024Secure@aws-1-us-east-2.pooler.supabase.com:6543/postgres?sslmode=require&connection_limit=10&pool_timeout=20&pgbouncer=true
 ```
 
 ### 4. Guarda los Cambios
@@ -39,6 +39,7 @@ postgresql://postgres.qkjtnkmmxaeznpwtvppd:ProntoClick2024Secure@aws-1-us-east-2
 2. **Parámetros agregados:**
    - `connection_limit=10`: Limita conexiones simultáneas
    - `pool_timeout=20`: Tiempo máximo de espera para obtener conexión
+   - `pgbouncer=true`: **CRÍTICO** - Deshabilita prepared statements para evitar errores
 
 ## 🔍 Verificación
 

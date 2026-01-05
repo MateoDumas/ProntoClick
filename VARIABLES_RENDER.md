@@ -9,12 +9,13 @@ NODE_ENV=production
 
 ### 2. DATABASE_URL
 ```
-DATABASE_URL=postgresql://postgres.qkjtnkmmxaeznpwtvppd:ProntoClick2024Secure@aws-1-us-east-2.pooler.supabase.com:6543/postgres?sslmode=require&connection_limit=10&pool_timeout=20
+DATABASE_URL=postgresql://postgres.qkjtnkmmxaeznpwtvppd:ProntoClick2024Secure@aws-1-us-east-2.pooler.supabase.com:6543/postgres?sslmode=require&connection_limit=10&pool_timeout=20&pgbouncer=true
 ```
 **Nota:** 
 - Usa el puerto **6543** (Session Pooler) en lugar de 5432 (Direct Connection)
 - Los parámetros `connection_limit=10` y `pool_timeout=20` optimizan el pool de conexiones
-- Esto previene el error "MaxClientsInSessionMode: max clients reached"
+- `pgbouncer=true` es **CRÍTICO** - Deshabilita prepared statements para evitar errores "prepared statement does not exist"
+- Esto previene los errores "MaxClientsInSessionMode" y "prepared statement does not exist"
 
 ### 3. JWT_SECRET
 ```
