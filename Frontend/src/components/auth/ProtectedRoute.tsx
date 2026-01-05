@@ -30,9 +30,15 @@ export default function ProtectedRoute({
           router.push(`${redirectTo}?redirect=${encodeURIComponent(currentPath)}`);
         }
       } else if (!user.emailVerified && router.asPath !== '/verify-email') {
-        // Si el usuario no ha verificado su email, redirigir a verificación
-        hasRedirected.current = true;
-        router.push('/verify-email');
+        // No requerir verificación de email para usuarios de soporte o admin
+        const isSupportUser = user.role === 'support' || user.role === 'admin';
+        const isSupportRoute = router.asPath.startsWith('/support');
+        
+        if (!isSupportUser && !isSupportRoute) {
+          // Si el usuario no ha verificado su email, redirigir a verificación
+          hasRedirected.current = true;
+          router.push('/verify-email');
+        }
       }
     }
   }, [user, isLoading, redirectTo, router]); // Agregar router a las dependencias
@@ -49,8 +55,12 @@ export default function ProtectedRoute({
     return null; // El useEffect redirigirá
   }
 
-  // Si el usuario no ha verificado su email, no mostrar el contenido
-  if (!user.emailVerified) {
+  // No requerir verificación de email para usuarios de soporte o admin
+  const isSupportUser = user.role === 'support' || user.role === 'admin';
+  const isSupportRoute = router.asPath.startsWith('/support');
+  
+  // Si el usuario no ha verificado su email, no mostrar el contenido (excepto para soporte)
+  if (!user.emailVerified && !isSupportUser && !isSupportRoute) {
     return null; // El useEffect redirigirá a /verify-email
   }
 
