@@ -19,7 +19,7 @@ import {
 import Loader from '../../components/ui/Loader';
 import { useToast } from '../../hooks/useToast';
 import ChatViewer from '../../components/support/ChatViewer';
-import Modal from '../../components/ui/Modal';
+import ReportDetailsModal from '../../components/support/ReportDetailsModal';
 
 export default function SupportDashboard() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
@@ -33,6 +33,8 @@ export default function SupportDashboard() {
   const [activeTab, setActiveTab] = useState<'overview' | 'chats' | 'resolved' | 'reports' | 'orders' | 'surveys'>('overview');
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
   const [updatingReports, setUpdatingReports] = useState<Set<string>>(new Set());
+  const [selectedReportId, setSelectedReportId] = useState<string | null>(null);
+  const [showReportModal, setShowReportModal] = useState(false);
   const { error: toastError, success } = useToast();
 
   useEffect(() => {
@@ -370,10 +372,45 @@ export default function SupportDashboard() {
                           Pedido: {report.order.restaurant.name} - ${report.order.total}
                         </p>
                         <div className="mt-3 flex gap-2">
-                          <button className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">
-                            Revisar
-                          </button>
-                          <button className="px-3 py-1 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-white text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors">
+                          {report.status === 'pending' && (
+                            <button
+                              onClick={async () => {
+                                if (updatingReports.has(report.id)) return;
+                                try {
+                                  setUpdatingReports((prev) => new Set(prev).add(report.id));
+                                  await updateReportStatus(report.id, 'reviewed');
+                                  success('Reporte marcado como revisado');
+                                  await loadDashboardData();
+                                } catch (error: any) {
+                                  toastError(error.response?.data?.message || 'Error al actualizar el reporte');
+                                } finally {
+                                  setUpdatingReports((prev) => {
+                                    const newSet = new Set(prev);
+                                    newSet.delete(report.id);
+                                    return newSet;
+                                  });
+                                }
+                              }}
+                              disabled={updatingReports.has(report.id)}
+                              className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+                            >
+                              {updatingReports.has(report.id) ? (
+                                <>
+                                  <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                  Procesando...
+                                </>
+                              ) : (
+                                'Revisar'
+                              )}
+                            </button>
+                          )}
+                          <button
+                            onClick={() => {
+                              setSelectedReportId(report.id);
+                              setShowReportModal(true);
+                            }}
+                            className="px-3 py-1 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-white text-sm rounded hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors"
+                          >
                             Ver Detalles
                           </button>
                           {(report.status === 'pending' || report.status === 'reviewed') && (
@@ -792,6 +829,19 @@ export default function SupportDashboard() {
               </div>
             </div>
           </div>
+        )}
+
+        {/* Modal de Detalles del Reporte */}
+        {selectedReportId && (
+          <ReportDetailsModal
+            isOpen={showReportModal}
+            onClose={() => {
+              setShowReportModal(false);
+              setSelectedReportId(null);
+            }}
+            reportId={selectedReportId}
+            onUpdate={loadDashboardData}
+          />
         )}
       </div>
     </SupportRoute>

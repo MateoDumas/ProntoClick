@@ -163,6 +163,57 @@ export const getPendingReports = async (): Promise<PendingReport[]> => {
   return response.data;
 };
 
+export interface ReportDetails extends PendingReport {
+  fee?: number;
+  notes?: string;
+  order: {
+    id: string;
+    total: number;
+    status: string;
+    createdAt: string;
+    deliveryAddress: any;
+    paymentMethod: string;
+    couponCode?: string;
+    discountAmount?: number;
+    tipAmount?: number;
+    restaurant: {
+      id: string;
+      name: string;
+      image?: string;
+      description?: string;
+    };
+    items: Array<{
+      id: string;
+      quantity: number;
+      price: number;
+      product: {
+        id: string;
+        name: string;
+        description: string;
+        price: number;
+        image?: string;
+      };
+    }>;
+    user: {
+      id: string;
+      name: string;
+      email: string;
+    };
+  };
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    avatar?: string;
+    phoneNumber?: string;
+  };
+}
+
+export const getReportDetails = async (reportId: string): Promise<ReportDetails> => {
+  const response = await api.get<ReportDetails>(`/support/reports/${reportId}`);
+  return response.data;
+};
+
 export const getOrdersWithReports = async (): Promise<OrderWithReports[]> => {
   const response = await api.get<OrderWithReports[]>('/support/orders/with-reports');
   return response.data;

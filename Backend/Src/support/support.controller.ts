@@ -47,6 +47,11 @@ export class SupportController {
     return this.supportService.getPendingReports();
   }
 
+  @Get('reports/:reportId')
+  async getReportDetails(@Param('reportId') reportId: string) {
+    return this.supportService.getReportDetails(reportId);
+  }
+
   @Get('orders/with-reports')
   async getOrdersWithReports() {
     return this.supportService.getOrdersWithReports();

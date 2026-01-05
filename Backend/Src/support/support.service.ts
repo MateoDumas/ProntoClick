@@ -179,6 +179,62 @@ export class SupportService {
     });
   }
 
+  // Obtener detalles completos de un reporte específico
+  async getReportDetails(reportId: string) {
+    const report = await this.prisma.report.findUnique({
+      where: { id: reportId },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            avatar: true,
+            phoneNumber: true,
+          },
+        },
+        order: {
+          include: {
+            restaurant: {
+              select: {
+                id: true,
+                name: true,
+                image: true,
+                description: true,
+              },
+            },
+            items: {
+              include: {
+                product: {
+                  select: {
+                    id: true,
+                    name: true,
+                    description: true,
+                    price: true,
+                    image: true,
+                  },
+                },
+              },
+            },
+            user: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!report) {
+      throw new Error('Reporte no encontrado');
+    }
+
+    return report;
+  }
+
   // Obtener pedidos con reportes
   async getOrdersWithReports() {
     const reports = await this.prisma.report.findMany({
