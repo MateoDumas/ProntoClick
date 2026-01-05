@@ -18,7 +18,7 @@ import { getReports } from '../services/reports.service';
 import type { Report } from '../services/reports.service';
 import { useRouter } from 'next/router';
 
-type TabType = 'profile' | 'password' | 'reports' | 'account';
+type TabType = 'profile' | 'password' | 'security' | 'reports' | 'account';
 
 function ProfilePageContent() {
   const router = useRouter();
@@ -38,6 +38,15 @@ function ProfilePageContent() {
   });
   const [profileErrors, setProfileErrors] = useState<Record<string, string>>({});
   const [updatingProfile, setUpdatingProfile] = useState(false);
+
+  // Estados para métodos de verificación
+  const [securityData, setSecurityData] = useState({
+    phoneNumber: '',
+    securityQuestion: '',
+    securityAnswer: '',
+  });
+  const [securityErrors, setSecurityErrors] = useState<Record<string, string>>({});
+  const [updatingSecurity, setUpdatingSecurity] = useState(false);
 
   // Estados para cambio de contraseña
   const [passwordData, setPasswordData] = useState({
@@ -79,6 +88,11 @@ function ProfilePageContent() {
         email: user.email || '',
         avatar: user.avatar || '',
       });
+      setSecurityData({
+        phoneNumber: user.phoneNumber || '',
+        securityQuestion: user.securityQuestion || '',
+        securityAnswer: '', // No mostramos la respuesta por seguridad
+      });
       if (activeTab === 'reports') {
         loadReports();
       }
@@ -105,6 +119,59 @@ function ProfilePageContent() {
         delete newErrors[field];
         return newErrors;
       });
+    }
+  };
+
+  const handleSecurityChange = (field: 'phoneNumber' | 'securityQuestion' | 'securityAnswer', value: string) => {
+    setSecurityData((prev) => ({ ...prev, [field]: value }));
+    if (securityErrors[field]) {
+      setSecurityErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
+    }
+  };
+
+  const validateSecurity = (): boolean => {
+    const errors: Record<string, string> = {};
+
+    if (securityData.phoneNumber && !/^\+?[1-9]\d{1,14}$/.test(securityData.phoneNumber)) {
+      errors.phoneNumber = 'El número de teléfono debe tener un formato válido (ej: +1234567890)';
+    }
+
+    if (securityData.securityQuestion && !securityData.securityAnswer) {
+      errors.securityAnswer = 'Debes proporcionar una respuesta si configuras una pregunta';
+    }
+
+    if (securityData.securityAnswer && !securityData.securityQuestion) {
+      errors.securityQuestion = 'Debes proporcionar una pregunta si configuras una respuesta';
+    }
+
+    setSecurityErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleUpdateSecurity = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!validateSecurity()) return;
+
+    setUpdatingSecurity(true);
+    setSecurityErrors({});
+
+    try {
+      await updateProfileMutation.mutateAsync({
+        phoneNumber: securityData.phoneNumber || undefined,
+        securityQuestion: securityData.securityQuestion || undefined,
+        securityAnswer: securityData.securityAnswer || undefined,
+      });
+      success('Métodos de verificación actualizados correctamente');
+    } catch (error: any) {
+      console.error('Error updating security:', error);
+      toastError(error.response?.data?.message || 'Error al actualizar métodos de verificación');
+    } finally {
+      setUpdatingSecurity(false);
     }
   };
 
@@ -249,6 +316,7 @@ function ProfilePageContent() {
   const tabs = [
     { id: 'profile' as TabType, label: 'Mi Perfil', icon: '👤' },
     { id: 'password' as TabType, label: 'Contraseña', icon: '🔒' },
+    { id: 'security' as TabType, label: 'Seguridad', icon: '🛡️' },
     { id: 'reports' as TabType, label: 'Mis Reportes', icon: '📋' },
     { id: 'account' as TabType, label: 'Configuración', icon: '⚙️' },
   ];
@@ -400,6 +468,82 @@ function ProfilePageContent() {
                 disabled={changingPassword || changePasswordMutation.isPending}
               >
                 {changingPassword || changePasswordMutation.isPending ? 'Cambiando...' : 'Cambiar Contraseña'}
+              </Button>
+            </form>
+          </div>
+        )}
+
+        {/* Tab: Métodos de Verificación */}
+        {activeTab === 'security' && (
+          <div>
+            <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-2">Métodos de Verificación</h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              Configura métodos adicionales de verificación para recuperar tu contraseña
+            </p>
+
+            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4 mb-6">
+              <p className="text-sm text-blue-800 dark:text-blue-200">
+                <strong>💡 Información:</strong> Estos métodos te ayudarán a recuperar tu contraseña si la olvidas.
+                Puedes configurar uno o varios métodos según prefieras.
+              </p>
+            </div>
+
+            <form onSubmit={handleUpdateSecurity} className="space-y-4 max-w-md">
+              <div>
+                <Input
+                  label="Número de Teléfono (SMS)"
+                  type="tel"
+                  placeholder="+1234567890"
+                  value={securityData.phoneNumber}
+                  onChange={(e) => handleSecurityChange('phoneNumber', e.target.value)}
+                  error={securityErrors.phoneNumber}
+                />
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  Formato: +1234567890 (con código de país). Este número se usará para enviarte códigos de verificación por SMS
+                </p>
+              </div>
+
+              <div>
+                <Input
+                  label="Pregunta de Seguridad"
+                  type="text"
+                  placeholder="¿Cuál es el nombre de tu mascota?"
+                  value={securityData.securityQuestion}
+                  onChange={(e) => handleSecurityChange('securityQuestion', e.target.value)}
+                  error={securityErrors.securityQuestion}
+                />
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  Elige una pregunta que solo tú puedas responder
+                </p>
+              </div>
+
+              <div>
+                <Input
+                  label="Respuesta de Seguridad"
+                  type="text"
+                  placeholder="Tu respuesta"
+                  value={securityData.securityAnswer}
+                  onChange={(e) => handleSecurityChange('securityAnswer', e.target.value)}
+                  error={securityErrors.securityAnswer}
+                />
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  La respuesta se guardará de forma segura y encriptada
+                </p>
+              </div>
+
+              <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg p-3 mt-4">
+                <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                  <strong>⚠️ Importante:</strong> Si olvidas tu contraseña, podrás usar estos métodos para recuperarla.
+                  Asegúrate de recordar tu pregunta y respuesta de seguridad.
+                </p>
+              </div>
+
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={updatingSecurity || updateProfileMutation.isPending}
+              >
+                {updatingSecurity || updateProfileMutation.isPending ? 'Guardando...' : 'Guardar Configuración'}
               </Button>
             </form>
           </div>

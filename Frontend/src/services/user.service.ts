@@ -5,6 +5,9 @@ export interface UpdateProfileDto {
   name?: string;
   email?: string;
   avatar?: string;
+  phoneNumber?: string;
+  securityQuestion?: string;
+  securityAnswer?: string;
 }
 
 export interface ChangePasswordDto {

@@ -54,6 +54,11 @@ export class UsersService {
         ...(updateData.name && { name: updateData.name }),
         ...(updateData.email && { email: updateData.email }),
         ...(updateData.avatar !== undefined && { avatar: updateData.avatar }),
+        ...(updateData.phoneNumber !== undefined && { phoneNumber: updateData.phoneNumber || null }),
+        ...(updateData.securityQuestion !== undefined && { securityQuestion: updateData.securityQuestion || null }),
+        ...(updateData.securityAnswer !== undefined && { 
+          securityAnswer: updateData.securityAnswer ? updateData.securityAnswer.trim().toLowerCase() : null 
+        }),
       },
     });
   }
