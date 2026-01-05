@@ -727,42 +727,52 @@ export class SupportService {
 
   // Obtener estadísticas de encuestas de soporte (solo completadas)
   async getSurveyStats(supportUserId?: string) {
-    // Solo contar encuestas completadas (rating no null y mayor a 0)
-    const where = supportUserId 
-      ? { 
-          supportUserId,
-          rating: { not: null },
-        }
-      : { 
-          rating: { not: null },
-        };
+    try {
+      // Solo contar encuestas completadas (rating no null y mayor a 0)
+      const where = supportUserId 
+        ? { 
+            supportUserId,
+            rating: { not: null },
+          }
+        : { 
+            rating: { not: null },
+          };
 
-    const [total, averageRating, ratings] = await Promise.all([
-      this.prisma.supportSurvey.count({ where }),
-      this.prisma.supportSurvey.aggregate({
+      // Obtener todas las encuestas con rating para calcular distribución sin groupBy
+      const surveys = await this.prisma.supportSurvey.findMany({
         where,
-        _avg: { rating: true },
-      }),
-      this.prisma.supportSurvey.groupBy({
-        by: ['rating'],
-        where: {
-          ...where,
-          rating: { not: null },
+        select: {
+          rating: true,
         },
-        _count: { rating: true },
-      }),
-    ]);
+      });
 
-    return {
-      total,
-      averageRating: averageRating._avg.rating || 0,
-      ratingsDistribution: ratings.reduce((acc, r) => {
-        if (r.rating !== null) {
-          acc[r.rating] = r._count.rating;
+      // Calcular estadísticas manualmente para evitar groupBy que causa problemas con el pool
+      const total = surveys.length;
+      const sum = surveys.reduce((acc, s) => acc + (s.rating || 0), 0);
+      const averageRating = total > 0 ? sum / total : 0;
+
+      // Calcular distribución de ratings
+      const ratingsDistribution: Record<number, number> = {};
+      surveys.forEach((survey) => {
+        if (survey.rating !== null) {
+          ratingsDistribution[survey.rating] = (ratingsDistribution[survey.rating] || 0) + 1;
         }
-        return acc;
-      }, {} as Record<number, number>),
-    };
+      });
+
+      return {
+        total,
+        averageRating,
+        ratingsDistribution,
+      };
+    } catch (error) {
+      console.error('[SupportService] Error en getSurveyStats:', error);
+      // Retornar valores por defecto en caso de error
+      return {
+        total: 0,
+        averageRating: 0,
+        ratingsDistribution: {},
+      };
+    }
   }
 
   // Obtener todas las encuestas completadas (para el dashboard)
