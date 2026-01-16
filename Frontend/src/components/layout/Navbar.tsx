@@ -34,7 +34,7 @@ export default function Navbar() {
             <div className={`w-10 h-10 bg-gradient-to-br ${holidayTheme.gradient} ${holidayTheme.darkGradient} rounded-xl flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg`}>
               <span className="text-white font-bold text-2xl">P</span>
             </div>
-            <span className={`text-xl font-bold bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} bg-clip-text text-transparent dark:text-white dark:bg-none`}>
+            <span className={`text-xl font-bold bg-gradient-to-r ${holidayTheme.gradient} bg-clip-text text-transparent dark:bg-none dark:text-red-400`}>
               ProntoClick
             </span>
           </Link>
