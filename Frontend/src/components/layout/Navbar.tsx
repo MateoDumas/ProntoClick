@@ -31,10 +31,10 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group flex-shrink-0">
-            <div className={`w-10 h-10 bg-gradient-to-br ${holidayTheme.gradient} ${holidayTheme.darkGradient} rounded-xl flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-12 transition-all duration-300 shadow-lg`}>
-              <span className="text-white font-bold text-lg">{holidayTheme.emoji}</span>
+            <div className={`w-10 h-10 bg-gradient-to-br ${holidayTheme.gradient} ${holidayTheme.darkGradient} rounded-xl flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-lg`}>
+              <span className="text-white font-extrabold text-lg tracking-tight">PC</span>
             </div>
-            <span className={`text-xl font-bold bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} bg-clip-text text-transparent`}>
+            <span className={`text-xl font-extrabold bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} bg-clip-text text-transparent tracking-tight`}>
               ProntoClick
             </span>
           </Link>
