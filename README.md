@@ -1,6 +1,6 @@
 # ProntoClick 🚀
 
-Aplicación de delivery de comida rápida con sistema de chat inteligente y soporte al cliente.
+Aplicación de delivery de comida rápida con sistema de chat inteligente, soporte al cliente y programa de recompensas.
 
 ## 🛠️ Tecnologías
 
@@ -43,7 +43,7 @@ Aplicación de delivery de comida rápida con sistema de chat inteligente y sopo
 
 1. **Clonar el repositorio**
 ```bash
-git clone <tu-repositorio>
+git clone https://github.com/MateoDumas/ProntoClick.git
 cd ProntoClick
 ```
 
@@ -68,10 +68,8 @@ npm run dev
 
 ## 📚 Documentación
 
-- [Guía de Deployment](./DEPLOYMENT_GRATIS.md) - Deployment gratuito
-- [Guía de Deployment Completa](./GUIA_DEPLOYMENT.md) - Opciones de deployment
-- [Checklist de Producción](./CHECKLIST_PRODUCCION.md) - Lista de verificación
-- [Configuración Supabase](./Backend/CONEXION_SUPABASE_EXITOSA.md) - Conexión a Supabase
+La documentación detallada está en proceso de consolidación.  
+Por ahora, este README recoge los pasos principales para levantar el entorno de desarrollo.
 
 ## 🔐 Variables de Entorno
 
@@ -118,7 +116,11 @@ npm run test
 
 ## 📦 Deployment
 
-Ver [DEPLOYMENT_GRATIS.md](./DEPLOYMENT_GRATIS.md) para instrucciones detalladas de deployment gratuito.
+Para producción puedes:
+- Desplegar el **Backend** en cualquier proveedor que soporte Node.js y PostgreSQL/Supabase.
+- Desplegar el **Frontend** en Vercel u otra plataforma para apps Next.js.
+
+Asegúrate de configurar correctamente las variables de entorno para el entorno de producción.
 
 ## 🤝 Contribuir
 
