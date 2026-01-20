@@ -8,6 +8,10 @@ interface OrderTrackingProps {
   orderId: string;
   initialStatus?: string;
   restaurantLocation?: Location;
+  deliveryAddress?: {
+    lat?: number;
+    lng?: number;
+  };
 }
 
 const statusConfig: Record<string, { label: string; color: string; darkColor: string; icon: string }> = {
