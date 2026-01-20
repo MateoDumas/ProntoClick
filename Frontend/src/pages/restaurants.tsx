@@ -74,8 +74,9 @@ function RestaurantsPageContent() {
       <div className="absolute top-1/2 left-1/4 w-72 h-72 bg-red-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
       
       {/* Hero Section */}
-      <div className={`relative overflow-hidden bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} gradient-animated`}>
-        <div className={`absolute inset-0 bg-gradient-to-r ${holidayTheme.gradient} opacity-80`}></div>
+      <div className={`relative overflow-hidden bg-gradient-to-r ${holidayTheme.gradient} gradient-animated`}>
+        <div className={`absolute inset-0 bg-gradient-to-r ${holidayTheme.gradient} opacity-90`}></div>
+        <div className="absolute inset-0 bg-black/30"></div>
         {holidayTheme.decorations && holiday !== 'none' && (
           <div className="absolute inset-0 pointer-events-none opacity-10">
             {holidayTheme.decorations.map((emoji, idx) => (
@@ -145,8 +146,10 @@ function RestaurantsPageContent() {
         {/* Filters */}
         <div className="mb-6 sm:mb-8 md:mb-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-6 fade-in-up">
           <div>
-            <h2 className={`text-2xl sm:text-3xl md:text-4xl font-extrabold bg-gradient-to-r ${holidayTheme.gradient} ${holidayTheme.darkGradient} bg-clip-text text-transparent mb-2`}>
-              {filteredRestaurants.length} Restaurantes Disponibles
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-2">
+              <span className={`text-${holidayTheme.primaryColor}-600 dark:text-${holidayTheme.primaryColor}-400`}>
+                {filteredRestaurants.length}
+              </span> Restaurantes Disponibles
             </h2>
             <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">Encuentra tu comida favorita</p>
           </div>
