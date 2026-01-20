@@ -20,7 +20,7 @@ export interface HolidayTheme {
   decorations?: string[];
 }
 
-const holidays: Record<HolidayType, HolidayTheme> = {
+export const holidays: Record<HolidayType, HolidayTheme> = {
   none: {
     name: 'Normal',
     emoji: '🍽️',

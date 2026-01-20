@@ -4,20 +4,41 @@ import { getCurrentHoliday, getHolidayTheme, type HolidayType, type HolidayTheme
 interface HolidayContextType {
   holiday: HolidayType;
   theme: HolidayTheme;
+  setOverrideHoliday: (holiday: HolidayType | null) => void;
+  overrideHoliday: HolidayType | null;
 }
 
 const HolidayContext = createContext<HolidayContextType | undefined>(undefined);
 
 export function HolidayProvider({ children }: { children: ReactNode }) {
-  const [holiday, setHoliday] = useState<HolidayType>(() => getCurrentHoliday());
+  const [overrideHoliday, setOverrideHolidayState] = useState<HolidayType | null>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('holiday_override');
+      return saved as HolidayType | null;
+    }
+    return null;
+  });
+
+  const [currentRealHoliday, setCurrentRealHoliday] = useState<HolidayType>(() => getCurrentHoliday());
+
+  const setOverrideHoliday = (holiday: HolidayType | null) => {
+    setOverrideHolidayState(holiday);
+    if (holiday) {
+      localStorage.setItem('holiday_override', holiday);
+    } else {
+      localStorage.removeItem('holiday_override');
+    }
+  };
+
+  const holiday = overrideHoliday || currentRealHoliday;
   const theme = getHolidayTheme(holiday);
 
   useEffect(() => {
     // Verificar si cambió el día (para cuando pasa medianoche)
     const checkHoliday = () => {
-      const currentHoliday = getCurrentHoliday();
-      if (currentHoliday !== holiday) {
-        setHoliday(currentHoliday);
+      const newRealHoliday = getCurrentHoliday();
+      if (newRealHoliday !== currentRealHoliday) {
+        setCurrentRealHoliday(newRealHoliday);
       }
     };
 
@@ -25,10 +46,10 @@ export function HolidayProvider({ children }: { children: ReactNode }) {
     const interval = setInterval(checkHoliday, 60 * 60 * 1000);
 
     return () => clearInterval(interval);
-  }, [holiday]);
+  }, [currentRealHoliday]);
 
   return (
-    <HolidayContext.Provider value={{ holiday, theme }}>
+    <HolidayContext.Provider value={{ holiday, theme, setOverrideHoliday, overrideHoliday }}>
       {children}
     </HolidayContext.Provider>
   );

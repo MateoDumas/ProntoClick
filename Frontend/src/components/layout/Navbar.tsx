@@ -6,6 +6,7 @@ import SearchBar from '../search/SearchBar';
 import UserMenu from './UserMenu';
 import PointsDisplay from '../rewards/PointsDisplay';
 import ThemeToggle from '../ui/ThemeToggle';
+import HolidaySelector from '../support/HolidaySelector';
 
 export default function Navbar() {
   const router = useRouter();
@@ -63,6 +64,9 @@ export default function Navbar() {
 
           {/* Auth Buttons */}
           <div className="flex items-center gap-3 flex-shrink-0">
+            {(user?.role === 'support' || user?.role === 'admin') && (
+              <HolidaySelector />
+            )}
             <ThemeToggle />
             {user ? (
               <>
