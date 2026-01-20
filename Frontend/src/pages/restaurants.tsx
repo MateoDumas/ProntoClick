@@ -66,6 +66,20 @@ function RestaurantsPageContent() {
         return results;
   }, [searchQuery, filter, restaurants]);
 
+  const getColorClass = (color: string) => {
+    const colors: Record<string, string> = {
+      red: 'text-red-600 dark:text-red-400',
+      orange: 'text-orange-600 dark:text-orange-400',
+      green: 'text-green-600 dark:text-green-400',
+      yellow: 'text-yellow-600 dark:text-yellow-400',
+      purple: 'text-purple-600 dark:text-purple-400',
+      pink: 'text-pink-600 dark:text-pink-400',
+      blue: 'text-blue-600 dark:text-blue-400',
+      gray: 'text-gray-600 dark:text-gray-400',
+    };
+    return colors[color] || 'text-gray-900 dark:text-white';
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-white dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 relative overflow-hidden transition-colors duration-200">
       {/* Animated background blobs */}
@@ -146,10 +160,8 @@ function RestaurantsPageContent() {
         {/* Filters */}
         <div className="mb-6 sm:mb-8 md:mb-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-6 fade-in-up">
           <div>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-2">
-              <span className={`text-${holidayTheme.primaryColor}-600 dark:text-${holidayTheme.primaryColor}-400`}>
-                {filteredRestaurants.length}
-              </span> Restaurantes Disponibles
+            <h2 className={`text-2xl sm:text-3xl md:text-4xl font-extrabold mb-2 ${getColorClass(holidayTheme.primaryColor)}`}>
+              {filteredRestaurants.length} Restaurantes Disponibles
             </h2>
             <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">Encuentra tu comida favorita</p>
           </div>
