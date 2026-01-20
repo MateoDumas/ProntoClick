@@ -108,7 +108,7 @@ const Home: NextPage = () => {
             </h1>
             {holiday !== 'none' && (
               <p className="text-base sm:text-lg font-semibold mb-2 opacity-90">
-                ¡Celebra {holidayTheme.name} con nosotros!
+                {holidayTheme.slogan || `¡Celebra ${holidayTheme.name} con nosotros!`}
               </p>
             )}
             <p className="text-base sm:text-lg md:text-xl text-white/90 dark:text-white/80 mb-6 max-w-2xl">

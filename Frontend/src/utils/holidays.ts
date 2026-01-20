@@ -19,6 +19,7 @@ export interface HolidayTheme {
   darkGradient: string;
   decorations?: string[];
   animationEffect?: 'snow' | 'rain' | 'confetti' | 'floating-emojis' | 'hearts' | 'none';
+  slogan?: string;
 }
 
 export const holidays: Record<HolidayType, HolidayTheme> = {
@@ -40,6 +41,7 @@ export const holidays: Record<HolidayType, HolidayTheme> = {
     darkGradient: 'dark:from-orange-700 dark:via-purple-700 dark:to-orange-600',
     decorations: ['🎃', '👻', '🦇', '🕷️'],
     animationEffect: 'floating-emojis',
+    slogan: '¡Sabores de miedo para una noche terrorífica!',
   },
   christmas: {
     name: 'Navidad',
@@ -50,6 +52,7 @@ export const holidays: Record<HolidayType, HolidayTheme> = {
     darkGradient: 'dark:from-green-700 dark:via-red-700 dark:to-green-600',
     decorations: ['🎄', '🎅', '🎁', '⭐', '❄️'],
     animationEffect: 'snow',
+    slogan: '¡Celebra la magia de la Navidad con los mejores sabores!',
   },
   newyear: {
     name: 'Año Nuevo',
@@ -60,6 +63,7 @@ export const holidays: Record<HolidayType, HolidayTheme> = {
     darkGradient: 'dark:from-yellow-500 dark:via-blue-600 dark:to-purple-700',
     decorations: ['🎉', '🎊', '⭐', '✨'],
     animationEffect: 'confetti',
+    slogan: '¡Empieza el año con el pie derecho y la panza llena!',
   },
   kings: {
     name: 'Día de Reyes',
@@ -70,6 +74,7 @@ export const holidays: Record<HolidayType, HolidayTheme> = {
     darkGradient: 'dark:from-yellow-500 dark:via-purple-600 dark:to-yellow-600',
     decorations: ['👑', '🎁', '⭐'],
     animationEffect: 'floating-emojis',
+    slogan: '¡Un banquete digno de reyes!',
   },
   easter: {
     name: 'Pascua',
@@ -80,6 +85,7 @@ export const holidays: Record<HolidayType, HolidayTheme> = {
     darkGradient: 'dark:from-pink-500 dark:via-yellow-400 dark:to-blue-500',
     decorations: ['🐰', '🥚', '🌸', '🌷'],
     animationEffect: 'floating-emojis',
+    slogan: '¡Pascua llena de sabor y alegría!',
   },
   mothersday: {
     name: 'Día de la Madre',
@@ -90,6 +96,7 @@ export const holidays: Record<HolidayType, HolidayTheme> = {
     darkGradient: 'dark:from-pink-600 dark:via-red-500 dark:to-pink-500',
     decorations: ['💐', '🌹', '❤️'],
     animationEffect: 'hearts',
+    slogan: '¡Mima a mamá con su comida favorita!',
   },
   fathersday: {
     name: 'Día del Padre',
@@ -100,6 +107,7 @@ export const holidays: Record<HolidayType, HolidayTheme> = {
     darkGradient: 'dark:from-blue-700 dark:via-gray-600 dark:to-blue-600',
     decorations: ['👔', '🎩', '💼'],
     animationEffect: 'floating-emojis',
+    slogan: '¡El mejor regalo para papá está en la mesa!',
   },
   valentines: {
     name: 'San Valentín',
@@ -110,6 +118,7 @@ export const holidays: Record<HolidayType, HolidayTheme> = {
     darkGradient: 'dark:from-pink-600 dark:via-red-600 dark:to-pink-500',
     decorations: ['💝', '❤️', '💕', '🌹'],
     animationEffect: 'hearts',
+    slogan: '¡Enamórate del sabor en cada bocado!',
   },
   independence: {
     name: 'Día de la Independencia',
@@ -120,6 +129,7 @@ export const holidays: Record<HolidayType, HolidayTheme> = {
     darkGradient: 'dark:from-blue-700 dark:via-yellow-500 dark:to-blue-600',
     decorations: ['🇦🇷', '⭐'],
     animationEffect: 'confetti',
+    slogan: '¡Celebra la patria con los sabores más nuestros!',
   },
 };
 
