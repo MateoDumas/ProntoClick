@@ -50,6 +50,10 @@ export default function OrderDetail() {
   const queryClient = useQueryClient();
   const { success, error: toastError } = useToast();
 
+  // Activar alertas de sonido y notificaciones visuales
+  const orderId = typeof id === 'string' ? id : undefined;
+  useOrderAlerts(orderId);
+
   useEffect(() => {
     if (user === null) {
       router.push('/login?returnTo=/orders');
