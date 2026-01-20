@@ -1,3 +1,5 @@
+import React from 'react';
+
 export type HolidayType = 
   | 'none'
   | 'halloween'
@@ -12,15 +14,23 @@ export type HolidayType =
 
 export interface HolidayTheme {
   name: string;
-  emoji: string;
+  emoji: string | React.ReactNode;
   primaryColor: string;
   secondaryColor: string;
   gradient: string;
   darkGradient: string;
-  decorations?: string[];
+  decorations?: (string | React.ReactNode)[];
   animationEffect?: 'snow' | 'rain' | 'confetti' | 'floating-emojis' | 'hearts' | 'none';
   slogan?: string;
 }
+
+const ArgentinaFlag = (
+  <svg viewBox="0 0 9 6" width="1em" height="0.67em" className="inline-block align-middle transform -translate-y-1">
+    <rect width="9" height="6" fill="#75AADB" />
+    <rect y="2" width="9" height="2" fill="#fff" />
+    <circle cx="4.5" cy="3" r="0.8" fill="#F6B40E" />
+  </svg>
+);
 
 export const holidays: Record<HolidayType, HolidayTheme> = {
   none: {
@@ -122,12 +132,12 @@ export const holidays: Record<HolidayType, HolidayTheme> = {
   },
   independence: {
     name: 'Día de la Independencia',
-    emoji: '🇦🇷',
+    emoji: ArgentinaFlag,
     primaryColor: 'blue',
     secondaryColor: 'yellow',
     gradient: 'from-blue-600 via-yellow-400 to-blue-500',
     darkGradient: 'dark:from-blue-700 dark:via-yellow-500 dark:to-blue-600',
-    decorations: ['🇦🇷', '⭐'],
+    decorations: [ArgentinaFlag, '⭐'],
     animationEffect: 'confetti',
     slogan: '¡Celebra la patria con los sabores más nuestros!',
   },
