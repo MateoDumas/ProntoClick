@@ -11,6 +11,14 @@ export type Order = {
   restaurantId: string;
   items: OrderItem[];
   total: number;
+  deliveryAddress: {
+    street: string;
+    city: string;
+    zipCode: string;
+    notes?: string;
+    lat?: number;
+    lng?: number;
+  };
   status: 'pending' | 'confirmed' | 'preparing' | 'ready' | 'delivered' | 'cancelled';
   tipAmount?: number | null;
   appliedPenalty?: number | null; // Penalización aplicada en este pedido

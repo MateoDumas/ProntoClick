@@ -175,6 +175,8 @@ function PaymentPageContent() {
           city: deliveryAddress.city,
           zipCode: deliveryAddress.zipCode,
           notes: deliveryAddress.notes,
+          lat: deliveryAddress.lat,
+          lng: deliveryAddress.lng,
         },
         paymentMethod,
         couponCode: couponCode || undefined,

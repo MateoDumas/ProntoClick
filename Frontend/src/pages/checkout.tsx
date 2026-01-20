@@ -114,6 +114,8 @@ function CheckoutContent() {
       city: formData.city,
       zipCode: formData.zipCode,
       notes: formData.notes || undefined,
+      lat: selectedLocation?.lat,
+      lng: selectedLocation?.lng,
     }));
 
     // Redirigir a la página de pagos

@@ -20,12 +20,40 @@ const statusConfig: Record<string, { label: string; color: string; darkColor: st
   cancelled: { label: 'Cancelado', color: 'bg-red-100 text-red-800', darkColor: 'dark:bg-red-900/30 dark:text-red-300', icon: '❌' },
 };
 
-export default function OrderTracking({ orderId, initialStatus, restaurantLocation }: OrderTrackingProps) {
+export default function OrderTracking({ orderId, initialStatus, restaurantLocation, deliveryAddress }: OrderTrackingProps) {
   const [currentStatus, setCurrentStatus] = useState(initialStatus || 'pending');
   const [deliveryLocation, setDeliveryLocation] = useState<Location | null>(null);
   const [statusHistory, setStatusHistory] = useState<Array<{ status: string; timestamp: string; message?: string }>>([]);
   
   const { isConnected, joinOrder, leaveOrder, onOrderUpdate, onStatusChange, onDeliveryLocation } = useSocket();
+
+  // Simulación de movimiento del repartidor
+  useEffect(() => {
+    if (currentStatus === 'on_the_way' && restaurantLocation && deliveryAddress?.lat && deliveryAddress?.lng && !deliveryLocation) {
+      // Si no hay ubicación del repartidor pero el estado es "en camino", iniciar simulación
+      let progress = 0;
+      const duration = 60000; // 60 segundos para llegar
+      const intervalTime = 1000; // Actualizar cada segundo
+      const steps = duration / intervalTime;
+      const stepSize = 1 / steps;
+
+      const interval = setInterval(() => {
+        progress += stepSize;
+        if (progress >= 1) {
+          progress = 1;
+          clearInterval(interval);
+        }
+
+        // Interpolación lineal
+        const lat = restaurantLocation.lat + (deliveryAddress.lat! - restaurantLocation.lat) * progress;
+        const lng = restaurantLocation.lng + (deliveryAddress.lng! - restaurantLocation.lng) * progress;
+
+        setDeliveryLocation({ lat, lng });
+      }, intervalTime);
+
+      return () => clearInterval(interval);
+    }
+  }, [currentStatus, restaurantLocation, deliveryAddress, deliveryLocation]);
 
   useEffect(() => {
     if (isConnected) {

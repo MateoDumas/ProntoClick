@@ -14,6 +14,14 @@ export class DeliveryAddressDto {
   @IsString()
   @IsOptional()
   notes?: string;
+
+  @IsNumber()
+  @IsOptional()
+  lat?: number;
+
+  @IsNumber()
+  @IsOptional()
+  lng?: number;
 }
 
 export class ProductDto {

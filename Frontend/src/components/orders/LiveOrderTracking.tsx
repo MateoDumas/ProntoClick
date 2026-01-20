@@ -153,6 +153,7 @@ export default function LiveOrderTracking({ orderId, onDismiss }: LiveOrderTrack
             orderId={order.id}
             initialStatus={order.status}
             restaurantLocation={{ lat: -34.6037, lng: -58.3816 }} // Por ahora fijo
+            deliveryAddress={order.deliveryAddress}
           />
         </div>
 

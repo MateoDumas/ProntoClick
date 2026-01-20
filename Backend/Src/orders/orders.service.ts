@@ -20,6 +20,8 @@ interface CreateOrderDto {
     city: string;
     zipCode: string;
     notes?: string;
+    lat?: number;
+    lng?: number;
   };
   paymentMethod: 'cash' | 'card';
   couponCode?: string;

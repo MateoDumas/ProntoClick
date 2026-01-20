@@ -204,6 +204,7 @@ export default function OrderDetail() {
           orderId={order.id}
           initialStatus={order.status}
           restaurantLocation={{ lat: -34.6037, lng: -58.3816 }} // Por ahora fijo, luego desde la API
+          deliveryAddress={order.deliveryAddress}
         />
       </div>
 
