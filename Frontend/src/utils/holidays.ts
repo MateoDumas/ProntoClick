@@ -18,6 +18,7 @@ export interface HolidayTheme {
   gradient: string;
   darkGradient: string;
   decorations?: string[];
+  animationEffect?: 'snow' | 'rain' | 'confetti' | 'floating-emojis' | 'hearts' | 'none';
 }
 
 export const holidays: Record<HolidayType, HolidayTheme> = {
@@ -28,6 +29,7 @@ export const holidays: Record<HolidayType, HolidayTheme> = {
     secondaryColor: 'red',
     gradient: 'from-red-600 to-red-500',
     darkGradient: 'dark:from-red-700 dark:to-red-600',
+    animationEffect: 'none',
   },
   halloween: {
     name: 'Halloween',
@@ -37,6 +39,7 @@ export const holidays: Record<HolidayType, HolidayTheme> = {
     gradient: 'from-orange-600 via-purple-600 to-orange-500',
     darkGradient: 'dark:from-orange-700 dark:via-purple-700 dark:to-orange-600',
     decorations: ['🎃', '👻', '🦇', '🕷️'],
+    animationEffect: 'floating-emojis',
   },
   christmas: {
     name: 'Navidad',
@@ -46,6 +49,7 @@ export const holidays: Record<HolidayType, HolidayTheme> = {
     gradient: 'from-green-600 via-red-600 to-green-500',
     darkGradient: 'dark:from-green-700 dark:via-red-700 dark:to-green-600',
     decorations: ['🎄', '🎅', '🎁', '⭐', '❄️'],
+    animationEffect: 'snow',
   },
   newyear: {
     name: 'Año Nuevo',
@@ -55,6 +59,7 @@ export const holidays: Record<HolidayType, HolidayTheme> = {
     gradient: 'from-yellow-400 via-blue-500 to-purple-600',
     darkGradient: 'dark:from-yellow-500 dark:via-blue-600 dark:to-purple-700',
     decorations: ['🎉', '🎊', '⭐', '✨'],
+    animationEffect: 'confetti',
   },
   kings: {
     name: 'Día de Reyes',
@@ -64,6 +69,7 @@ export const holidays: Record<HolidayType, HolidayTheme> = {
     gradient: 'from-yellow-400 via-purple-500 to-yellow-500',
     darkGradient: 'dark:from-yellow-500 dark:via-purple-600 dark:to-yellow-600',
     decorations: ['👑', '🎁', '⭐'],
+    animationEffect: 'floating-emojis',
   },
   easter: {
     name: 'Pascua',
@@ -73,6 +79,7 @@ export const holidays: Record<HolidayType, HolidayTheme> = {
     gradient: 'from-pink-400 via-yellow-300 to-blue-400',
     darkGradient: 'dark:from-pink-500 dark:via-yellow-400 dark:to-blue-500',
     decorations: ['🐰', '🥚', '🌸', '🌷'],
+    animationEffect: 'floating-emojis',
   },
   mothersday: {
     name: 'Día de la Madre',
@@ -82,6 +89,7 @@ export const holidays: Record<HolidayType, HolidayTheme> = {
     gradient: 'from-pink-500 via-red-400 to-pink-400',
     darkGradient: 'dark:from-pink-600 dark:via-red-500 dark:to-pink-500',
     decorations: ['💐', '🌹', '❤️'],
+    animationEffect: 'hearts',
   },
   fathersday: {
     name: 'Día del Padre',
@@ -91,6 +99,7 @@ export const holidays: Record<HolidayType, HolidayTheme> = {
     gradient: 'from-blue-600 via-gray-500 to-blue-500',
     darkGradient: 'dark:from-blue-700 dark:via-gray-600 dark:to-blue-600',
     decorations: ['👔', '🎩', '💼'],
+    animationEffect: 'floating-emojis',
   },
   valentines: {
     name: 'San Valentín',
@@ -100,6 +109,7 @@ export const holidays: Record<HolidayType, HolidayTheme> = {
     gradient: 'from-pink-500 via-red-500 to-pink-400',
     darkGradient: 'dark:from-pink-600 dark:via-red-600 dark:to-pink-500',
     decorations: ['💝', '❤️', '💕', '🌹'],
+    animationEffect: 'hearts',
   },
   independence: {
     name: 'Día de la Independencia',
@@ -109,6 +119,7 @@ export const holidays: Record<HolidayType, HolidayTheme> = {
     gradient: 'from-blue-600 via-yellow-400 to-blue-500',
     darkGradient: 'dark:from-blue-700 dark:via-yellow-500 dark:to-blue-600',
     decorations: ['🇦🇷', '⭐'],
+    animationEffect: 'confetti',
   },
 };
 
