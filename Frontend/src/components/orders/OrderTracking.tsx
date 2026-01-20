@@ -33,31 +33,37 @@ export default function OrderTracking({ orderId, initialStatus, restaurantLocati
 
   // Simulación de movimiento del repartidor
   useEffect(() => {
-    if (currentStatus === 'on_the_way' && restaurantLocation && deliveryAddress?.lat && deliveryAddress?.lng && !deliveryLocation) {
+    if (currentStatus === 'on_the_way' && restaurantLocation && deliveryAddress?.lat && deliveryAddress?.lng) {
       // Si no hay ubicación del repartidor pero el estado es "en camino", iniciar simulación
-      let progress = 0;
+      const startLat = restaurantLocation.lat;
+      const startLng = restaurantLocation.lng;
+      const endLat = deliveryAddress.lat!;
+      const endLng = deliveryAddress.lng!;
+      
+      const startTime = Date.now();
       const duration = 60000; // 60 segundos para llegar
-      const intervalTime = 1000; // Actualizar cada segundo
-      const steps = duration / intervalTime;
-      const stepSize = 1 / steps;
+      const intervalTime = 100; // Actualizar cada 100ms para mayor fluidez
 
       const interval = setInterval(() => {
-        progress += stepSize;
+        const now = Date.now();
+        const elapsed = now - startTime;
+        let progress = elapsed / duration;
+
         if (progress >= 1) {
           progress = 1;
-          clearInterval(interval);
+          // No limpiamos el intervalo para mantener la posición final
         }
 
         // Interpolación lineal
-        const lat = restaurantLocation.lat + (deliveryAddress.lat! - restaurantLocation.lat) * progress;
-        const lng = restaurantLocation.lng + (deliveryAddress.lng! - restaurantLocation.lng) * progress;
+        const lat = startLat + (endLat - startLat) * progress;
+        const lng = startLng + (endLng - startLng) * progress;
 
         setDeliveryLocation({ lat, lng });
       }, intervalTime);
 
       return () => clearInterval(interval);
     }
-  }, [currentStatus, restaurantLocation, deliveryAddress, deliveryLocation]);
+  }, [currentStatus, restaurantLocation, deliveryAddress]);
 
   useEffect(() => {
     if (isConnected) {
