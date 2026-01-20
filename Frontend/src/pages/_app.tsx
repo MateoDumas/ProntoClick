@@ -1,15 +1,27 @@
 // Frontend/src/pages/_app.tsx
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { GoogleMapsProvider } from '../contexts/GoogleMapsContext';
 import { ThemeProvider } from '../contexts/ThemeContext';
 import { HolidayProvider } from '../contexts/HolidayContext';
+import Preloader from '../components/ui/Preloader';
 
 import MainLayout from '../components/layout/MainLayout';
 
 export default function App({ Component, pageProps }: AppProps) {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simular tiempo de carga inicial
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -26,6 +38,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <HolidayProvider>
+          {loading && <Preloader />}
           <GoogleMapsProvider>
             <MainLayout>
               <Component {...pageProps} />
